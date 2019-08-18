@@ -61,6 +61,12 @@ public class DataCollector {
 		if (!d.exists())
 			d.createDirectory(true, false);
 		dataFile.createNewFile();
+		DonationType t = new DonationType();
+		t.Active = true;
+		t.Name = "Default";
+		t.AddMessage("<donation_username> - <donation_amount> <donation_currency>");
+		t.AddMessage("<donation_message>");
+		AddDonationType(t);
 		try {
 			Save();
 		} catch (JSONException e) {
