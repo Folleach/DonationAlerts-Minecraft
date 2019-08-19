@@ -214,14 +214,16 @@ public class DonationTypeEntry extends Gui implements IEntry {
 		if (addMessage.isClick(mouseX, mouseY)) {
 			messages.add(new WritableLineElement(this, mc, WritableType.Message, langLine + " " + (messages.size() + 1)));
 			addMessage.playPressSound(mc.getSoundHandler());
+			owner.updateHeight();
 		}
 		if (addCommand.isClick(mouseX, mouseY)) {
 			commands.add(new WritableLineElement(this, mc, WritableType.Command, langLine + " " + (commands.size() + 1)));
 			addCommand.playPressSound(mc.getSoundHandler());
+			owner.updateHeight();
 		}
 		if (deleteEntry.isClick(mouseX, mouseY)) {
-			owner.removeEntry(this);
 			deleteEntry.playPressSound(mc.getSoundHandler());
+			owner.removeEntry(this);
 		}
 		
 		if (CurrencyBRL.mouseClicked(mouseX, mouseY, mouseButton))
@@ -327,6 +329,7 @@ public class DonationTypeEntry extends Gui implements IEntry {
 				else if (wtype == WritableType.Command)
 					callbackThinking.removeCommands(this);
 				delete.playPressSound(mc.getSoundHandler());
+				owner.updateHeight();
 			}
 		}
 	

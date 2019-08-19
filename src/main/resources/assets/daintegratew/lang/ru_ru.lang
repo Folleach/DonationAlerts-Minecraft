@@ -23,6 +23,7 @@ daintegratew.name=Название
 daintegratew.active=Активно
 daintegratew.line=Строка
 daintegratew.commands=Комманды
+daintegratew.countshowdonation=Количество последних донатов в списке
 #Token
 daintegratew.token=Токен
 daintegratew.token.exists=Токен существует

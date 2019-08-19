@@ -23,6 +23,7 @@ daintegratew.name=Name
 daintegratew.active=Active
 daintegratew.line=Line
 daintegratew.commands=Commands
+daintegratew.countshowdonation=Number of last donations in the list
 #Token
 daintegratew.token=Token
 daintegratew.token.exists=Token is exists

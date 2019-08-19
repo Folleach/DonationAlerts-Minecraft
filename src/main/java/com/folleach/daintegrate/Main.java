@@ -30,11 +30,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.client.settings.KeyBindingMap;
 
 @SideOnly(Side.CLIENT)
-@Mod(modid = Main.MODID, name = Main.MODNAME, version = Main.MODVERSION, acceptedMinecraftVersions = "1.15.5")
+@Mod(modid = Main.MODID, name = Main.MODNAME, version = Main.MODVERSION)
 public class Main {
 	public static final String MODID = "daintegratew";
 	public static final String MODNAME = "Donation Alerts Integrate";
-	public static final String MODVERSION = "1.0.0";
+	public static final String MODVERSION = "1.1.0";
 	public static final String DASERVER = "https://socket.donationalerts.ru:443";
 	
 	public static Minecraft GameInstance;

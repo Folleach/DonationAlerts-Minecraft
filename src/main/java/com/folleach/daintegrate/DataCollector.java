@@ -32,6 +32,7 @@ public class DataCollector {
 	public TypesManager TManager;
 	public ChatType DonationTo;
 	public boolean SkipTestDonation;
+	public int CountDonationInCache = 30;
 	public String FEmptyString;
 	
 	private File dataFile;
@@ -42,7 +43,6 @@ public class DataCollector {
 	public static final String TagDonationCurrency     = "<donation_currency>";
 	public static final String TagDonationUserName     = "<donation_username>";
 	public static final String TagMinecraftPlayerName  = "<minecraft_playername>";
-	
 	
 	public DataCollector() throws IOException
 	{
@@ -92,10 +92,12 @@ public class DataCollector {
 			DonationTo = ChatType.byId((byte) json.getInt("donationTo"));
 			SkipTestDonation = json.getBoolean("skiptest");
 			FEmptyString = json.getString("tkn");
+			CountDonationInCache = json.getInt("cdic");
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 	}
+	
 	//Save --------------
 	public void Save() throws JSONException, IOException {
 		JSONObject json = new JSONObject();
@@ -103,6 +105,7 @@ public class DataCollector {
 		json.put("donationTo", DonationTo.getId());
 		json.put("skiptest", SkipTestDonation);
 		json.put("tkn", FEmptyString);
+		json.put("cdic", CountDonationInCache);
 		
 		String sj = json.toString();
 		byte[] bytes = sj.getBytes(StandardCharsets.UTF_8);
@@ -113,11 +116,8 @@ public class DataCollector {
 		}
 	}
 	
-	@SuppressWarnings("null")
 	public void AddDonation(Donation donat)
 	{
-		if (Donations.size() > 30)
-			Donations.remove(0);
 		if (SkipTestDonation && donat.IsTest)
 			return;
 		Donations.add(donat);
@@ -145,6 +145,13 @@ public class DataCollector {
 				temp = ReplaceConstants(executor.getCommands().get(i), donat);
 				Main.GameInstance.player.sendChatMessage(temp);
 			}
+		RecountDonationCache();
+	}
+	
+	public void RecountDonationCache()
+	{
+		while (Donations.size() > CountDonationInCache)
+			Donations.remove(0);
 	}
 	
 	String ReplaceConstants(String pattern, Donation donat) {

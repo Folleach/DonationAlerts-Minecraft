@@ -74,6 +74,7 @@ public class MainWindow extends GuiScreen
 	private CheckBox SETTINGSBUTTON_DTChat;
 	private CheckBox SETTINGSBUTTON_DTSystem;
 	private CheckBox SETTINGSBUTTON_DTGameInfo;
+	private CustomTextBox SETTINGS_ShowCountDonation;
 	private DefaultButton SETTINGSBUTTON_Save;
 	
 	private CustomTextBox text1;
@@ -137,6 +138,9 @@ public class MainWindow extends GuiScreen
         STATUSLABEL_Warning.addLine("daintegratew.warning.line1");
         STATUSLABEL_Warning.addLine("daintegratew.warning.line2");
         STATUSLABEL_Warning.addLine("daintegratew.warning.line3");
+        SETTINGS_ShowCountDonation = new CustomTextBox(0, fontRenderer, 125, 90, 200, 20);
+        SETTINGS_ShowCountDonation.tag = I18n.format("daintegratew.countshowdonation");
+        SETTINGS_ShowCountDonation.setText(Integer.toString(data.CountDonationInCache));
         Keyboard.enableRepeatEvents(true);
         text1 = new CustomTextBox(100, fontRenderer, 125, TOKENPANELY, 200, 20);
         text1.setTextColor(Pallete.WHITE);
@@ -208,6 +212,7 @@ public class MainWindow extends GuiScreen
     			drawString(fontRenderer, langError, width - lenghtSaved - 100, 6, Pallete.RED);
     		break;
     	case Settings:
+    		SETTINGS_ShowCountDonation.drawTextBox();
     		this.drawString(fontRenderer, langDonto, 125, 54, Pallete.WHITE);
     		break;
     	case Help:
@@ -232,6 +237,8 @@ public class MainWindow extends GuiScreen
             super.keyTyped(typedChar, keyCode);
     	if (activePanel == activePanel.Types)
     		typesPanel.keyTyped(typedChar, keyCode);
+    	if (activePanel == activePanel.Settings)
+    		SETTINGS_ShowCountDonation.textboxKeyTyped(typedChar, keyCode);
     }
     
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
@@ -241,6 +248,8 @@ public class MainWindow extends GuiScreen
     		text1.mouseClicked(mouseX, mouseY, mouseButton);
     	if (activePanel == PanelsType.Types)
     		typesPanel.mouseClicked(mouseX, mouseY, mouseButton);
+    	if (activePanel == activePanel.Settings)
+    		SETTINGS_ShowCountDonation.mouseClicked(mouseX, mouseY, mouseButton);
     }
     
     protected void mouseReleased(int mouseX, int mouseY, int state)
@@ -290,7 +299,15 @@ public class MainWindow extends GuiScreen
 			break;
 		case 9:
 			try {
+				data.CountDonationInCache = Integer.parseInt(SETTINGS_ShowCountDonation.getText());
+				if (data.CountDonationInCache < 1)
+					data.CountDonationInCache = 1;
 				data.Save();
+				data.RecountDonationCache();
+				SETTINGS_ShowCountDonation.LineColor = Pallete.GRAY30_TRANSPERIENTDD;
+				SETTINGS_ShowCountDonation.setText(Integer.toString(data.CountDonationInCache));
+			} catch (NumberFormatException e) {
+				SETTINGS_ShowCountDonation.LineColor = Pallete.RED;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

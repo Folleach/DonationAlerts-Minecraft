@@ -74,6 +74,12 @@ public class ScrollPanel<T extends IEntry> extends Gui {
     		scrollPosition += wheel / 5;
     }
     
+    public void updateHeight() {
+    	contentHeight = 0;
+    	for (int i = 0; i < entries.size(); i++)
+    		contentHeight += entries.get(i).getHeight();
+    }
+    
     public void addEntry(T entry) {
     	contentHeight += entry.getHeight();
     	entries.add(entry);
