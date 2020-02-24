@@ -1,52 +1,55 @@
 package com.folleach.gui;
 
+import com.folleach.daintegrate.Main;
 import com.folleach.daintegrate.Pallete;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
-public class CheckBox extends CustomButton {
+@OnlyIn(Dist.CLIENT)
+public class CheckBox extends CustomButton
+{
 	public boolean Flag;
 	
-	public CheckBox(int buttonId, int x, int y, int widthIn, boolean visibility, String buttonText, boolean flag) {
-		super(buttonId, x, y, widthIn, visibility, buttonText);
+	public CheckBox(int x, int y, int widthIn, boolean visibility, String buttonText, boolean flag, IPressable onPress)
+    {
+        this(x, y, widthIn, 20, buttonText, flag, onPress);
+        CheckBox e = this;
 		Flag = flag;
 	}
 	
-	public CheckBox(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText, boolean flag) {
-		super(buttonId, x, y, widthIn, heightIn, buttonText);
+	public CheckBox(int x, int y, int widthIn, int heightIn, String buttonText, boolean flag, IPressable onPress)
+    {
+		super(x, y, widthIn, heightIn, buttonText, onPress);
 		Flag = flag;
 	}
-	
-	public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks)
+
+	public void render(int mouseX, int mouseY, float partialTicks)
     {
         if (this.visible)
         {
-            FontRenderer fontrenderer = mc.fontRenderer;
-            this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
-            int i = this.getHoverState(this.hovered);
-            
-            this.mouseDragged(mc, mouseX, mouseY);
+            FontRenderer fontrenderer = Main.GameInstance.fontRenderer;
+            this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
+            // this.mouseDragged(mc, mouseX, mouseY);
             int colorBg = DefaultBackgroundColor;
             int colorFg = DefaultForegroundColor;
-            if (!this.enabled)
+            if (!this.active)
             {
             	colorBg = DisableBackgroundColor;
             	colorFg = DisableForegroundColor;
             }
-            else if (this.hovered)
+            else if (this.isHovered)
             {
             	colorBg = HoveredBackgroundColor;
             }
-            this.drawRect(x, y, x + width, y + height, colorBg);
+            fill(x, y, x + width, y + height, colorBg);
             int colorFlag = Pallete.RED;
             if (Flag)
             	colorFlag = Pallete.GREEN;
-            this.drawRect(x + 4, y + 4, x + 16, y + 16, colorFlag);
-            this.drawString(fontrenderer, this.displayString, this.x + 22, this.y + (this.height / 2) - 4, colorFg);
+            fill(x + 4, y + 4, x + 16, y + 16, colorFlag);
+            this.drawString(fontrenderer, this.getMessage(), this.x + 22, this.y + (this.height / 2) - 4, colorFg);
         }
     }
 

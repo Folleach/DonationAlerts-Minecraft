@@ -2,21 +2,21 @@ package com.folleach.gui;
 
 import com.folleach.daintegrate.Pallete;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class DefaultButton extends CustomButton {
 
-	public DefaultButton(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText) {
-		super(buttonId, x, y, widthIn, heightIn, buttonText);
+	public DefaultButton(int x, int y, int widthIn, int heightIn, String buttonText, IPressable onPress) {
+		super(x, y, widthIn, heightIn, buttonText, onPress);
 		super.DefaultBackgroundColor = Pallete.BLACK_TRANSPERIENTB0;
 		super.HoveredBackgroundColor = Pallete.YELLOW_TRANSPERIENTA0;
 		super.HoveredForegroundColor = Pallete.WHITE;
 	}
 	
-	public DefaultButton(int buttonId, int x, int y, int widthIn, boolean visibility, String buttonText) {
-		this(buttonId, x, y, widthIn, 20, buttonText);
+	public DefaultButton(int x, int y, int widthIn, boolean visibility, String buttonText, IPressable onPress) {
+		this(x, y, widthIn, 20, buttonText, onPress);
 		visible = visibility;
 	}
 }

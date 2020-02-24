@@ -1,9 +1,9 @@
 package com.folleach.daintegrate;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class Pallete {
 	public static final int WHITE = 0xFFFFFFFF;
 	public static final int BLACK = 0xFF000000;

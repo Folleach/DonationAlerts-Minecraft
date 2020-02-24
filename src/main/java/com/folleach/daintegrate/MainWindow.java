@@ -5,32 +5,26 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
+import com.folleach.gui.*;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.json.JSONException;
-import org.lwjgl.input.Keyboard;
 
 import com.folleach.donationalerts.DonationAlerts;
 import com.folleach.donationalerts.DonationType;
 import com.folleach.donationalerts.TypesManager;
-import com.folleach.gui.CheckBox;
-import com.folleach.gui.CustomButton;
-import com.folleach.gui.CustomTextBox;
-import com.folleach.gui.DefaultButton;
-import com.folleach.gui.DonationTypeEntry;
-import com.folleach.gui.MessageEntry;
-import com.folleach.gui.ScrollPanel;
 import com.google.common.collect.Lists;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiLabel;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.ChatType;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
-public class MainWindow extends GuiScreen
+@OnlyIn(Dist.CLIENT)
+public class MainWindow extends Screen
 {
 	enum PanelsType { Messages, Status, Types, Settings, Help }
 	
@@ -51,6 +45,7 @@ public class MainWindow extends GuiScreen
 	private static int lenghtSaved;
 	
 	private Minecraft mc;
+	private FontRenderer fontRenderer;
 	private DataCollector data;
 	private DonationAlerts dalets;
 	private PanelsType activePanel;
@@ -65,7 +60,7 @@ public class MainWindow extends GuiScreen
 	private DefaultButton STATUSBUTTON_Save;
 	private DefaultButton STATUSBUTTON_Delete;
 	private DefaultButton STATUSBUTTON_ConnectionController;
-	private GuiLabel STATUSLABEL_Warning;
+	// private GuiLabel STATUSLABEL_Warning;
 	
 	private DefaultButton TYPESBUTTON_Save;
 	private CustomButton TYPESBUTTON_Add;
@@ -84,10 +79,13 @@ public class MainWindow extends GuiScreen
 	
 	private boolean typesSuccessfulSave;
 	private int typesSaveTimer;
-	
+	private boolean initialized;
+
 	public MainWindow(Minecraft mc, DataCollector d, DonationAlerts da)
 	{
+		super(new StringTextComponent("MainWindow"));
 		this.mc = mc;
+		fontRenderer = mc.fontRenderer;
 		data = d;
 		dalets = da;
 		InitializeStrings();
@@ -107,69 +105,70 @@ public class MainWindow extends GuiScreen
 		langError = I18n.format("daintegratew.error");
 		lenghtSaved = mc.fontRenderer.getStringWidth(langSaved) + 10;
 	}
-	
-    public void initGui()
-    {
-        this.buttonList.clear();
-        this.labelList.clear();
-        this.buttonList.add(LEFTBUTTON_Messages = new CustomButton(0, 0, 20 + (0 * SPACE_LEFTBUTTON), 120, 20, I18n.format("daintegratew.messages")));
-        this.buttonList.add(LEFTBUTTON_Status = new CustomButton(1, 0, 20 + (1 * SPACE_LEFTBUTTON), 120, 20, I18n.format("daintegratew.status")));
-        this.buttonList.add(LEFTBUTTON_Types = new CustomButton(2, 0, 20 + (2 * SPACE_LEFTBUTTON), 120, 20, I18n.format("daintegratew.types")));
-        this.buttonList.add(LEFTBUTTON_Settings = new CustomButton(3, 0, 20 + (3 * SPACE_LEFTBUTTON), 120, 20, I18n.format("daintegratew.settings")));
-        this.buttonList.add(LEFTBUTTON_Settings = new CustomButton(20, 0, 20 + (4 * SPACE_LEFTBUTTON), 120, 20, I18n.format("daintegratew.help")));
-        this.buttonList.add(LEFTBUTTON_SupportAuthor = new DefaultButton(4, 0, height - 20, 120, 20, I18n.format("daintegratew.suppauthor")));
-        this.buttonList.add(SETTINGSBUTTON_SkippingTestDonation = new CheckBox(5, 125, 25, 170, activePanel == PanelsType.Settings, I18n.format("daintegratew.skiptestd"), data.SkipTestDonation));
-        this.buttonList.add(SETTINGSBUTTON_DTChat = new CheckBox(6, 125, 65, 80, activePanel == PanelsType.Settings, I18n.format("daintegratew.chat"), data.DonationTo == ChatType.CHAT));
-        this.buttonList.add(SETTINGSBUTTON_DTSystem = new CheckBox(7, 210, 65, 80, activePanel == PanelsType.Settings, I18n.format("daintegratew.system"), data.DonationTo == ChatType.SYSTEM));
-        this.buttonList.add(SETTINGSBUTTON_DTGameInfo = new CheckBox(8, 295, 65, 80, activePanel == PanelsType.Settings, I18n.format("daintegratew.gameinfo"), data.DonationTo == ChatType.GAME_INFO));
-        this.buttonList.add(SETTINGSBUTTON_Save = new DefaultButton(9, this.width - 80, 0, 80, activePanel == PanelsType.Settings, I18n.format("daintegratew.save")));
-        this.buttonList.add(STATUSBUTTON_Save = new DefaultButton(10, 125, TOKENPANELY + 45, 120, activePanel == PanelsType.Status, I18n.format("daintegratew.save")));
-        this.buttonList.add(STATUSBUTTON_Delete = new DefaultButton(11, 250, TOKENPANELY + 45, 120, activePanel == PanelsType.Status, I18n.format("daintegratew.delete")));
-        this.buttonList.add(STATUSBUTTON_ConnectionController = new DefaultButton(12, 125, 35, 120, activePanel == PanelsType.Status,
-        		dalets.getConnected() ? I18n.format("daintegratew.disconnect") : I18n.format("daintegratew.connect")));
-        this.buttonList.add(TYPESBUTTON_Save = new DefaultButton(13, this.width - 80, 0, 80, activePanel == PanelsType.Types, I18n.format("daintegratew.save")));
-        this.buttonList.add(TYPESBUTTON_Add = new CustomButton(14, this.width - 100, 0, 20, activePanel == PanelsType.Types, "+"));
-        TYPESBUTTON_Add.DefaultBackgroundColor = Pallete.GREEN;
-        TYPESBUTTON_Add.HoveredBackgroundColor = Pallete.GREEN_HOVERED;
-        TYPESBUTTON_Add.HoveredForegroundColor = Pallete.WHITE;
-        LEFTBUTTON_SupportAuthor.DefaultBackgroundColor = Pallete.BLACK_TRANSPERIENT30;
-        this.labelList.add(STATUSLABEL_Warning = new GuiLabel(fontRenderer, 201, 125, 130, width - 130, 30, Pallete.WHITE));
-        STATUSLABEL_Warning.visible = activePanel == PanelsType.Status;
-        STATUSLABEL_Warning.addLine("daintegratew.warning.line1");
-        STATUSLABEL_Warning.addLine("daintegratew.warning.line2");
-        STATUSLABEL_Warning.addLine("daintegratew.warning.line3");
-        SETTINGS_ShowCountDonation = new CustomTextBox(0, fontRenderer, 125, 90, 200, 20);
-        SETTINGS_ShowCountDonation.tag = I18n.format("daintegratew.countshowdonation");
-        SETTINGS_ShowCountDonation.setText(Integer.toString(data.CountDonationInCache));
-        Keyboard.enableRepeatEvents(true);
-        text1 = new CustomTextBox(100, fontRenderer, 125, TOKENPANELY, 200, 20);
-        text1.setTextColor(Pallete.WHITE);
-        text1.tag = langToken;
-		
-        InitializeMessages();
-        InitializeTypes();
-        
-        lenghtConnectState = mc.fontRenderer.getStringWidth(langConnectState);
-        if (activePanel == null)
-        	this.SetActivePanel(PanelsType.Messages);
-    }
-    
+
+    public void init() {
+		initialized = false;
+		this.buttons.clear();
+		this.children.clear();
+		LEFTBUTTON_Messages = this.addButton(new CustomButton(0, 20, 120, 20, I18n.format("daintegratew.messages"), this::SwitchPanel_Messages));
+		LEFTBUTTON_Status = this.addButton(new CustomButton(0, 20 + SPACE_LEFTBUTTON, 120, 20, I18n.format("daintegratew.status"), this::SwitchPanel_Status));
+		LEFTBUTTON_Types = this.addButton(new CustomButton(0, 20 + (2 * SPACE_LEFTBUTTON), 120, 20, I18n.format("daintegratew.types"), this::SwitchPanel_Types));
+		LEFTBUTTON_Settings = this.addButton(new CustomButton(0, 20 + (3 * SPACE_LEFTBUTTON), 120, 20, I18n.format("daintegratew.settings"), this::SwitchPanel_Settings));
+		LEFTBUTTON_Help = this.addButton(new CustomButton(0, 20 + (4 * SPACE_LEFTBUTTON), 120, 20, I18n.format("daintegratew.help"), this::SwitchPanel_Help));
+		LEFTBUTTON_SupportAuthor = this.addButton(new DefaultButton(0, height - 20, 120, 20, I18n.format("daintegratew.suppauthor"), this::SwitchPanel_SupportAuthor));
+		SETTINGSBUTTON_SkippingTestDonation = this.addButton(new CheckBox(125, 25, 170, activePanel == PanelsType.Settings, I18n.format("daintegratew.skiptestd"), data.SkipTestDonation, this::SettingsSkipTestDonationClick));
+		SETTINGSBUTTON_DTChat = this.addButton(new CheckBox(125, 65, 80, activePanel == PanelsType.Settings, I18n.format("daintegratew.chat"), data.DonationTo == ChatType.CHAT, this::SettingsDTChatClick));
+		SETTINGSBUTTON_DTSystem = this.addButton(new CheckBox(210, 65, 80, activePanel == PanelsType.Settings, I18n.format("daintegratew.system"), data.DonationTo == ChatType.SYSTEM, this::SettingsDTSystemClick));
+		SETTINGSBUTTON_DTGameInfo = this.addButton(new CheckBox(295, 65, 80, activePanel == PanelsType.Settings, I18n.format("daintegratew.gameinfo"), data.DonationTo == ChatType.GAME_INFO, this::SettingsDTGameClick));
+		SETTINGSBUTTON_Save = this.addButton(new DefaultButton(this.width - 80, 0, 80, activePanel == PanelsType.Settings, I18n.format("daintegratew.save"), this::SettingsSaveClick));
+		STATUSBUTTON_Save = this.addButton(new DefaultButton(125, TOKENPANELY + 45, 120, activePanel == PanelsType.Status, I18n.format("daintegratew.save"), this::StatusSaveClick));
+		STATUSBUTTON_Delete = this.addButton(new DefaultButton(250, TOKENPANELY + 45, 120, activePanel == PanelsType.Status, I18n.format("daintegratew.delete"), this::StatusDeleteClick));
+		STATUSBUTTON_ConnectionController = this.addButton(new DefaultButton(125, 35, 120, activePanel == PanelsType.Status,
+				dalets.getConnected() ? I18n.format("daintegratew.disconnect") : I18n.format("daintegratew.connect"), this::ConntectionControllerClick));
+		TYPESBUTTON_Save = this.addButton(new DefaultButton(this.width - 80, 0, 80, activePanel == PanelsType.Types, I18n.format("daintegratew.save"), this::TypesSaveClick));
+		TYPESBUTTON_Add = this.addButton(new CustomButton(this.width - 100, 0, 20, activePanel == PanelsType.Types, "+", this::TypesAddClick));
+		TYPESBUTTON_Add.DefaultBackgroundColor = Pallete.GREEN;
+		TYPESBUTTON_Add.HoveredBackgroundColor = Pallete.GREEN_HOVERED;
+		TYPESBUTTON_Add.HoveredForegroundColor = Pallete.WHITE;
+		LEFTBUTTON_SupportAuthor.DefaultBackgroundColor = Pallete.BLACK_TRANSPERIENT30;
+		//this.labelList.add(STATUSLABEL_Warning = new GuiLabel(fontRenderer, 201, 125, 130, width - 130, 30, Pallete.WHITE));
+		//STATUSLABEL_Warning.visible = activePanel == PanelsType.Status;
+		//STATUSLABEL_Warning.addLine("daintegratew.warning.line1");
+		//STATUSLABEL_Warning.addLine("daintegratew.warning.line2");
+		//STATUSLABEL_Warning.addLine("daintegratew.warning.line3");
+		SETTINGS_ShowCountDonation = new CustomTextBox(fontRenderer, 125, 90, 200, 20, "");
+		SETTINGS_ShowCountDonation.tag = I18n.format("daintegratew.countshowdonation");
+		SETTINGS_ShowCountDonation.setText(Integer.toString(data.CountDonationInCache));
+		// Keyboard.enableRepeatEvents(true);
+		text1 = new CustomTextBox(fontRenderer, 125, TOKENPANELY, 200, 20, "");
+		text1.setTextColor(Pallete.WHITE);
+		text1.tag = langToken;
+
+		InitializeMessages();
+		InitializeTypes();
+
+		lenghtConnectState = mc.fontRenderer.getStringWidth(langConnectState);
+		if (activePanel == null)
+			this.SetActivePanel(PanelsType.Messages);
+		initialized = true;
+	}
+
     private void InitializeMessages()
     {
     	messagesPanel = new ScrollPanel<MessageEntry>(125, 25, this.width, this.height);
 		for (int i = data.Donations.size() - 1; i >= 0; i--)
-			messagesPanel.addEntry(new MessageEntry(mc.fontRenderer, data.Donations.get(i), this.width - 130));
+			messagesPanel.addEntry(new MessageEntry(0, 0, this.width - 130, 0, fontRenderer, data.Donations.get(i)));
     }
     
     private void InitializeTypes()
     {
     	typesPanel = new ScrollPanel<DonationTypeEntry>(125, 25, this.width, this.height);
     	for (int i = 0; i < data.TManager.getTypes().size(); i++)
-    		typesPanel.addEntry(new DonationTypeEntry(typesPanel, data.TManager.getTypes().get(i) , mc, this.width));
+    		typesPanel.addEntry(new DonationTypeEntry(0, 0, 0, 0, typesPanel, data.TManager.getTypes().get(i) , mc, this.width));
     }
     
     private void InitializeLangHelpLines() {
-    	langHelpLines = Lists.<String>newArrayList();
+    	langHelpLines = Lists.newArrayList();
     	langHelpLines.add(I18n.format("daintegratew.help.title"));
     	langHelpLines.add(DataCollector.TagDonationMessage + " - " + I18n.format("daintegratew.help.d1"));
     	langHelpLines.add(DataCollector.TagDonationAmount + " - " + I18n.format("daintegratew.help.d2"));
@@ -179,17 +178,20 @@ public class MainWindow extends GuiScreen
     }
     
     //MINECRAFT HANDLERS HERE ------------------------------------------------
-    public void updateScreen()
+    public void tick()
+	{
+		if (typesSaveTimer > 0)
+			typesSaveTimer--;
+	}
+
+    public void render(int mouseX, int mouseY, float partialTicks)
     {
-    	if (typesSaveTimer > 0)
-        	typesSaveTimer--;
-    }
-    
-    public void drawScreen(int mouseX, int mouseY, float partialTicks)
-    {
+    	if (!initialized)
+    		return;
     	//Background
-        this.drawRect(0, 0, this.width, this.height, 0xEE1A1A1E);
-        
+        fill(0, 0, this.width, this.height, 0xEE1A1A1E);
+        if (activePanel == null)
+        	activePanel = PanelsType.Messages;
         //Panels
         switch (activePanel)
     	{
@@ -201,7 +203,7 @@ public class MainWindow extends GuiScreen
     		drawString(fontRenderer, dalets.getConnected() ? langConnected : langDisonnected, 125 + lenghtConnectState + 5, 25,
     				dalets.getConnected() ? Pallete.GREEN : Pallete.RED);
     		
-    		text1.drawTextBox();
+    		text1.renderButton();
     		drawString(fontRenderer, data.isTokenExists() ? langTokenExist : langTokenNotExists, 125, TOKENPANELY + 35, data.isTokenExists() ? Pallete.GREEN : Pallete.RED);
     		break;
     	case Types:
@@ -212,7 +214,7 @@ public class MainWindow extends GuiScreen
     			drawString(fontRenderer, langError, width - lenghtSaved - 100, 6, Pallete.RED);
     		break;
     	case Settings:
-    		SETTINGS_ShowCountDonation.drawTextBox();
+    		SETTINGS_ShowCountDonation.renderButton();
     		this.drawString(fontRenderer, langDonto, 125, 54, Pallete.WHITE);
     		break;
     	case Help:
@@ -222,132 +224,191 @@ public class MainWindow extends GuiScreen
     	}
         
         //Left menu
-        this.drawRect(0, 0, this.width, 20, 0x65000000);
-        this.drawRect(0, 20, 120, this.height, 0x50000000);
+        fill(0, 0, this.width, 20, 0x65000000);
+        fill(0, 20, 120, this.height, 0x50000000);
         this.drawString(fontRenderer, Main.MODNAME, 5, 5, Pallete.WHITE);
         
-        super.drawScreen(mouseX, mouseY, partialTicks);
+        super.render(mouseX, mouseY, partialTicks);
     }
      
-    protected void keyTyped(char typedChar, int keyCode) throws IOException
+    public boolean charTyped(char typedChar, int keyCode)
     {
-    	if (text1.textboxKeyTyped(typedChar, keyCode)) {	
+    	if (!initialized)
+    		return false;
+    	if (text1.charTyped(typedChar, keyCode)) {
         }
         else
-            super.keyTyped(typedChar, keyCode);
-    	if (activePanel == activePanel.Types)
-    		typesPanel.keyTyped(typedChar, keyCode);
-    	if (activePanel == activePanel.Settings)
-    		SETTINGS_ShowCountDonation.textboxKeyTyped(typedChar, keyCode);
-    }
-    
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
-    {
-    	super.mouseClicked(mouseX, mouseY, mouseButton);
-    	if (activePanel == PanelsType.Status)
-    		text1.mouseClicked(mouseX, mouseY, mouseButton);
+            super.charTyped(typedChar, keyCode);
     	if (activePanel == PanelsType.Types)
-    		typesPanel.mouseClicked(mouseX, mouseY, mouseButton);
-    	if (activePanel == activePanel.Settings)
-    		SETTINGS_ShowCountDonation.mouseClicked(mouseX, mouseY, mouseButton);
+    		typesPanel.charTyped(typedChar, keyCode);
+    	if (activePanel == PanelsType.Settings)
+    		SETTINGS_ShowCountDonation.charTyped(typedChar, keyCode);
+    	return true;
     }
-    
-    protected void mouseReleased(int mouseX, int mouseY, int state)
-    {
-        super.mouseReleased(mouseX, mouseY, state);
-    }
-    
-    protected void actionPerformed(GuiButton button)
-    {
-    	CheckBox chb;
 
-    	switch (button.id)
-    	{
-    	case 0: SetActivePanel(PanelsType.Messages); break;
-    	case 1: SetActivePanel(PanelsType.Status); break;
-    	case 2: SetActivePanel(PanelsType.Types); break;
-    	case 3: SetActivePanel(PanelsType.Settings); break;
-    	case 4:
-    		try { Desktop.getDesktop().browse(new URI("https://www.donationalerts.com/r/folleach")); }
-    		catch (Exception e) { e.printStackTrace(); }
-    		break;
-    	case 5:
-    		chb = (CheckBox)button;
-    		chb.SwitchFlag(!chb.Flag);
-    		data.SkipTestDonation = (chb.Flag);
-    		break;
-    	case 6:
-    		SETTINGSBUTTON_DTSystem.SwitchFlag(false);
-    		SETTINGSBUTTON_DTGameInfo.SwitchFlag(false);
-    		chb = (CheckBox)button;
-    		chb.SwitchFlag(true);
-    		data.DonationTo = ChatType.CHAT;
-    		break;
-		case 7:
-			SETTINGSBUTTON_DTChat.SwitchFlag(false);
-    		SETTINGSBUTTON_DTGameInfo.SwitchFlag(false);
-			chb = (CheckBox)button;
-    		chb.SwitchFlag(true);
-    		data.DonationTo = ChatType.SYSTEM;
-			break;
-		case 8:
-			SETTINGSBUTTON_DTChat.SwitchFlag(false);
-    		SETTINGSBUTTON_DTSystem.SwitchFlag(false);
-			chb = (CheckBox)button;
-    		chb.SwitchFlag(true);
-    		data.DonationTo = ChatType.GAME_INFO;
-			break;
-		case 9:
+    public boolean keyPressed(int a, int b, int c)
+	{
+		if (!initialized)
+			return false;
+		if (activePanel == PanelsType.Types)
+			typesPanel.keyPressed(a, b, c);
+		if (activePanel == PanelsType.Settings)
+            SETTINGS_ShowCountDonation.keyPressed(a, b, c);
+		if (activePanel == PanelsType.Status)
+		    text1.keyPressed(a, b, c);
+		return super.keyPressed(a, b, c);
+	}
+    
+    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
+    {
+		if (!initialized)
+			return false;
+		super.mouseClicked(mouseX, mouseY, mouseButton);
+    	if (activePanel == PanelsType.Status)
+    		return text1.mouseClicked(mouseX, mouseY, mouseButton);
+    	if (activePanel == PanelsType.Types)
+    		return typesPanel.mouseClicked(mouseX, mouseY, mouseButton);
+    	if (activePanel == PanelsType.Settings)
+    		return SETTINGS_ShowCountDonation.mouseClicked(mouseX, mouseY, mouseButton);
+    	return true;
+    }
+    
+    public boolean mouseReleased(double mouseX, double mouseY, int state)
+    {
+        return super.mouseReleased(mouseX, mouseY, state);
+    }
+
+	private void SwitchPanel_Messages(Button button)
+	{
+		SetActivePanel(PanelsType.Messages);
+	}
+
+	private void SwitchPanel_Status(Button button)
+	{
+		SetActivePanel(PanelsType.Status);
+	}
+
+	private void SwitchPanel_Types(Button button)
+	{
+		SetActivePanel(PanelsType.Types);
+	}
+
+	private void SwitchPanel_Settings(Button button)
+	{
+		SetActivePanel(PanelsType.Settings);
+	}
+
+	private void SwitchPanel_Help(Button button)
+	{
+		SetActivePanel(PanelsType.Help);
+	}
+
+	private void SwitchPanel_SupportAuthor(Button button)
+	{
+		try { Desktop.getDesktop().browse(new URI("https://www.donationalerts.com/r/folleach")); }
+		catch (Exception e) { e.printStackTrace(); }
+	}
+
+	private void SettingsSkipTestDonationClick(Button button)
+	{
+		CheckBox chb;
+		chb = (CheckBox)button;
+		chb.SwitchFlag(!chb.Flag);
+		data.SkipTestDonation = (chb.Flag);
+	}
+
+	private void SettingsDTChatClick(Button button)
+	{
+		CheckBox chb;
+		SETTINGSBUTTON_DTSystem.SwitchFlag(false);
+		SETTINGSBUTTON_DTGameInfo.SwitchFlag(false);
+		chb = (CheckBox)button;
+		chb.SwitchFlag(true);
+		data.DonationTo = ChatType.CHAT;
+	}
+
+	private void SettingsDTSystemClick(Button button)
+	{
+		CheckBox chb;
+		SETTINGSBUTTON_DTChat.SwitchFlag(false);
+		SETTINGSBUTTON_DTGameInfo.SwitchFlag(false);
+		chb = (CheckBox)button;
+		chb.SwitchFlag(true);
+		data.DonationTo = ChatType.SYSTEM;
+	}
+
+	private void SettingsDTGameClick(Button button)
+	{
+		CheckBox chb;
+		SETTINGSBUTTON_DTChat.SwitchFlag(false);
+		SETTINGSBUTTON_DTSystem.SwitchFlag(false);
+		chb = (CheckBox)button;
+		chb.SwitchFlag(true);
+		data.DonationTo = ChatType.GAME_INFO;
+	}
+
+	private void SettingsSaveClick(Button button)
+	{
+		try {
+			data.CountDonationInCache = Integer.parseInt(SETTINGS_ShowCountDonation.getText());
+			if (data.CountDonationInCache < 1)
+				data.CountDonationInCache = 1;
+			data.Save();
+			data.RecountDonationCache();
+			SETTINGS_ShowCountDonation.LineColor = Pallete.GRAY30_TRANSPERIENTDD;
+			SETTINGS_ShowCountDonation.setText(Integer.toString(data.CountDonationInCache));
+		} catch (NumberFormatException e) {
+			SETTINGS_ShowCountDonation.LineColor = Pallete.RED;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void StatusSaveClick(Button button)
+	{
+		data.Token = text1.getText();
+		try {
+			data.Save();
+		} catch (JSONException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void StatusDeleteClick(Button button)
+	{
+		data.Token = "";
+		try {
+			data.Save();
+		} catch (JSONException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void ConntectionControllerClick(Button button)
+	{
+		if (dalets.getConnected()) {
+			dalets.Disconnect();
+			STATUSBUTTON_ConnectionController.setMessage(I18n.format("daintegratew.connect"));
+		}
+		else {
 			try {
-				data.CountDonationInCache = Integer.parseInt(SETTINGS_ShowCountDonation.getText());
-				if (data.CountDonationInCache < 1)
-					data.CountDonationInCache = 1;
-				data.Save();
-				data.RecountDonationCache();
-				SETTINGS_ShowCountDonation.LineColor = Pallete.GRAY30_TRANSPERIENTDD;
-				SETTINGS_ShowCountDonation.setText(Integer.toString(data.CountDonationInCache));
-			} catch (NumberFormatException e) {
-				SETTINGS_ShowCountDonation.LineColor = Pallete.RED;
-			} catch (Exception e) {
+				dalets.Connect(data.Token);
+			} catch (JSONException e) {
+				Main.DonationAlertsInformation(I18n.format("daintegratew.error"));
 				e.printStackTrace();
 			}
-			break;
-		case 10:
-			data.FEmptyString = text1.getText();
-			try {
-				data.Save();
-			} catch (JSONException | IOException e) {
-				e.printStackTrace();
-			}
-			break;
-		case 11:
-			data.FEmptyString = "";
-			try {
-				data.Save();
-			} catch (JSONException | IOException e) {
-				e.printStackTrace();
-			}
-			break;
-		case 12:
-			if (dalets.getConnected()) {
-				dalets.Disconnect();
-				STATUSBUTTON_ConnectionController.displayString = I18n.format("daintegratew.connect");
-			}
-			else {
-				try {
-					dalets.Connect(data.FEmptyString);
-				} catch (JSONException e) {
-					Main.DonationAlertsInformation(I18n.format("daintegratew.error"));
-					e.printStackTrace();
-				}
-				STATUSBUTTON_ConnectionController.displayString = I18n.format("daintegratew.disconnect");
-			}
-			break;
-		case 13:
-			TypesManager tManager = new TypesManager();
-			DonationType temp;
-			List<DonationTypeEntry> entries = typesPanel.getEntries();
-			for (int i = 0; i < entries.size(); i++) {
+			STATUSBUTTON_ConnectionController.setMessage(I18n.format("daintegratew.disconnect"));
+		}
+	}
+
+	private void TypesSaveClick(Button button) {
+		TypesManager tManager = new TypesManager();
+		DonationType temp;
+		List<DonationTypeEntry> entries = typesPanel.getEntries();
+		try
+		{
+			for (int i = 0; i < entries.size(); i++)
+			{
 				if (entries.get(i).hasError)
 				{
 					typesSaveTimer = 120;
@@ -369,34 +430,40 @@ public class MainWindow extends GuiScreen
 				tManager.getTypes().add(temp);
 			}
 			data.TManager = tManager;
-			try {
-				data.Save();
-				typesSaveTimer = 120;
-				typesSuccessfulSave = true;
-			}
-			catch (JSONException | IOException  e) { e.printStackTrace(); }
-			break;
-		case 14:
-			typesPanel.addEntry(new DonationTypeEntry(typesPanel, new DonationType(), mc, this.width));
-			break;
-		case 20:
-			SetActivePanel(PanelsType.Help);
-			break;
-    	}
-    }
+			data.Save();
+			typesSaveTimer = 120;
+			typesSuccessfulSave = true;
+		} catch (JSONException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void TypesAddClick(Button button)
+	{
+		typesPanel.addEntry(new DonationTypeEntry(0, 0, 0, 0, typesPanel, new DonationType(), mc, this.width));
+	}
     
     public void onGuiClosed() {
-        Keyboard.enableRepeatEvents(false);
+        // Keyboard.enableRepeatEvents(false);
     }
-    
-    public void handleMouseInput() throws IOException
-    {
-        super.handleMouseInput();
-        if (activePanel == PanelsType.Messages)
-        	messagesPanel.handleMouseInput();
+
+	public boolean mouseScrolled(double a, double b, double delta)
+	{
+		if (activePanel == PanelsType.Messages)
+        	messagesPanel.mouseScrolled(a, b, delta);
         if (activePanel == PanelsType.Types)
-        	typesPanel.handleMouseInput();
-    }
+        	typesPanel.mouseScrolled(a, b, delta);
+        return true;
+	}
+
+//    public void handleMouseInput() throws IOException
+//    {
+//        handleMouseInput();
+//        if (activePanel == PanelsType.Messages)
+//        	messagesPanel.handleMouseInput();
+//        if (activePanel == PanelsType.Types)
+//        	typesPanel.handleMouseInput();
+//    }
     //END MINECRAFT HANDLERS =================================================
     
     void setVisibilitySettingsPanel(boolean value) {
@@ -412,7 +479,7 @@ public class MainWindow extends GuiScreen
     	STATUSBUTTON_Save.visible =
     		STATUSBUTTON_Delete.visible =
     		STATUSBUTTON_ConnectionController.visible =
-    		STATUSLABEL_Warning.visible =
+    		//STATUSLABEL_Warning.visible =
     		value;
     }
     

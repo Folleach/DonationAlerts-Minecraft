@@ -3,14 +3,13 @@ package com.folleach.donationalerts;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class TypesManager {
 	private List<DonationType> types;
 	
@@ -35,8 +34,13 @@ public class TypesManager {
 	public String toString()
 	{
 		 JSONObject json = new JSONObject();
+		 JSONArray jsonArray = new JSONArray();
 		 try {
-			json.put("types", types);
+		 	for (DonationType item : types)
+			{
+				jsonArray.put(item.toString());
+			}
+			json.put("types", jsonArray);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

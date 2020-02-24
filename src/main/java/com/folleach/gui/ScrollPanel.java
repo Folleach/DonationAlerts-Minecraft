@@ -1,22 +1,17 @@
 package com.folleach.gui;
 
-import java.util.List;
-
-import org.lwjgl.input.Mouse;
-
 import com.folleach.daintegrate.MathHelper;
 import com.folleach.daintegrate.Pallete;
 import com.google.common.collect.Lists;
+import net.minecraft.client.gui.widget.Widget;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiListExtended;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import java.util.List;
 
-@SideOnly(Side.CLIENT)
-public class ScrollPanel<T extends IEntry> extends Gui {
+@OnlyIn(Dist.CLIENT)
+public class ScrollPanel<T extends IEntry> extends Widget
+{
     private final List<T> entries = Lists.<T>newArrayList();
     
     private int x, y, width, height; 
@@ -26,8 +21,10 @@ public class ScrollPanel<T extends IEntry> extends Gui {
     public int contentHeight;
     public boolean visible;
     
-    public ScrollPanel(int x, int y, int width, int height) {
-    	this.x = x;
+    public ScrollPanel(int x, int y, int width, int height)
+	{
+		super(x, y, width, height, "msg");
+		this.x = x;
     	this.y = y;
     	this.width = width;
     	this.height = height;
@@ -44,7 +41,7 @@ public class ScrollPanel<T extends IEntry> extends Gui {
     	
     	if (contentHeight > visualHeight) {
     		int pos = MathHelper.convertRange(-scrollPosition, 0, contentHeight - visualHeight, 0, height - 50);
-    		drawRect(width - 4, y+pos, width, pos + 50, Pallete.YELLOW);
+    		fill(width - 4, y+pos, width, pos + 50, Pallete.YELLOW);
     	}
     	int offset = scrollPosition + y;
     	for (int i = 0; i < entries.size(); i++)
@@ -52,29 +49,38 @@ public class ScrollPanel<T extends IEntry> extends Gui {
     		entries.get(i).drawEntry(x, offset, mouseX, mouseY, partialTicks);
     		offset += entries.get(i).getHeight();
     	}
-    
     }
     
-    public void keyTyped(char typedChar, int keyCode)
+    public boolean charTyped(char typedChar, int keyCode)
     {
     	for (int i = 0; i < entries.size(); i++)
     		entries.get(i).keyTyped(typedChar, keyCode);
+    	return true;
     }
     
-    public void mouseClicked(int mouseX, int mouseY, int mouseButton)
+    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
     {
     	if (mouseY >= 20)
-    	for (int i = 0; i < entries.size(); i++)
-    		entries.get(i).mouseClicked(mouseX, mouseY, mouseButton);
+    		for (int i = 0; i < entries.size(); i++)
+    			entries.get(i).mouseClicked(mouseX, mouseY, mouseButton);
+    	return true;
     }
+
+    public boolean keyPressed(int a, int b, int c)
+	{
+		for (int i = 0; i < entries.size(); i++)
+			entries.get(i).keyPressed(a, b, c);
+		return true;
+	}
+
+	public boolean mouseScrolled(double a, double b, double delta)
+    {
+    	scrollPosition += delta * 30;
+    	return true;
+	}
     
-    public void handleMouseInput() {
-    	int wheel = Mouse.getDWheel();
-    	if (wheel != 0)
-    		scrollPosition += wheel / 5;
-    }
-    
-    public void updateHeight() {
+    public void updateHeight()
+	{
     	contentHeight = 0;
     	for (int i = 0; i < entries.size(); i++)
     		contentHeight += entries.get(i).getHeight();

@@ -1,14 +1,11 @@
 package com.folleach.donationalerts;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.folleach.daintegrate.Main;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class AdditionalData {
 	public String ForceVariations;
 	public int Randomness;

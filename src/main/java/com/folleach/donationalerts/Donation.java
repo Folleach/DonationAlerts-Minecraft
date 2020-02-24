@@ -3,13 +3,11 @@ package com.folleach.donationalerts;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.folleach.daintegrate.DataCollector;
 import org.json.JSONObject;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-@SideOnly(Side.CLIENT)
-public class Donation {
+public class Donation
+{
 	public int ID;
 	public String AlertType;
 	public String IsShown;

@@ -1,0 +1,48 @@
+modLoader="javafml" #mandatory
+
+loaderVersion="[28,)" #mandatory (28 is current forge version)
+
+issueTrackerURL="https://github.com/Folleach/DonationAlerts-Minecraft/issues/" #optional
+
+[[mods]] #mandatory
+
+modId="daintegratew" #mandatory
+
+jarVersion="1.1.0a1-1.14"
+
+version="${file.jarVersion}" #mandatory
+
+displayName="Donation Alerts Integrate" #mandatory
+
+# updateJSONURL="http://myurl.me/" #optional
+
+displayURL="https://www.curseforge.com/minecraft/mc-mods/donation-alerts-integrate/" #optional
+
+# logoFile="examplemod.png" #optional
+
+credits="Thanks for this example mod goes to Java" #optional
+
+authors="Folleach" #optional
+
+description='''
+    Modification can interact with your chat as well as with the rest of the world through commands.
+'''
+
+[[dependencies.daintegratew]] #optional
+    # the modid of the dependency
+    modId="forge" #mandatory
+    # Does this dependency have to exist - if not, ordering below must be specified
+    mandatory=true #mandatory
+    # The version range of the dependency
+    versionRange="[28,)" #mandatory
+    # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
+    ordering="AFTER"
+    # Side this dependency is applied on - BOTH, CLIENT or SERVER
+    side="CLIENT"
+
+[[dependencies.daintegratew]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.14.4]"
+    ordering="AFTER"
+    side="CLIENT"

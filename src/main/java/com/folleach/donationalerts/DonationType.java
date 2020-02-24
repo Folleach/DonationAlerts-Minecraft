@@ -3,16 +3,16 @@ package com.folleach.donationalerts;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.JsonElement;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.common.collect.Lists;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class DonationType {
 	public boolean Active;
 	
@@ -45,31 +45,44 @@ public class DonationType {
 	{
 		JSONObject json = new JSONObject(data);
 		DonationType obj = new DonationType();
-		try {
+		if (json.has("active"))
 			obj.Active = json.getBoolean("active");
-		} catch (JSONException e) { }
-		JSONArray jarr = json.getJSONArray("m");
-		if (jarr != null)
+		if (json.has("m"))
 		{
-			obj.Messages = new ArrayList<String>();
-			for (int i = 0; i < jarr.length(); i++)
-				obj.Messages.add(jarr.getString(i));
+			JSONArray jarr = json.getJSONArray("m");
+			if (jarr != null)
+			{
+				obj.Messages = new ArrayList<String>();
+				for (int i = 0; i < jarr.length(); i++)
+					obj.Messages.add(jarr.getString(i));
+			}
 		}
-		jarr = json.getJSONArray("c");
-		if (jarr != null)
+		if (json.has("c"))
 		{
-			obj.Commands = new ArrayList<String>();
-			for (int i = 0; i < jarr.length(); i++)
-				obj.Commands.add(jarr.getString(i));
+			JSONArray jarr = json.getJSONArray("c");
+			if (jarr != null)
+			{
+				obj.Commands = new ArrayList<String>();
+				for (int i = 0; i < jarr.length(); i++)
+					obj.Commands.add(jarr.getString(i));
+			}
 		}
-		obj.CurrencyBRL = (float) json.getDouble("BRL");
-		obj.CurrencyBYN = (float) json.getDouble("BYN");
-		obj.CurrencyEUR = (float) json.getDouble("EUR");
-		obj.CurrencyKZT = (float) json.getDouble("KZT");
-		obj.CurrencyRUB = (float) json.getDouble("RUB");
-		obj.CurrencyUAH = (float) json.getDouble("UAH");
-		obj.CurrencyUSD = (float) json.getDouble("USD");
-		obj.Name = json.getString("name");
+		if (json.has("BRL"))
+			obj.CurrencyBRL = (float) json.getDouble("BRL");
+		if (json.has("BYN"))
+			obj.CurrencyBYN = (float) json.getDouble("BYN");
+		if (json.has("EUR"))
+			obj.CurrencyEUR = (float) json.getDouble("EUR");
+		if (json.has("KZT"))
+			obj.CurrencyKZT = (float) json.getDouble("KZT");
+		if (json.has("RUB"))
+			obj.CurrencyRUB = (float) json.getDouble("RUB");
+		if (json.has("UAH"))
+			obj.CurrencyUAH = (float) json.getDouble("UAH");
+		if (json.has("USD"))
+			obj.CurrencyUSD = (float) json.getDouble("USD");
+		if (json.has("name"))
+			obj.Name = json.getString("name");
 		return obj;
 	}
 	

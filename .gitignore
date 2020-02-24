@@ -20,5 +20,8 @@ build
 # other
 eclipse
 run
-src/test
-libs
+mcmodsrepo
+Jars
+
+# Files from Forge MDK
+forge*changelog.txt

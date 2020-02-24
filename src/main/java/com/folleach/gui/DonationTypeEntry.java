@@ -1,6 +1,5 @@
 package com.folleach.gui;
 
-import java.util.Iterator;
 import java.util.List;
 
 import com.folleach.daintegrate.Pallete;
@@ -9,14 +8,14 @@ import com.google.common.collect.Lists;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.widget.Widget;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import scala.Int;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
-public class DonationTypeEntry extends Gui implements IEntry {
+@OnlyIn(Dist.CLIENT)
+public class DonationTypeEntry extends Widget implements IEntry {
 	private static final String langMessages;
 	private static final String langCommands;
 	private static final String langLine;
@@ -52,18 +51,19 @@ public class DonationTypeEntry extends Gui implements IEntry {
 	
 	public boolean hasError = false;
 	
-	public DonationTypeEntry(ScrollPanel own, DonationType type, Minecraft mc, int right)
+	public DonationTypeEntry(int x, int y, int width, int height, ScrollPanel own, DonationType type, Minecraft mc, int right)
 	{
+		super(x, y, width, height, "msg");
 		this.right = right;
 		owner = own;
 		messages = Lists.<WritableLineElement>newArrayList();
 		commands = Lists.<WritableLineElement>newArrayList();
-		
-		addMessage = new CustomButton(2002, 0, 0, 20, true, "+");
+
+		addMessage = new CustomButton(0, 0, 20, true, "+", this::AddMessageClick);
 		addMessage.DefaultBackgroundColor = Pallete.GREEN;
 		addMessage.HoveredBackgroundColor = Pallete.GREEN_HOVERED;
 		addMessage.HoveredForegroundColor = Pallete.WHITE;
-		addCommand = new CustomButton(2002, 0, 0, 20, true, "+");
+		addCommand = new CustomButton(0, 0, 20, true, "+", this::AddCommandClick);
 		addCommand.DefaultBackgroundColor = Pallete.GREEN;
 		addCommand.HoveredBackgroundColor = Pallete.GREEN_HOVERED;
 		addCommand.HoveredForegroundColor = Pallete.WHITE;
@@ -71,12 +71,12 @@ public class DonationTypeEntry extends Gui implements IEntry {
 		this.type = type;
 		this.fontRenderer = mc.fontRenderer;
 		this.mc = mc;
-		textBoxName = new CustomTextBox(1, fontRenderer, 0, 0, 200, 20);
+		textBoxName = new CustomTextBox(fontRenderer, 0, 0, 200, 20, "");
 		textBoxName.tag = I18n.format("daintegratew.name");
 		textBoxName.setText(type.Name);
-		checkBoxActive = new CheckBox(8001, 0, 0, 60, true, I18n.format("daintegratew.active"), type.Active);
+		checkBoxActive = new CheckBox(0, 0, 60, true, I18n.format("daintegratew.active"), type.Active, this::CheckBoxClick);
 		
-		deleteEntry = new CustomButton(0, 0, 0, 20, true, "-");
+		deleteEntry = new CustomButton(0, 0, 20, true, "-", this::DeleteEntryClick);
 		deleteEntry.DefaultBackgroundColor = Pallete.RED;
 		deleteEntry.HoveredBackgroundColor = Pallete.RED_HOVERED;
 		deleteEntry.HoveredForegroundColor = Pallete.WHITE;
@@ -96,33 +96,59 @@ public class DonationTypeEntry extends Gui implements IEntry {
 			
 		}
 		
-		CurrencyBRL = new CustomTextBox(0, fontRenderer, 0, 0, 80, 20);
+		CurrencyBRL = new CustomTextBox(fontRenderer, 0, 0, 80, 20, "");
 		CurrencyBRL.tag = "BRL";
 		CurrencyBRL.setText(String.valueOf(type.CurrencyBRL));
-		CurrencyBYN = new CustomTextBox(0, fontRenderer, 0, 0, 80, 20);
+		CurrencyBYN = new CustomTextBox(fontRenderer, 0, 0, 80, 20, "");
 		CurrencyBYN.tag = "BYN";
 		CurrencyBYN.setText(String.valueOf(type.CurrencyBYN));
-		CurrencyEUR = new CustomTextBox(0, fontRenderer, 0, 0, 80, 20);
+		CurrencyEUR = new CustomTextBox(fontRenderer, 0, 0, 80, 20, "");
 		CurrencyEUR.tag = "EUR";
 		CurrencyEUR.setText(String.valueOf(type.CurrencyEUR));
-		CurrencyKZT = new CustomTextBox(0, fontRenderer, 0, 0, 80, 20);
+		CurrencyKZT = new CustomTextBox(fontRenderer, 0, 0, 80, 20, "");
 		CurrencyKZT.tag = "KZT";
 		CurrencyKZT.setText(String.valueOf(type.CurrencyKZT));
-		CurrencyRUB = new CustomTextBox(0, fontRenderer, 0, 0, 80, 20);
+		CurrencyRUB = new CustomTextBox(fontRenderer, 0, 0, 80, 20, "");
 		CurrencyRUB.tag = "RUB";
 		CurrencyRUB.setText(String.valueOf(type.CurrencyRUB));
-		CurrencyUAH = new CustomTextBox(0, fontRenderer, 0, 0, 80, 20);
+		CurrencyUAH = new CustomTextBox(fontRenderer, 0, 0, 80, 20, "");
 		CurrencyUAH.tag = "UAH";
 		CurrencyUAH.setText(String.valueOf(type.CurrencyUAH));
-		CurrencyUSD = new CustomTextBox(0, fontRenderer, 0, 0, 80, 20);
+		CurrencyUSD = new CustomTextBox(fontRenderer, 0, 0, 80, 20, "");
 		CurrencyUSD.tag = "USD";
 		CurrencyUSD.setText(String.valueOf(type.CurrencyUSD));
 	}
-	
+
+	private void AddMessageClick(Button button)
+	{
+		messages.add(new WritableLineElement(this, mc, WritableType.Message, langLine + " " + (messages.size() + 1)));
+		button.playDownSound(mc.getSoundHandler());
+		owner.updateHeight();
+	}
+
+	private void AddCommandClick(Button button)
+	{
+		commands.add(new WritableLineElement(this, mc, WritableType.Command, langLine + " " + (commands.size() + 1)));
+		button.playDownSound(mc.getSoundHandler());
+		owner.updateHeight();
+	}
+
+	private void DeleteEntryClick(Button button)
+	{
+		button.playDownSound(mc.getSoundHandler());
+		owner.removeEntry(this);
+	}
+
+	private void CheckBoxClick(Button button)
+	{
+		checkBoxActive.SwitchFlag(!checkBoxActive.Flag);
+		checkBoxActive.playDownSound(mc.getSoundHandler());
+	}
+
 	@Override
 	public void drawEntry(int x, int y, int mouseX, int mouseY, float partialTicks) {
 		int offset = y;
-		textBoxName.drawTextBox(x, offset);
+		textBoxName.renderButton(x, offset);
 		checkBoxActive.drawButton(mc, x + 210, y + 10, mouseX, mouseY, partialTicks);
 		deleteEntry.drawButton(mc, x + 275, y + 10, mouseX, mouseY, partialTicks);
 		offset += 35;
@@ -144,21 +170,20 @@ public class DonationTypeEntry extends Gui implements IEntry {
 		}
 		addCommand.drawButton(mc, x + 210, offset, mouseX, mouseY, partialTicks);
 		offset += 25;
-		CurrencyUSD.drawTextBox(x, offset); CurrencyRUB.drawTextBox(x + 90, offset);
+		CurrencyUSD.renderButton(x, offset); CurrencyRUB.renderButton(x + 90, offset);
 		offset += 35;
-		CurrencyEUR.drawTextBox(x, offset); CurrencyKZT.drawTextBox(x + 90, offset);
+		CurrencyEUR.renderButton(x, offset); CurrencyKZT.renderButton(x + 90, offset);
 		offset += 35;
-		CurrencyBRL.drawTextBox(x, offset); CurrencyBYN.drawTextBox(x + 90, offset);
+		CurrencyBRL.renderButton(x, offset); CurrencyBYN.renderButton(x + 90, offset);
 		offset += 35;
-		CurrencyUAH.drawTextBox(x, offset);
+		CurrencyUAH.renderButton(x, offset);
 		offset += 35;
-		drawRect(x, offset, right - 10, offset + 1, Pallete.GRAY60);
+		fill(x, offset, right - 10, offset + 1, Pallete.GRAY60);
 		offset += 20;
 	}
 
 	@Override
 	public int getHeight() {
-		
 		return 265 + (messages.size() * 35) + (commands.size() * 35);
 	}
 	
@@ -181,51 +206,62 @@ public class DonationTypeEntry extends Gui implements IEntry {
 		for (WritableLineElement element : commands)
 			element.keyTyped(typedChar, keyCode);
 		
-		textBoxName.textboxKeyTyped(typedChar, keyCode);
-		if (CurrencyBRL.textboxKeyTyped(typedChar, keyCode))
+		textBoxName.charTyped(typedChar, keyCode);
+		if (CurrencyBRL.charTyped(typedChar, keyCode))
 			checkCurrency(CurrencyBRL);
-		if (CurrencyBYN.textboxKeyTyped(typedChar, keyCode))
+		if (CurrencyBYN.charTyped(typedChar, keyCode))
 			checkCurrency(CurrencyBYN);
-		if (CurrencyEUR.textboxKeyTyped(typedChar, keyCode))
+		if (CurrencyEUR.charTyped(typedChar, keyCode))
 			checkCurrency(CurrencyEUR);
-		if (CurrencyKZT.textboxKeyTyped(typedChar, keyCode))
+		if (CurrencyKZT.charTyped(typedChar, keyCode))
 			checkCurrency(CurrencyKZT);
-		if (CurrencyRUB.textboxKeyTyped(typedChar, keyCode))
+		if (CurrencyRUB.charTyped(typedChar, keyCode))
 			checkCurrency(CurrencyRUB);
-		if (CurrencyUAH.textboxKeyTyped(typedChar, keyCode))
+		if (CurrencyUAH.charTyped(typedChar, keyCode))
 			checkCurrency(CurrencyUAH);
-		if (CurrencyUSD.textboxKeyTyped(typedChar, keyCode))
+		if (CurrencyUSD.charTyped(typedChar, keyCode))
 			checkCurrency(CurrencyUSD);
 	}
 
+	public boolean keyPressed(int a, int b, int c)
+	{
+		for (WritableLineElement element : messages)
+			element.keyPressed(a, b, c);
+		for (WritableLineElement element : commands)
+			element.keyPressed(a, b, c);
+		textBoxName.keyPressed(a, b, c);
+		if (CurrencyBRL.keyPressed(a, b, c))
+			checkCurrency(CurrencyBRL);
+		if (CurrencyBYN.keyPressed(a, b, c))
+			checkCurrency(CurrencyBYN);
+		if (CurrencyEUR.keyPressed(a, b, c))
+			checkCurrency(CurrencyEUR);
+		if (CurrencyKZT.keyPressed(a, b, c))
+			checkCurrency(CurrencyKZT);
+		if (CurrencyRUB.keyPressed(a, b, c))
+			checkCurrency(CurrencyRUB);
+		if (CurrencyUAH.keyPressed(a, b, c))
+			checkCurrency(CurrencyUAH);
+		if (CurrencyUSD.keyPressed(a, b, c))
+			checkCurrency(CurrencyUSD);
+		return true;
+	}
+
 	@Override
-	public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
+	{
 		for (int i = 0; i < messages.size(); i++)
 			messages.get(i).mouseClicked(mouseX, mouseY, mouseButton);
 
 		for (int i = 0; i < commands.size(); i++)
 			commands.get(i).mouseClicked(mouseX, mouseY, mouseButton);
 		textBoxName.mouseClicked(mouseX, mouseY, mouseButton);
-		
-		if (checkBoxActive.isClick(mouseX, mouseY)) {
-			checkBoxActive.SwitchFlag(!checkBoxActive.Flag);
-			checkBoxActive.playPressSound(mc.getSoundHandler());
-		}
-		if (addMessage.isClick(mouseX, mouseY)) {
-			messages.add(new WritableLineElement(this, mc, WritableType.Message, langLine + " " + (messages.size() + 1)));
-			addMessage.playPressSound(mc.getSoundHandler());
-			owner.updateHeight();
-		}
-		if (addCommand.isClick(mouseX, mouseY)) {
-			commands.add(new WritableLineElement(this, mc, WritableType.Command, langLine + " " + (commands.size() + 1)));
-			addCommand.playPressSound(mc.getSoundHandler());
-			owner.updateHeight();
-		}
-		if (deleteEntry.isClick(mouseX, mouseY)) {
-			deleteEntry.playPressSound(mc.getSoundHandler());
-			owner.removeEntry(this);
-		}
-		
+
+		addMessage.mouseClicked(mouseX, mouseY, mouseButton);
+		addCommand.mouseClicked(mouseX, mouseY, mouseButton);
+		deleteEntry.mouseClicked(mouseX, mouseY, mouseButton);
+		checkBoxActive.mouseClicked(mouseX, mouseY, mouseButton);
+
 		if (CurrencyBRL.mouseClicked(mouseX, mouseY, mouseButton))
 			checkCurrency(CurrencyBRL);
 		if (CurrencyBYN.mouseClicked(mouseX, mouseY, mouseButton))
@@ -240,11 +276,13 @@ public class DonationTypeEntry extends Gui implements IEntry {
 			checkCurrency(CurrencyUAH);
 		if (CurrencyUSD.mouseClicked(mouseX, mouseY, mouseButton))
 			checkCurrency(CurrencyUSD);
+		return true;
 	}
 	
 	private void checkCurrency(CustomTextBox textBox) {
 		try {
-			Double.parseDouble(textBox.getText());
+			String aa = textBox.getText();
+			Double.parseDouble(aa);
 			textBox.LineColor = Pallete.GRAY30_TRANSPERIENTDD;
 			hasError = false;
 		}
@@ -286,7 +324,8 @@ public class DonationTypeEntry extends Gui implements IEntry {
 		Message, Command
 	}
 	
-	public class WritableLineElement {
+	public class WritableLineElement
+	{
 		private final Minecraft mc;
 		private final DonationTypeEntry callbackThinking;
 		private final WritableType wtype;
@@ -295,43 +334,54 @@ public class DonationTypeEntry extends Gui implements IEntry {
 		
 		private CustomButton delete;
 		
-		public WritableLineElement(DonationTypeEntry dte, Minecraft mc, WritableType t, String tag) {
+		public WritableLineElement(DonationTypeEntry dte, Minecraft mc, WritableType t, String tag)
+		{
 			this.mc = mc;
 			callbackThinking = dte;
 			wtype = t;
-			line = new CustomTextBox(2, mc.fontRenderer, 0, 0, 200, 20);
+			line = new CustomTextBox(mc.fontRenderer, 0, 0, 200, 20, "");
 			line.tag = tag;
-			line.maxStringLength = Short.MAX_VALUE;
-			delete = new CustomButton(2002, 0, 0, 20, true, "-");
+			delete = new CustomButton(0, 0, 20, true, "-", this::DeleteClick);
 		}
-		
+
+		public void DeleteClick(Button button)
+		{
+			if (wtype == WritableType.Message)
+				callbackThinking.removeMessage(this);
+			else if (wtype == WritableType.Command)
+				callbackThinking.removeCommands(this);
+			button.playDownSound(mc.getSoundHandler());
+			owner.updateHeight();
+		}
+
 		public void changeTag(String tag) {
 			line.tag = tag;
 		}
 		
-		public void drawElement(int x, int y, int mouseX, int mouseY, float partialTicks) {
-			line.drawTextBox(x, y);
+		public void drawElement(int x, int y, int mouseX, int mouseY, float partialTicks)
+		{
+			line.renderButton(x, y);
 			delete.drawButton(mc, x + 210, y + 10, mouseX, mouseY, partialTicks);
 		}
 
-		public void keyTyped(char typedChar, int keyCode) {
-			if (line.textboxKeyTyped(typedChar, keyCode)) {
-				
+		public void keyTyped(char typedChar, int keyCode)
+		{
+			if (line.charTyped(typedChar, keyCode))
+			{
 			}
+		}
+
+		public boolean keyPressed(int a, int b, int c)
+		{
+			if (line.keyPressed(a, b, c))
+				return true;
+			return false;
 		}
 		
-		public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+		public void mouseClicked(double mouseX, double mouseY, int mouseButton)
+		{
 			line.mouseClicked(mouseX, mouseY, mouseButton);
-			if (delete.isClick(mouseX, mouseY))
-			{
-				if (wtype == WritableType.Message)
-					callbackThinking.removeMessage(this);
-				else if (wtype == WritableType.Command)
-					callbackThinking.removeCommands(this);
-				delete.playPressSound(mc.getSoundHandler());
-				owner.updateHeight();
-			}
+			delete.mouseClicked(mouseX, mouseY, mouseButton);
 		}
-	
 	}
 }

@@ -14,10 +14,7 @@ import io.socket.client.Socket;
 import io.socket.client.SocketIOException;
 import io.socket.emitter.Emitter.Listener;
 import net.minecraft.client.resources.I18n;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
 public class DonationAlerts {
 	private Socket sock;
 	private URI _url;
