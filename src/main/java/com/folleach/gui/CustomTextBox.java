@@ -4,7 +4,6 @@ import com.folleach.daintegrate.Pallete;
 import com.google.common.base.Predicates;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.IRenderable;
@@ -28,7 +27,7 @@ public class CustomTextBox extends Widget implements IRenderable, IGuiEventListe
 {
     private final FontRenderer fontRenderer;
     private String text = "";
-    private int maxStringLength = 32;
+    private int maxStringLength = Integer.MAX_VALUE;
     private int cursorCounter;
     private boolean enableBackgroundDrawing = true;
     private boolean canLoseFocus = true;
