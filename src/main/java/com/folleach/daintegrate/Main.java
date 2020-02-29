@@ -3,7 +3,8 @@ package com.folleach.daintegrate;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import com.folleach.donationalerts.Donation;
+import com.folleach.donationalerts.AlertType;
+import com.folleach.donationalerts.DonationAlertsEvent;
 import com.folleach.donationalerts.DonationAlerts;
 
 import net.minecraft.client.Minecraft;
@@ -66,9 +67,12 @@ public class Main {
 		MinecraftForge.EVENT_BUS.register(keys);
 	}
 	
-	public static void AddDonation(Donation donate)
+	public static void AddDonation(DonationAlertsEvent event)
 	{
-		data.AddDonation(donate);
+		if (event.Type == AlertType.Donate)
+			data.AddDonation(event);
+		else
+			DonationAlertsInformation("Invalid type: " + event.Type.toString());
 	}
 	
 	public static void DonationAlertsInformation(String message)

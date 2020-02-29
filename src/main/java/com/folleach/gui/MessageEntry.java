@@ -5,7 +5,7 @@ import net.minecraft.client.gui.widget.Widget;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import com.folleach.daintegrate.Pallete;
-import com.folleach.donationalerts.Donation;
+import com.folleach.donationalerts.DonationAlertsEvent;
 import net.minecraft.client.gui.FontRenderer;
 
 @OnlyIn(Dist.CLIENT)
@@ -15,7 +15,7 @@ public class MessageEntry extends Widget implements IEntry
 	private String title;
 	private List<String> messageLines;
 
-    public MessageEntry(int x, int y, int width, int height, FontRenderer fontR, Donation donate)
+    public MessageEntry(int x, int y, int width, int height, FontRenderer fontR, DonationAlertsEvent donate)
     {
 		super(x, y, height, width, "msg");
 		fontRenderer = fontR;

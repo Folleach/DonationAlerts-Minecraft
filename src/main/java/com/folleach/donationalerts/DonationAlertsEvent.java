@@ -3,15 +3,14 @@ package com.folleach.donationalerts;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.folleach.daintegrate.DataCollector;
 import org.json.JSONObject;
 
-public class Donation
+public class DonationAlertsEvent
 {
 	public int ID;
-	public String AlertType;
+	public AlertType Type;
 	public String IsShown;
-	public AdditionalData AddData;
+	public AdditionalData Additional;
 	public String BillingSystem;
 	public String BillingSystemType;
 	public String UserName;
@@ -25,9 +24,9 @@ public class Donation
 	public String ApId;
 	public boolean IsTest;
 	
-	public static Donation getDonation(String data)
+	public static DonationAlertsEvent getDonationAlertsEvent(String data)
 	{
-		Donation obj = new Donation();
+		DonationAlertsEvent obj = new DonationAlertsEvent();
 		JSONObject json;
 		boolean mainDone = false;
 		try {
@@ -41,16 +40,19 @@ public class Donation
 			obj.UserName = json.getString("username");
 			obj.Message = json.getString("message");
 			obj.IsTest = json.getBoolean("_is_test_alert");
+			if (json.has("alert_type"))
+				obj.Type = AlertType.valueOf(json.getInt("alert_type"));
+			else
+				obj.Type = AlertType.Undefined;
 			mainDone = true;
 			//Secondary
-			obj.AlertType = json.getString("alert_type");
 			obj.IsShown = json.getString("is_shown");
 			obj.BillingSystem = json.getString("billing_system");
 			obj.BillingSystemType = json.getString("billing_system_type");
 			obj.DateCreated = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(json.getString("date_created"));
 			obj.Emotes = json.getString("emotes");
 			obj.ApId = json.getString("ap_id");
-			obj.AddData = AdditionalData.getAdditionalData(json.getString("additional_data"));
+			obj.Additional = AdditionalData.getAdditionalData(json.getString("additional_data"));
 		} catch (Exception e) {
 			if (mainDone)
 				return obj;

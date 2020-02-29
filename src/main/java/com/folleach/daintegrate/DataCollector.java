@@ -1,7 +1,6 @@
 package com.folleach.daintegrate;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -12,7 +11,7 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.folleach.donationalerts.Donation;
+import com.folleach.donationalerts.DonationAlertsEvent;
 import com.folleach.donationalerts.DonationType;
 import com.folleach.donationalerts.TypesManager;
 import com.google.common.collect.Lists;
@@ -21,7 +20,7 @@ import net.minecraft.util.text.ChatType;
 import net.minecraftforge.common.ForgeHooks;
 
 public class DataCollector {
-	public List<Donation> Donations;
+	public List<DonationAlertsEvent> Donations;
 	public TypesManager TManager;
 	public ChatType DonationTo;
 	public boolean SkipTestDonation;
@@ -39,7 +38,7 @@ public class DataCollector {
 	
 	public DataCollector() throws IOException
 	{
-		Donations = Lists.<Donation>newArrayList();
+		Donations = Lists.<DonationAlertsEvent>newArrayList();
 		TManager = new TypesManager();
 		DonationTo = ChatType.CHAT;
 		SkipTestDonation = false;
@@ -107,7 +106,7 @@ public class DataCollector {
 		}
 	}
 	
-	public void AddDonation(Donation donate)
+	public void AddDonation(DonationAlertsEvent donate)
 	{
 		if (SkipTestDonation && donate.IsTest)
 			return;
@@ -145,7 +144,7 @@ public class DataCollector {
 			Donations.remove(0);
 	}
 	
-	private String ReplaceConstants(String pattern, Donation donat) {
+	private String ReplaceConstants(String pattern, DonationAlertsEvent donat) {
 		pattern = pattern.replace(TagDonationMessage, donat.Message);
 		pattern = pattern.replace(TagDonationAmount, String.valueOf(donat.Amount));
 		pattern = pattern.replace(TagDonationCurrency, String.valueOf(donat.Currency));

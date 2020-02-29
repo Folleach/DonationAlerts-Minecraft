@@ -8,7 +8,7 @@ issueTrackerURL="https://github.com/Folleach/DonationAlerts-Minecraft/issues/" #
 
 modId="daintegratew" #mandatory
 
-jarVersion="1.1.0a1-1.14"
+jarVersion="1.1.0b1-1.14"
 
 version="${file.jarVersion}" #mandatory
 
