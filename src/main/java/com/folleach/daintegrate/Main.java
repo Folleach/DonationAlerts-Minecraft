@@ -29,32 +29,10 @@ public class Main {
 
 	public Main()
 	{
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::Setup);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::ClientSetup);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::EnqueueIMC);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::ProcessIMC);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::LoadComplite);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::LoadComplete);
 	}
 
-	public void Setup(final FMLCommonSetupEvent event)
-	{
-
-	}
-
-	public void ClientSetup(final FMLClientSetupEvent event) {
-	}
-
-	public void EnqueueIMC(final InterModEnqueueEvent event)
-	{
-
-	}
-
-	public void ProcessIMC(final InterModProcessEvent event)
-	{
-
-	}
-
-	public void LoadComplite(final FMLLoadCompleteEvent event)
+	public void LoadComplete(final FMLLoadCompleteEvent event)
 	{
 		GameInstance = Minecraft.getInstance();
 		keys = new KeyHandler();

@@ -114,8 +114,8 @@ public class DataCollector {
 		DonationType executor = null;
 		for (int i = 0; i < TManager.getTypes().size(); i++)
 		{
-			if (donate.Amount >= TManager.get(i).getAmmoutByCurrency(donate.Currency)
-					&& (executor == null || TManager.get(i).getAmmoutByCurrency(donate.Currency) > executor.getAmmoutByCurrency(donate.Currency))
+			if (donate.Amount >= TManager.get(i).getAmountByCurrency(donate.Currency)
+					&& (executor == null || TManager.get(i).getAmountByCurrency(donate.Currency) > executor.getAmountByCurrency(donate.Currency))
 					&& TManager.get(i).Active) {
 				executor = TManager.get(i);
 			}

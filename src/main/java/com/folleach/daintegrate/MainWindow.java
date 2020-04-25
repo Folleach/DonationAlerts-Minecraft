@@ -127,21 +127,15 @@ public class MainWindow extends Screen
 				dalets.getConnected() ? I18n.format("daintegratew.disconnect") : I18n.format("daintegratew.connect"), this::ConntectionControllerClick));
 		TYPESBUTTON_Save = this.addButton(new DefaultButton(this.width - 80, 0, 80, activePanel == PanelsType.Types, I18n.format("daintegratew.save"), this::TypesSaveClick));
 		TYPESBUTTON_Add = this.addButton(new CustomButton(this.width - 100, 0, 20, activePanel == PanelsType.Types, "+", this::TypesAddClick));
-		TYPESBUTTON_Add.DefaultBackgroundColor = Pallete.GREEN;
-		TYPESBUTTON_Add.HoveredBackgroundColor = Pallete.GREEN_HOVERED;
-		TYPESBUTTON_Add.HoveredForegroundColor = Pallete.WHITE;
-		LEFTBUTTON_SupportAuthor.DefaultBackgroundColor = Pallete.BLACK_TRANSPERIENT30;
-		//this.labelList.add(STATUSLABEL_Warning = new GuiLabel(fontRenderer, 201, 125, 130, width - 130, 30, Pallete.WHITE));
-		//STATUSLABEL_Warning.visible = activePanel == PanelsType.Status;
-		//STATUSLABEL_Warning.addLine("daintegratew.warning.line1");
-		//STATUSLABEL_Warning.addLine("daintegratew.warning.line2");
-		//STATUSLABEL_Warning.addLine("daintegratew.warning.line3");
+		TYPESBUTTON_Add.DefaultBackgroundColor = Palette.GREEN;
+		TYPESBUTTON_Add.HoveredBackgroundColor = Palette.GREEN_HOVERED;
+		TYPESBUTTON_Add.HoveredForegroundColor = Palette.WHITE;
+		LEFTBUTTON_SupportAuthor.DefaultBackgroundColor = Palette.BLACK_TRANSPARENT30;
 		SETTINGS_ShowCountDonation = new CustomTextBox(fontRenderer, 125, 90, 200, 20, "");
 		SETTINGS_ShowCountDonation.tag = I18n.format("daintegratew.countshowdonation");
 		SETTINGS_ShowCountDonation.setText(Integer.toString(data.CountDonationInCache));
-		// Keyboard.enableRepeatEvents(true);
 		text1 = new CustomTextBox(fontRenderer, 125, TOKENPANELY, 200, 20, "");
-		text1.setTextColor(Pallete.WHITE);
+		text1.setTextColor(Palette.WHITE);
 		text1.tag = langToken;
 
 		InitializeMessages();
@@ -199,34 +193,34 @@ public class MainWindow extends Screen
     		messagesPanel.drawPanel(mouseX, mouseY, partialTicks);
     		break;
     	case Status:
-    		drawString(fontRenderer, langConnectState, 125, 25, Pallete.WHITE);
+    		drawString(fontRenderer, langConnectState, 125, 25, Palette.WHITE);
     		drawString(fontRenderer, dalets.getConnected() ? langConnected : langDisonnected, 125 + lenghtConnectState + 5, 25,
-    				dalets.getConnected() ? Pallete.GREEN : Pallete.RED);
+    				dalets.getConnected() ? Palette.GREEN : Palette.RED);
     		
     		text1.renderButton();
-    		drawString(fontRenderer, data.isTokenExists() ? langTokenExist : langTokenNotExists, 125, TOKENPANELY + 35, data.isTokenExists() ? Pallete.GREEN : Pallete.RED);
+    		drawString(fontRenderer, data.isTokenExists() ? langTokenExist : langTokenNotExists, 125, TOKENPANELY + 35, data.isTokenExists() ? Palette.GREEN : Palette.RED);
     		break;
     	case Types:
     		typesPanel.drawPanel(mouseX, mouseY, partialTicks);
     		if (typesSuccessfulSave && typesSaveTimer > 0)
-    			drawString(fontRenderer, langSaved, width - lenghtSaved - 100, 6, Pallete.WHITE);
+    			drawString(fontRenderer, langSaved, width - lenghtSaved - 100, 6, Palette.WHITE);
     		else if (!typesSuccessfulSave && typesSaveTimer > 0)
-    			drawString(fontRenderer, langError, width - lenghtSaved - 100, 6, Pallete.RED);
+    			drawString(fontRenderer, langError, width - lenghtSaved - 100, 6, Palette.RED);
     		break;
     	case Settings:
     		SETTINGS_ShowCountDonation.renderButton();
-    		this.drawString(fontRenderer, langDonto, 125, 54, Pallete.WHITE);
+    		this.drawString(fontRenderer, langDonto, 125, 54, Palette.WHITE);
     		break;
     	case Help:
     		for (int i = 0; i < langHelpLines.size(); i++)
-    			drawString(fontRenderer, langHelpLines.get(i), 125, i * 10 + 25, Pallete.WHITE);
+    			drawString(fontRenderer, langHelpLines.get(i), 125, i * 10 + 25, Palette.WHITE);
     		break;
     	}
         
         //Left menu
         fill(0, 0, this.width, 20, 0x65000000);
         fill(0, 20, 120, this.height, 0x50000000);
-        this.drawString(fontRenderer, Main.MODNAME, 5, 5, Pallete.WHITE);
+        this.drawString(fontRenderer, Main.MODNAME, 5, 5, Palette.WHITE);
         
         super.render(mouseX, mouseY, partialTicks);
     }
@@ -355,10 +349,10 @@ public class MainWindow extends Screen
 				data.CountDonationInCache = 1;
 			data.Save();
 			data.RecountDonationCache();
-			SETTINGS_ShowCountDonation.LineColor = Pallete.GRAY30_TRANSPERIENTDD;
+			SETTINGS_ShowCountDonation.LineColor = Palette.GRAY30_TRANSPARENT_xDD;
 			SETTINGS_ShowCountDonation.setText(Integer.toString(data.CountDonationInCache));
 		} catch (NumberFormatException e) {
-			SETTINGS_ShowCountDonation.LineColor = Pallete.RED;
+			SETTINGS_ShowCountDonation.LineColor = Palette.RED;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

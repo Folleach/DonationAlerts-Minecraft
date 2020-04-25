@@ -2,7 +2,7 @@ package com.folleach.gui;
 
 import java.util.List;
 
-import com.folleach.daintegrate.Pallete;
+import com.folleach.daintegrate.Palette;
 import com.folleach.donationalerts.DonationType;
 import com.google.common.collect.Lists;
 
@@ -60,13 +60,13 @@ public class DonationTypeEntry extends Widget implements IEntry {
 		commands = Lists.<WritableLineElement>newArrayList();
 
 		addMessage = new CustomButton(0, 0, 20, true, "+", this::AddMessageClick);
-		addMessage.DefaultBackgroundColor = Pallete.GREEN;
-		addMessage.HoveredBackgroundColor = Pallete.GREEN_HOVERED;
-		addMessage.HoveredForegroundColor = Pallete.WHITE;
+		addMessage.DefaultBackgroundColor = Palette.GREEN;
+		addMessage.HoveredBackgroundColor = Palette.GREEN_HOVERED;
+		addMessage.HoveredForegroundColor = Palette.WHITE;
 		addCommand = new CustomButton(0, 0, 20, true, "+", this::AddCommandClick);
-		addCommand.DefaultBackgroundColor = Pallete.GREEN;
-		addCommand.HoveredBackgroundColor = Pallete.GREEN_HOVERED;
-		addCommand.HoveredForegroundColor = Pallete.WHITE;
+		addCommand.DefaultBackgroundColor = Palette.GREEN;
+		addCommand.HoveredBackgroundColor = Palette.GREEN_HOVERED;
+		addCommand.HoveredForegroundColor = Palette.WHITE;
 		
 		this.type = type;
 		this.fontRenderer = mc.fontRenderer;
@@ -77,9 +77,9 @@ public class DonationTypeEntry extends Widget implements IEntry {
 		checkBoxActive = new CheckBox(0, 0, 60, true, I18n.format("daintegratew.active"), type.Active, this::CheckBoxClick);
 		
 		deleteEntry = new CustomButton(0, 0, 20, true, "-", this::DeleteEntryClick);
-		deleteEntry.DefaultBackgroundColor = Pallete.RED;
-		deleteEntry.HoveredBackgroundColor = Pallete.RED_HOVERED;
-		deleteEntry.HoveredForegroundColor = Pallete.WHITE;
+		deleteEntry.DefaultBackgroundColor = Palette.RED;
+		deleteEntry.HoveredBackgroundColor = Palette.RED_HOVERED;
+		deleteEntry.HoveredForegroundColor = Palette.WHITE;
 		WritableLineElement temp;
 		if (type.getMessages() != null)
 		for (int i = 0; i < type.getMessages().size(); i++) {
@@ -152,7 +152,7 @@ public class DonationTypeEntry extends Widget implements IEntry {
 		checkBoxActive.drawButton(mc, x + 210, y + 10, mouseX, mouseY, partialTicks);
 		deleteEntry.drawButton(mc, x + 275, y + 10, mouseX, mouseY, partialTicks);
 		offset += 35;
-		fontRenderer.drawString(langMessages, x, offset, Pallete.WHITE);
+		fontRenderer.drawString(langMessages, x, offset, Palette.WHITE);
 		offset += 10;
 		for (int i = 0; i < messages.size(); i++)
 		{
@@ -161,7 +161,7 @@ public class DonationTypeEntry extends Widget implements IEntry {
 		}
 		addMessage.drawButton(mc, x + 210, offset, mouseX, mouseY, partialTicks);
 		offset += 25;
-		fontRenderer.drawString(langCommands, x, offset, Pallete.WHITE);
+		fontRenderer.drawString(langCommands, x, offset, Palette.WHITE);
 		offset += 10;
 		for (int i = 0; i < commands.size(); i++)
 		{
@@ -178,7 +178,7 @@ public class DonationTypeEntry extends Widget implements IEntry {
 		offset += 35;
 		CurrencyUAH.renderButton(x, offset);
 		offset += 35;
-		fill(x, offset, right - 10, offset + 1, Pallete.GRAY60);
+		fill(x, offset, right - 10, offset + 1, Palette.GRAY60);
 		offset += 20;
 	}
 
@@ -283,11 +283,11 @@ public class DonationTypeEntry extends Widget implements IEntry {
 		try {
 			String aa = textBox.getText();
 			Double.parseDouble(aa);
-			textBox.LineColor = Pallete.GRAY30_TRANSPERIENTDD;
+			textBox.LineColor = Palette.GRAY30_TRANSPARENT_xDD;
 			hasError = false;
 		}
 		catch (Exception e) {
-			textBox.LineColor = Pallete.RED;
+			textBox.LineColor = Palette.RED;
 			hasError = true;
 		}
 	}

@@ -1,9 +1,8 @@
 package com.folleach.gui;
 
 import com.folleach.daintegrate.Main;
-import com.folleach.daintegrate.Pallete;
+import com.folleach.daintegrate.Palette;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -45,9 +44,9 @@ public class CheckBox extends CustomButton
             	colorBg = HoveredBackgroundColor;
             }
             fill(x, y, x + width, y + height, colorBg);
-            int colorFlag = Pallete.RED;
+            int colorFlag = Palette.RED;
             if (Flag)
-            	colorFlag = Pallete.GREEN;
+            	colorFlag = Palette.GREEN;
             fill(x + 4, y + 4, x + 16, y + 16, colorFlag);
             this.drawString(fontrenderer, this.getMessage(), this.x + 22, this.y + (this.height / 2) - 4, colorFg);
         }

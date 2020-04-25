@@ -1,6 +1,6 @@
 package com.folleach.gui;
 
-import com.folleach.daintegrate.Pallete;
+import com.folleach.daintegrate.Palette;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -10,9 +10,9 @@ public class DefaultButton extends CustomButton {
 
 	public DefaultButton(int x, int y, int widthIn, int heightIn, String buttonText, IPressable onPress) {
 		super(x, y, widthIn, heightIn, buttonText, onPress);
-		super.DefaultBackgroundColor = Pallete.BLACK_TRANSPERIENTB0;
-		super.HoveredBackgroundColor = Pallete.YELLOW_TRANSPERIENTA0;
-		super.HoveredForegroundColor = Pallete.WHITE;
+		super.DefaultBackgroundColor = Palette.BLACK_TRANSPARENT_xB0;
+		super.HoveredBackgroundColor = Palette.YELLOW_TRANSPARENT_xA0;
+		super.HoveredForegroundColor = Palette.WHITE;
 	}
 	
 	public DefaultButton(int x, int y, int widthIn, boolean visibility, String buttonText, IPressable onPress) {
