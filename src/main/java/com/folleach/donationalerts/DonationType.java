@@ -3,7 +3,6 @@ package com.folleach.donationalerts;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gson.JsonElement;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.json.JSONArray;
@@ -28,7 +27,7 @@ public class DonationType {
 	public float CurrencyUAH;
 	public float CurrencyUSD;
 	
-	public float getAmmoutByCurrency(String currency) {
+	public float getAmountByCurrency(String currency) {
 		switch (currency) {
 		case "BRL": return CurrencyBRL; 
 		case "BYN": return CurrencyBYN;

@@ -1,6 +1,6 @@
 package com.folleach.gui;
 
-import com.folleach.daintegrate.Pallete;
+import com.folleach.daintegrate.Palette;
 import com.google.common.base.Predicates;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
@@ -432,12 +432,12 @@ public class CustomTextBox extends Widget implements IRenderable, IGuiEventListe
     public void renderButton() {
         if (this.getVisible()) {
             if (this.getEnableBackgroundDrawing()) {
-                int lineColor = isFocused() ? Pallete.YELLOW : LineColor;
-                fill(x, y, x + width, y + height, Pallete.GRAY12_TRANSPERIENTDD);
+                int lineColor = isFocused() ? Palette.YELLOW : LineColor;
+                fill(x, y, x + width, y + height, Palette.GRAY12_TRANSPARENT_xDD);
                 fill(x, y + height - 1, x + width, y + height, lineColor);
             }
             if (tag != null)
-                fontRenderer.drawString(tag, x, y - 10, Pallete.WHITE);
+                fontRenderer.drawString(tag, x, y - 10, Palette.WHITE);
 
             int i = this.isEnabled ? this.enabledColor : this.disabledColor;
             int j = this.cursorPosition - this.lineScrollOffset;

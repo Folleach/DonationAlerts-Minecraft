@@ -1,7 +1,7 @@
 package com.folleach.gui;
 
 import com.folleach.daintegrate.MathHelper;
-import com.folleach.daintegrate.Pallete;
+import com.folleach.daintegrate.Palette;
 import com.google.common.collect.Lists;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraftforge.api.distmarker.Dist;
@@ -41,7 +41,7 @@ public class ScrollPanel<T extends IEntry> extends Widget
     	
     	if (contentHeight > visualHeight) {
     		int pos = MathHelper.convertRange(-scrollPosition, 0, contentHeight - visualHeight, 0, height - 50);
-    		fill(width - 4, y+pos, width, pos + 50, Pallete.YELLOW);
+    		fill(width - 4, y+pos, width, pos + 50, Palette.YELLOW);
     	}
     	int offset = scrollPosition + y;
     	for (int i = 0; i < entries.size(); i++)

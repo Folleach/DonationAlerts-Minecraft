@@ -4,7 +4,7 @@ import java.util.List;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import com.folleach.daintegrate.Pallete;
+import com.folleach.daintegrate.Palette;
 import com.folleach.donationalerts.DonationAlertsEvent;
 import net.minecraft.client.gui.FontRenderer;
 
@@ -26,14 +26,14 @@ public class MessageEntry extends Widget implements IEntry
 	@Override
 	public void drawEntry(int x, int y, int mouseX, int mouseY, float partialTicks) {
 		int offset = y;
-		fontRenderer.drawString(title, x, offset, Pallete.WHITE);
+		fontRenderer.drawString(title, x, offset, Palette.WHITE);
 		offset += 10;
 		for (String element : messageLines)
 		{
-			fontRenderer.drawString(element, x, offset, Pallete.WHITE);
+			fontRenderer.drawString(element, x, offset, Palette.WHITE);
 			offset += 10;
 		}
-		fill(x, offset, x + width, offset + 1, Pallete.GRAY30);
+		fill(x, offset, x + width, offset + 1, Palette.GRAY30);
 		offset += 5;
 	}
 
