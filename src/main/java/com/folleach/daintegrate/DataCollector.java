@@ -127,7 +127,7 @@ public class DataCollector {
 			for (int i = 0; i < executor.getMessages().size(); i++)
 			{
 				temp = ReplaceConstants(executor.getMessages().get(i), donate);
-				Main.GameInstance.ingameGUI.addChatMessage(DonationTo, ForgeHooks.newChatWithLinks(temp));
+				Main.GameInstance.ingameGUI.getChatGUI().printChatMessage(ForgeHooks.newChatWithLinks(temp));
 			}
 		if (executor.getCommands() != null)
 			for (int i = 0; i < executor.getCommands().size(); i++)

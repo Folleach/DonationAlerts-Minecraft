@@ -55,7 +55,6 @@ public class Main {
 	
 	public static void DonationAlertsInformation(String message)
 	{
-		GameInstance.ingameGUI.addChatMessage(ChatType.SYSTEM,
-				new StringTextComponent("[DonationAlerts] " + message));
+		GameInstance.ingameGUI.getChatGUI().printChatMessage(new StringTextComponent("[DonationAlerts] " + message));
 	}
 }

@@ -6,8 +6,10 @@ import java.net.URI;
 import java.util.List;
 
 import com.folleach.gui.*;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -178,51 +180,51 @@ public class MainWindow extends Screen
 			typesSaveTimer--;
 	}
 
-    public void render(int mouseX, int mouseY, float partialTicks)
+    public void render(MatrixStack matrixs, int mouseX, int mouseY, float partialTicks)
     {
     	if (!initialized)
     		return;
     	//Background
-        fill(0, 0, this.width, this.height, 0xEE1A1A1E);
+        fill(matrixs,0, 0, this.width, this.height, 0xEE1A1A1E);
         if (activePanel == null)
         	activePanel = PanelsType.Messages;
         //Panels
         switch (activePanel)
     	{
     	case Messages:
-    		messagesPanel.drawPanel(mouseX, mouseY, partialTicks);
+    		messagesPanel.drawPanel(matrixs, mouseX, mouseY, partialTicks);
     		break;
     	case Status:
-    		drawString(fontRenderer, langConnectState, 125, 25, Palette.WHITE);
-    		drawString(fontRenderer, dalets.getConnected() ? langConnected : langDisonnected, 125 + lenghtConnectState + 5, 25,
+    		drawString(matrixs, fontRenderer, langConnectState, 125, 25, Palette.WHITE);
+    		drawString(matrixs, fontRenderer, dalets.getConnected() ? langConnected : langDisonnected, 125 + lenghtConnectState + 5, 25,
     				dalets.getConnected() ? Palette.GREEN : Palette.RED);
     		
-    		text1.renderButton();
-    		drawString(fontRenderer, data.isTokenExists() ? langTokenExist : langTokenNotExists, 125, TOKENPANELY + 35, data.isTokenExists() ? Palette.GREEN : Palette.RED);
+    		text1.renderButton(matrixs);
+    		drawString(matrixs, fontRenderer, data.isTokenExists() ? langTokenExist : langTokenNotExists, 125, TOKENPANELY + 35, data.isTokenExists() ? Palette.GREEN : Palette.RED);
     		break;
     	case Types:
-    		typesPanel.drawPanel(mouseX, mouseY, partialTicks);
+    		typesPanel.drawPanel(matrixs, mouseX, mouseY, partialTicks);
     		if (typesSuccessfulSave && typesSaveTimer > 0)
-    			drawString(fontRenderer, langSaved, width - lenghtSaved - 100, 6, Palette.WHITE);
+    			drawString(matrixs, fontRenderer, langSaved, width - lenghtSaved - 100, 6, Palette.WHITE);
     		else if (!typesSuccessfulSave && typesSaveTimer > 0)
-    			drawString(fontRenderer, langError, width - lenghtSaved - 100, 6, Palette.RED);
+    			drawString(matrixs, fontRenderer, langError, width - lenghtSaved - 100, 6, Palette.RED);
     		break;
     	case Settings:
-    		SETTINGS_ShowCountDonation.renderButton();
-    		this.drawString(fontRenderer, langDonto, 125, 54, Palette.WHITE);
+    		SETTINGS_ShowCountDonation.renderButton(matrixs);
+    		this.drawString(matrixs, fontRenderer, langDonto, 125, 54, Palette.WHITE);
     		break;
     	case Help:
     		for (int i = 0; i < langHelpLines.size(); i++)
-    			drawString(fontRenderer, langHelpLines.get(i), 125, i * 10 + 25, Palette.WHITE);
+    			drawString(matrixs, fontRenderer, langHelpLines.get(i), 125, i * 10 + 25, Palette.WHITE);
     		break;
     	}
         
         //Left menu
-        fill(0, 0, this.width, 20, 0x65000000);
-        fill(0, 20, 120, this.height, 0x50000000);
-        this.drawString(fontRenderer, Main.MODNAME, 5, 5, Palette.WHITE);
+        fill(matrixs, 0, 0, this.width, 20, 0x65000000);
+        fill(matrixs, 0, 20, 120, this.height, 0x50000000);
+        this.drawString(matrixs, fontRenderer, Main.MODNAME, 5, 5, Palette.WHITE);
         
-        super.render(mouseX, mouseY, partialTicks);
+        super.render(matrixs, mouseX, mouseY, partialTicks);
     }
      
     public boolean charTyped(char typedChar, int keyCode)
@@ -382,7 +384,7 @@ public class MainWindow extends Screen
 	{
 		if (dalets.getConnected()) {
 			dalets.Disconnect();
-			STATUSBUTTON_ConnectionController.setMessage(I18n.format("daintegratew.connect"));
+			STATUSBUTTON_ConnectionController.setMessage(new StringTextComponent(I18n.format("daintegratew.connect")));
 		}
 		else {
 			try {
@@ -391,7 +393,7 @@ public class MainWindow extends Screen
 				Main.DonationAlertsInformation(I18n.format("daintegratew.error"));
 				e.printStackTrace();
 			}
-			STATUSBUTTON_ConnectionController.setMessage(I18n.format("daintegratew.disconnect"));
+			STATUSBUTTON_ConnectionController.setMessage(new StringTextComponent(I18n.format("daintegratew.disconnect")));
 		}
 	}
 

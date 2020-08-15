@@ -3,6 +3,7 @@ package com.folleach.gui;
 import com.folleach.daintegrate.Main;
 import com.folleach.daintegrate.Palette;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -25,7 +26,7 @@ public class CheckBox extends CustomButton
 		Flag = flag;
 	}
 
-	public void render(int mouseX, int mouseY, float partialTicks)
+	public void render(MatrixStack matrixs,  int mouseX, int mouseY, float partialTicks)
     {
         if (this.visible)
         {
@@ -43,12 +44,12 @@ public class CheckBox extends CustomButton
             {
             	colorBg = HoveredBackgroundColor;
             }
-            fill(x, y, x + width, y + height, colorBg);
+            fill(matrixs, x, y, x + width, y + height, colorBg);
             int colorFlag = Palette.RED;
             if (Flag)
             	colorFlag = Palette.GREEN;
-            fill(x + 4, y + 4, x + 16, y + 16, colorFlag);
-            this.drawString(fontrenderer, this.getMessage(), this.x + 22, this.y + (this.height / 2) - 4, colorFg);
+            fill(matrixs, x + 4, y + 4, x + 16, y + 16, colorFlag);
+            this.drawString(matrixs, fontrenderer, this.getMessage(), this.x + 22, this.y + (this.height / 2) - 4, colorFg);
         }
     }
 

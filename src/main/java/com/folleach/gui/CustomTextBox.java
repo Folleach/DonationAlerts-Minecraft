@@ -2,8 +2,11 @@ package com.folleach.gui;
 
 import com.folleach.daintegrate.Palette;
 import com.google.common.base.Predicates;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.IRenderable;
@@ -14,17 +17,19 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.SharedConstants;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.*;
 
 import javax.annotation.Nullable;
+import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class CustomTextBox extends Widget implements IRenderable, IGuiEventListener
-{
+public class CustomTextBox extends Widget implements IRenderable, IGuiEventListener {
     private final FontRenderer fontRenderer;
     private String text = "";
     private int maxStringLength = Integer.MAX_VALUE;
@@ -40,41 +45,42 @@ public class CustomTextBox extends Widget implements IRenderable, IGuiEventListe
     private int disabledColor = 7368816;
     private String suggestion;
     private Consumer<String> guiResponder;
-    private Predicate<String> validator = Predicates.alwaysTrue();
-    private BiFunction<String, Integer, String> textFormatter = (p_195610_0_, p_195610_1_) -> {
-        return p_195610_0_;
+    /** Called to check if the text is valid */
+    private Predicate<String> validator = Objects::nonNull;
+    private BiFunction<String, Integer, IReorderingProcessor> textFormatter = (p_195610_0_, p_195610_1_) -> {
+        return IReorderingProcessor.func_242239_a(p_195610_0_, Style.EMPTY);
     };
     public String tag;
     public int LineColor;
 
-
-    public CustomTextBox(FontRenderer fontIn, int p_i51137_2_, int p_i51137_3_, int p_i51137_4_, int p_i51137_5_, String msg) {
-        this(fontIn, p_i51137_2_, p_i51137_3_, p_i51137_4_, p_i51137_5_, (TextFieldWidget)null, msg);
+    public CustomTextBox(FontRenderer p_i232260_1_, int p_i232260_2_, int p_i232260_3_, int p_i232260_4_, int p_i232260_5_, String p_i232260_6_) {
+        this(p_i232260_1_, p_i232260_2_, p_i232260_3_, p_i232260_4_, p_i232260_5_, (net.minecraft.client.gui.widget.TextFieldWidget)null, p_i232260_6_);
     }
 
-    public CustomTextBox(FontRenderer fontIn, int xIn, int yIn, int widthIn, int heightIn, @Nullable TextFieldWidget p_i51138_6_, String msg) {
-        super(xIn, yIn + 10, widthIn, heightIn, msg);
-        this.fontRenderer = fontIn;
-        if (p_i51138_6_ != null) {
-            this.setText(p_i51138_6_.getText());
+    public CustomTextBox(FontRenderer p_i232259_1_, int p_i232259_2_, int p_i232259_3_, int p_i232259_4_, int p_i232259_5_, @Nullable net.minecraft.client.gui.widget.TextFieldWidget p_i232259_6_, String p_i232259_7_) {
+        super(p_i232259_2_, p_i232259_3_, p_i232259_4_, p_i232259_5_, new StringTextComponent(p_i232259_7_));
+        this.fontRenderer = p_i232259_1_;
+        if (p_i232259_6_ != null) {
+            this.setText(p_i232259_6_.getText());
         }
+
     }
 
-    public void func_212954_a(Consumer<String> p_212954_1_) {
-        this.guiResponder = p_212954_1_;
+    public void setResponder(Consumer<String> rssponderIn) {
+        this.guiResponder = rssponderIn;
     }
 
-    public void setTextFormatter(BiFunction<String, Integer, String> p_195607_1_) {
-        this.textFormatter = p_195607_1_;
+    public void setTextFormatter(BiFunction<String, Integer, IReorderingProcessor> textFormatterIn) {
+        this.textFormatter = textFormatterIn;
     }
 
     public void tick() {
         ++this.cursorCounter;
     }
 
-    protected String getNarrationMessage() {
-        String s = this.getMessage();
-        return s.isEmpty() ? "" : I18n.format("gui.narrate.editBox", s, this.text);
+    protected IFormattableTextComponent getNarrationMessage() {
+        ITextComponent itextcomponent = this.getMessage();
+        return new TranslationTextComponent("gui.narrate.editBox", itextcomponent, this.text);
     }
 
     /**
@@ -90,7 +96,7 @@ public class CustomTextBox extends Widget implements IRenderable, IGuiEventListe
 
             this.setCursorPositionEnd();
             this.setSelectionPos(this.cursorPosition);
-            this.func_212951_d(textIn);
+            this.onTextChanged(textIn);
         }
     }
 
@@ -110,47 +116,36 @@ public class CustomTextBox extends Widget implements IRenderable, IGuiEventListe
         return this.text.substring(i, j);
     }
 
-    public void setValidator(Predicate<String> p_200675_1_) {
-        this.validator = p_200675_1_;
+    public void setValidator(Predicate<String> validatorIn) {
+        this.validator = validatorIn;
     }
 
     /**
      * Adds the given text after the cursor, or replaces the currently selected text if there is a selection.
      */
     public void writeText(String textToWrite) {
-        String s = "";
-        String s1 = SharedConstants.filterAllowedCharacters(textToWrite);
         int i = this.cursorPosition < this.selectionEnd ? this.cursorPosition : this.selectionEnd;
         int j = this.cursorPosition < this.selectionEnd ? this.selectionEnd : this.cursorPosition;
         int k = this.maxStringLength - this.text.length() - (i - j);
-        if (!this.text.isEmpty()) {
-            s = s + this.text.substring(0, i);
-        }
-
-        int l;
-        if (k < s1.length()) {
-            s = s + s1.substring(0, k);
+        String s = SharedConstants.filterAllowedCharacters(textToWrite);
+        int l = s.length();
+        if (k < l) {
+            s = s.substring(0, k);
             l = k;
-        } else {
-            s = s + s1;
-            l = s1.length();
         }
 
-        if (!this.text.isEmpty() && j < this.text.length()) {
-            s = s + this.text.substring(j);
-        }
-
-        if (this.validator.test(s)) {
-            this.text = s;
-            this.func_212422_f(i + l);
+        String s1 = (new StringBuilder(this.text)).replace(i, j, s).toString();
+        if (this.validator.test(s1)) {
+            this.text = s1;
+            this.clampCursorPosition(i + l);
             this.setSelectionPos(this.cursorPosition);
-            this.func_212951_d(this.text);
+            this.onTextChanged(this.text);
         }
     }
 
-    private void func_212951_d(String p_212951_1_) {
+    private void onTextChanged(String newText) {
         if (this.guiResponder != null) {
-            this.guiResponder.accept(p_212951_1_);
+            this.guiResponder.accept(newText);
         }
 
         this.nextNarration = Util.milliTime() + 500L;
@@ -188,25 +183,15 @@ public class CustomTextBox extends Widget implements IRenderable, IGuiEventListe
             if (this.selectionEnd != this.cursorPosition) {
                 this.writeText("");
             } else {
-                boolean flag = num < 0;
-                int i = flag ? this.cursorPosition + num : this.cursorPosition;
-                int j = flag ? this.cursorPosition : this.cursorPosition + num;
-                String s = "";
-                if (i >= 0) {
-                    s = this.text.substring(0, i);
-                }
-
-                if (j < this.text.length()) {
-                    s = s + this.text.substring(j);
-                }
-
-                if (this.validator.test(s)) {
-                    this.text = s;
-                    if (flag) {
-                        this.moveCursorBy(num);
+                int i = this.func_238516_r_(num);
+                int j = Math.min(i, this.cursorPosition);
+                int k = Math.max(i, this.cursorPosition);
+                if (j != k) {
+                    String s = (new StringBuilder(this.text)).delete(j, k).toString();
+                    if (this.validator.test(s)) {
+                        this.text = s;
+                        this.setCursorPosition(j);
                     }
-
-                    this.func_212951_d(this.text);
                 }
             }
         }
@@ -263,23 +248,27 @@ public class CustomTextBox extends Widget implements IRenderable, IGuiEventListe
      * Moves the text cursor by a specified number of characters and clears the selection
      */
     public void moveCursorBy(int num) {
-        this.setCursorPosition(this.cursorPosition + num);
+        this.setCursorPosition(this.func_238516_r_(num));
+    }
+
+    private int func_238516_r_(int p_238516_1_) {
+        return Util.func_240980_a_(this.text, this.cursorPosition, p_238516_1_);
     }
 
     /**
      * Sets the current position of the cursor.
      */
     public void setCursorPosition(int pos) {
-        this.func_212422_f(pos);
+        this.clampCursorPosition(pos);
         if (!this.field_212956_h) {
             this.setSelectionPos(this.cursorPosition);
         }
 
-        this.func_212951_d(this.text);
+        this.onTextChanged(this.text);
     }
 
-    public void func_212422_f(int p_212422_1_) {
-        this.cursorPosition = MathHelper.clamp(p_212422_1_, 0, this.text.length());
+    public void clampCursorPosition(int pos) {
+        this.cursorPosition = MathHelper.clamp(pos, 0, this.text.length());
     }
 
     /**
@@ -296,25 +285,25 @@ public class CustomTextBox extends Widget implements IRenderable, IGuiEventListe
         this.setCursorPosition(this.text.length());
     }
 
-    public boolean keyPressed(int p_keyPressed_1_, int p_keyPressed_2_, int p_keyPressed_3_) {
-        if (!this.func_212955_f()) {
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (!this.canWrite()) {
             return false;
         } else {
             this.field_212956_h = Screen.hasShiftDown();
-            if (Screen.isSelectAll(p_keyPressed_1_)) {
+            if (Screen.isSelectAll(keyCode)) {
                 this.setCursorPositionEnd();
                 this.setSelectionPos(0);
                 return true;
-            } else if (Screen.isCopy(p_keyPressed_1_)) {
+            } else if (Screen.isCopy(keyCode)) {
                 Minecraft.getInstance().keyboardListener.setClipboardString(this.getSelectedText());
                 return true;
-            } else if (Screen.isPaste(p_keyPressed_1_)) {
+            } else if (Screen.isPaste(keyCode)) {
                 if (this.isEnabled) {
                     this.writeText(Minecraft.getInstance().keyboardListener.getClipboardString());
                 }
 
                 return true;
-            } else if (Screen.isCut(p_keyPressed_1_)) {
+            } else if (Screen.isCut(keyCode)) {
                 Minecraft.getInstance().keyboardListener.setClipboardString(this.getSelectedText());
                 if (this.isEnabled) {
                     this.writeText("");
@@ -322,7 +311,7 @@ public class CustomTextBox extends Widget implements IRenderable, IGuiEventListe
 
                 return true;
             } else {
-                switch(p_keyPressed_1_) {
+                switch(keyCode) {
                     case 259:
                         if (this.isEnabled) {
                             this.field_212956_h = false;
@@ -373,16 +362,16 @@ public class CustomTextBox extends Widget implements IRenderable, IGuiEventListe
         }
     }
 
-    public boolean func_212955_f() {
+    public boolean canWrite() {
         return this.getVisible() && this.isFocused() && this.isEnabled();
     }
 
-    public boolean charTyped(char p_charTyped_1_, int p_charTyped_2_) {
-        if (!this.func_212955_f()) {
+    public boolean charTyped(char p_231042_1_, int p_231042_2_) {
+        if (!this.canWrite()) {
             return false;
-        } else if (SharedConstants.isAllowedCharacter(p_charTyped_1_)) {
+        } else if (SharedConstants.isAllowedCharacter(p_231042_1_)) {
             if (this.isEnabled) {
-                this.writeText(Character.toString(p_charTyped_1_));
+                this.writeText(Character.toString(p_231042_1_));
             }
 
             return true;
@@ -391,23 +380,23 @@ public class CustomTextBox extends Widget implements IRenderable, IGuiEventListe
         }
     }
 
-    public boolean mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_, int p_mouseClicked_5_) {
+    public boolean mouseClicked(double mouseX, double mouseY, int p_231044_5_) {
         if (!this.getVisible()) {
             return false;
         } else {
-            boolean flag = p_mouseClicked_1_ >= (double)this.x && p_mouseClicked_1_ < (double)(this.x + this.width) && p_mouseClicked_3_ >= (double)this.y && p_mouseClicked_3_ < (double)(this.y + this.height);
+            boolean flag = mouseX >= (double)this.x && mouseX < (double)(this.x + this.width) && mouseY >= (double)this.y && mouseY < (double)(this.y + this.height);
             if (this.canLoseFocus) {
                 this.setFocused2(flag);
             }
 
-            if (this.isFocused() && flag && p_mouseClicked_5_ == 0) {
-                int i = MathHelper.floor(p_mouseClicked_1_) - this.x;
+            if (this.isFocused() && flag && p_231044_5_ == 0) {
+                int i = MathHelper.floor(mouseX) - this.x;
                 if (this.enableBackgroundDrawing) {
                     i -= 4;
                 }
 
-                String s = this.fontRenderer.trimStringToWidth(this.text.substring(this.lineScrollOffset), this.getAdjustedWidth());
-                this.setCursorPosition(this.fontRenderer.trimStringToWidth(s, i).length() + this.lineScrollOffset);
+                String s = this.fontRenderer.func_238412_a_(this.text.substring(this.lineScrollOffset), this.getAdjustedWidth());
+                this.setCursorPosition(this.fontRenderer.func_238412_a_(s, i).length() + this.lineScrollOffset);
                 return true;
             } else {
                 return false;
@@ -422,45 +411,41 @@ public class CustomTextBox extends Widget implements IRenderable, IGuiEventListe
         super.setFocused(isFocusedIn);
     }
 
-    public void renderButton(int x, int y)
+    public void renderButton(MatrixStack matrixs, int x, int y)
     {
         this.x = x;
         this.y = y + 10;
-        renderButton();
+        renderButton(matrixs);
     }
 
-    public void renderButton() {
+    public void renderButton(MatrixStack p_230431_1_) {
         if (this.getVisible()) {
             if (this.getEnableBackgroundDrawing()) {
-                int lineColor = isFocused() ? Palette.YELLOW : LineColor;
-                fill(x, y, x + width, y + height, Palette.GRAY12_TRANSPARENT_xDD);
-                fill(x, y + height - 1, x + width, y + height, lineColor);
+                int i = this.isFocused() ? -1 : -6250336;
+                fill(p_230431_1_, this.x - 1, this.y - 1, this.x + this.width + 1, this.y + this.height + 1, i);
+                fill(p_230431_1_, this.x, this.y, this.x + this.width, this.y + this.height, -16777216);
             }
-            if (tag != null)
-                fontRenderer.drawString(tag, x, y - 10, Palette.WHITE);
 
-            int i = this.isEnabled ? this.enabledColor : this.disabledColor;
+            int i2 = this.isEnabled ? this.enabledColor : this.disabledColor;
             int j = this.cursorPosition - this.lineScrollOffset;
             int k = this.selectionEnd - this.lineScrollOffset;
-            String s = this.fontRenderer.trimStringToWidth(this.text.substring(this.lineScrollOffset), this.getWidth());
+            String s = this.fontRenderer.func_238412_a_(this.text.substring(this.lineScrollOffset), this.getAdjustedWidth());
             boolean flag = j >= 0 && j <= s.length();
             boolean flag1 = this.isFocused() && this.cursorCounter / 6 % 2 == 0 && flag;
             int l = this.enableBackgroundDrawing ? this.x + 4 : this.x;
             int i1 = this.enableBackgroundDrawing ? this.y + (this.height - 8) / 2 : this.y;
             int j1 = l;
-
             if (k > s.length()) {
                 k = s.length();
             }
 
             if (!s.isEmpty()) {
                 String s1 = flag ? s.substring(0, j) : s;
-                j1 = this.fontRenderer.drawStringWithShadow(s1, (float) l, (float) i1, i);
+                j1 = this.fontRenderer.func_238407_a_(p_230431_1_, this.textFormatter.apply(s1, this.lineScrollOffset), (float)l, (float)i1, i2);
             }
 
             boolean flag2 = this.cursorPosition < this.text.length() || this.text.length() >= this.getMaxStringLength();
             int k1 = j1;
-
             if (!flag) {
                 k1 = j > 0 ? l + this.width : l;
             } else if (flag2) {
@@ -469,21 +454,26 @@ public class CustomTextBox extends Widget implements IRenderable, IGuiEventListe
             }
 
             if (!s.isEmpty() && flag && j < s.length()) {
-                j1 = this.fontRenderer.drawStringWithShadow(s.substring(j), (float) j1, (float) i1, i);
+                this.fontRenderer.func_238407_a_(p_230431_1_, this.textFormatter.apply(s.substring(j), this.cursorPosition), (float)j1, (float)i1, i2);
+            }
+
+            if (!flag2 && this.suggestion != null) {
+                this.fontRenderer.drawStringWithShadow(p_230431_1_, this.suggestion, (float)(k1 - 1), (float)i1, -8355712);
             }
 
             if (flag1) {
                 if (flag2) {
-                    fill(k1, i1 - 1, k1 + 1, i1 + 1 + this.fontRenderer.FONT_HEIGHT, -3092272);
+                    AbstractGui.fill(p_230431_1_, k1, i1 - 1, k1 + 1, i1 + 1 + 9, -3092272);
                 } else {
-                    this.fontRenderer.drawStringWithShadow("_", (float) k1, (float) i1, i);
+                    this.fontRenderer.drawStringWithShadow(p_230431_1_, "_", (float)k1, (float)i1, i2);
                 }
             }
 
             if (k != j) {
                 int l1 = l + this.fontRenderer.getStringWidth(s.substring(0, k));
-                this.drawSelectionBox(k1, i1 - 1, l1 - 1, i1 + 1 + this.fontRenderer.FONT_HEIGHT);
+                this.drawSelectionBox(k1, i1 - 1, l1 - 1, i1 + 1 + 9);
             }
+
         }
     }
 
@@ -513,18 +503,18 @@ public class CustomTextBox extends Widget implements IRenderable, IGuiEventListe
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
-        GlStateManager.color4f(0.0F, 0.0F, 255.0F, 255.0F);
-        GlStateManager.disableTexture();
-        GlStateManager.enableColorLogicOp();
-        GlStateManager.logicOp(GlStateManager.LogicOp.OR_REVERSE);
+        RenderSystem.color4f(0.0F, 0.0F, 255.0F, 255.0F);
+        RenderSystem.disableTexture();
+        RenderSystem.enableColorLogicOp();
+        RenderSystem.logicOp(GlStateManager.LogicOp.OR_REVERSE);
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
         bufferbuilder.pos((double)startX, (double)endY, 0.0D).endVertex();
         bufferbuilder.pos((double)endX, (double)endY, 0.0D).endVertex();
         bufferbuilder.pos((double)endX, (double)startY, 0.0D).endVertex();
         bufferbuilder.pos((double)startX, (double)startY, 0.0D).endVertex();
         tessellator.draw();
-        GlStateManager.disableColorLogicOp();
-        GlStateManager.enableTexture();
+        RenderSystem.disableColorLogicOp();
+        RenderSystem.enableTexture();
     }
 
     /**
@@ -535,7 +525,7 @@ public class CustomTextBox extends Widget implements IRenderable, IGuiEventListe
         this.maxStringLength = length;
         if (this.text.length() > length) {
             this.text = this.text.substring(0, length);
-            this.func_212951_d(this.text);
+            this.onTextChanged(this.text);
         }
 
     }
@@ -582,16 +572,16 @@ public class CustomTextBox extends Widget implements IRenderable, IGuiEventListe
         this.disabledColor = color;
     }
 
-    public boolean changeFocus(boolean p_changeFocus_1_) {
-        return this.visible && this.isEnabled ? super.changeFocus(p_changeFocus_1_) : false;
+    public boolean changeFocus(boolean p_231049_1_) {
+        return this.visible && this.isEnabled ? super.changeFocus(p_231049_1_) : false;
     }
 
-    public boolean isMouseOver(double p_isMouseOver_1_, double p_isMouseOver_3_) {
-        return this.visible && p_isMouseOver_1_ >= (double)this.x && p_isMouseOver_1_ < (double)(this.x + this.width) && p_isMouseOver_3_ >= (double)this.y && p_isMouseOver_3_ < (double)(this.y + this.height);
+    public boolean isMouseOver(double mouseX, double mouseY) {
+        return this.visible && mouseX >= (double)this.x && mouseX < (double)(this.x + this.width) && mouseY >= (double)this.y && mouseY < (double)(this.y + this.height);
     }
 
-    protected void onFocusedChanged(boolean p_onFocusedChanged_1_) {
-        if (p_onFocusedChanged_1_) {
+    protected void onFocusedChanged(boolean p_230995_1_) {
+        if (p_230995_1_) {
             this.cursorCounter = 0;
         }
 
@@ -628,10 +618,10 @@ public class CustomTextBox extends Widget implements IRenderable, IGuiEventListe
             }
 
             int j = this.getAdjustedWidth();
-            String s = this.fontRenderer.trimStringToWidth(this.text.substring(this.lineScrollOffset), j);
+            String s = this.fontRenderer.func_238412_a_(this.text.substring(this.lineScrollOffset), j);
             int k = s.length() + this.lineScrollOffset;
             if (this.selectionEnd == this.lineScrollOffset) {
-                this.lineScrollOffset -= this.fontRenderer.trimStringToWidth(this.text, j, true).length();
+                this.lineScrollOffset -= this.fontRenderer.func_238413_a_(this.text, j, true).length();
             }
 
             if (this.selectionEnd > k) {
@@ -674,7 +664,7 @@ public class CustomTextBox extends Widget implements IRenderable, IGuiEventListe
         return p_195611_1_ > this.text.length() ? this.x : this.x + this.fontRenderer.getStringWidth(this.text.substring(0, p_195611_1_));
     }
 
-    public void setX(int p_212952_1_) {
-        this.x = p_212952_1_;
+    public void setX(int xIn) {
+        this.x = xIn;
     }
 }

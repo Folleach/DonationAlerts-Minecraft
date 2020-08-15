@@ -3,7 +3,9 @@ package com.folleach.gui;
 import com.folleach.daintegrate.MathHelper;
 import com.folleach.daintegrate.Palette;
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.widget.Widget;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -23,7 +25,7 @@ public class ScrollPanel<T extends IEntry> extends Widget
     
     public ScrollPanel(int x, int y, int width, int height)
 	{
-		super(x, y, width, height, "msg");
+		super(x, y, width, height, new StringTextComponent("msg"));
 		this.x = x;
     	this.y = y;
     	this.width = width;
@@ -31,7 +33,7 @@ public class ScrollPanel<T extends IEntry> extends Widget
     	this.visualHeight = height - y;
 	}
     
-    public void drawPanel(int mouseX, int mouseY, float partialTicks)
+    public void drawPanel(MatrixStack matrixs, int mouseX, int mouseY, float partialTicks)
     {
     	if (-scrollPosition > contentHeight - visualHeight)
     		scrollPosition = -(contentHeight - visualHeight);
@@ -41,12 +43,12 @@ public class ScrollPanel<T extends IEntry> extends Widget
     	
     	if (contentHeight > visualHeight) {
     		int pos = MathHelper.convertRange(-scrollPosition, 0, contentHeight - visualHeight, 0, height - 50);
-    		fill(width - 4, y+pos, width, pos + 50, Palette.YELLOW);
+    		fill(matrixs, width - 4, y+pos, width, pos + 50, Palette.YELLOW);
     	}
     	int offset = scrollPosition + y;
     	for (int i = 0; i < entries.size(); i++)
     	{
-    		entries.get(i).drawEntry(x, offset, mouseX, mouseY, partialTicks);
+    		entries.get(i).drawEntry(matrixs, x, offset, mouseX, mouseY, partialTicks);
     		offset += entries.get(i).getHeight();
     	}
     }

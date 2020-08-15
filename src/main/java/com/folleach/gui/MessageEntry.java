@@ -1,7 +1,11 @@
 package com.folleach.gui;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.widget.Widget;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import com.folleach.daintegrate.Palette;
@@ -17,23 +21,23 @@ public class MessageEntry extends Widget implements IEntry
 
     public MessageEntry(int x, int y, int width, int height, FontRenderer fontR, DonationAlertsEvent donate)
     {
-		super(x, y, height, width, "msg");
+		super(x, y, height, width, new StringTextComponent("msg"));
 		fontRenderer = fontR;
         title = donate.UserName + " - " + donate.Amount + " " + donate.Currency;
-        messageLines = fontRenderer.listFormattedStringToWidth(donate.Message, width);
+        messageLines = new ArrayList<String>(); //TODO: FUCK IT fontRenderer.listFormattedStringToWidth(donate.Message, width);
     }
 
 	@Override
-	public void drawEntry(int x, int y, int mouseX, int mouseY, float partialTicks) {
+	public void drawEntry(MatrixStack matrixs, int x, int y, int mouseX, int mouseY, float partialTicks) {
 		int offset = y;
-		fontRenderer.drawString(title, x, offset, Palette.WHITE);
+		fontRenderer.drawString(matrixs, title, x, offset, Palette.WHITE);
 		offset += 10;
 		for (String element : messageLines)
 		{
-			fontRenderer.drawString(element, x, offset, Palette.WHITE);
+			fontRenderer.drawString(matrixs, element, x, offset, Palette.WHITE);
 			offset += 10;
 		}
-		fill(x, offset, x + width, offset + 1, Palette.GRAY30);
+		fill(matrixs, x, offset, x + width, offset + 1, Palette.GRAY30);
 		offset += 5;
 	}
 

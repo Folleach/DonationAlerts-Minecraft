@@ -6,11 +6,13 @@ import com.folleach.daintegrate.Palette;
 import com.folleach.donationalerts.DonationType;
 import com.google.common.collect.Lists;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -53,7 +55,8 @@ public class DonationTypeEntry extends Widget implements IEntry {
 	
 	public DonationTypeEntry(int x, int y, int width, int height, ScrollPanel own, DonationType type, Minecraft mc, int right)
 	{
-		super(x, y, width, height, "msg");
+
+		super(x, y, width, height, new StringTextComponent("msg"));
 		this.right = right;
 		owner = own;
 		messages = Lists.<WritableLineElement>newArrayList();
@@ -146,39 +149,39 @@ public class DonationTypeEntry extends Widget implements IEntry {
 	}
 
 	@Override
-	public void drawEntry(int x, int y, int mouseX, int mouseY, float partialTicks) {
+	public void drawEntry(MatrixStack matrixs, int x, int y, int mouseX, int mouseY, float partialTicks) {
 		int offset = y;
-		textBoxName.renderButton(x, offset);
-		checkBoxActive.drawButton(mc, x + 210, y + 10, mouseX, mouseY, partialTicks);
-		deleteEntry.drawButton(mc, x + 275, y + 10, mouseX, mouseY, partialTicks);
+		textBoxName.renderButton(matrixs, x, offset);
+		checkBoxActive.drawButton(matrixs, mc, x + 210, y + 10, mouseX, mouseY, partialTicks);
+		deleteEntry.drawButton(matrixs, mc, x + 275, y + 10, mouseX, mouseY, partialTicks);
 		offset += 35;
-		fontRenderer.drawString(langMessages, x, offset, Palette.WHITE);
+		fontRenderer.drawString(matrixs, langMessages, x, offset, Palette.WHITE);
 		offset += 10;
 		for (int i = 0; i < messages.size(); i++)
 		{
-			messages.get(i).drawElement(x, offset, mouseX, mouseY, partialTicks);
+			messages.get(i).drawElement(matrixs, x, offset, mouseX, mouseY, partialTicks);
 			offset += 35;
 		}
-		addMessage.drawButton(mc, x + 210, offset, mouseX, mouseY, partialTicks);
+		addMessage.drawButton(matrixs, mc, x + 210, offset, mouseX, mouseY, partialTicks);
 		offset += 25;
-		fontRenderer.drawString(langCommands, x, offset, Palette.WHITE);
+		fontRenderer.drawString(matrixs, langCommands, x, offset, Palette.WHITE);
 		offset += 10;
 		for (int i = 0; i < commands.size(); i++)
 		{
-			commands.get(i).drawElement(x, offset, mouseX, mouseY, partialTicks);
+			commands.get(i).drawElement(matrixs, x, offset, mouseX, mouseY, partialTicks);
 			offset += 35;
 		}
-		addCommand.drawButton(mc, x + 210, offset, mouseX, mouseY, partialTicks);
+		addCommand.drawButton(matrixs, mc, x + 210, offset, mouseX, mouseY, partialTicks);
 		offset += 25;
-		CurrencyUSD.renderButton(x, offset); CurrencyRUB.renderButton(x + 90, offset);
+		CurrencyUSD.renderButton(matrixs, x, offset); CurrencyRUB.renderButton(matrixs, x + 90, offset);
 		offset += 35;
-		CurrencyEUR.renderButton(x, offset); CurrencyKZT.renderButton(x + 90, offset);
+		CurrencyEUR.renderButton(matrixs, x, offset); CurrencyKZT.renderButton(matrixs, x + 90, offset);
 		offset += 35;
-		CurrencyBRL.renderButton(x, offset); CurrencyBYN.renderButton(x + 90, offset);
+		CurrencyBRL.renderButton(matrixs, x, offset); CurrencyBYN.renderButton(matrixs, x + 90, offset);
 		offset += 35;
-		CurrencyUAH.renderButton(x, offset);
+		CurrencyUAH.renderButton(matrixs, x, offset);
 		offset += 35;
-		fill(x, offset, right - 10, offset + 1, Palette.GRAY60);
+		fill(matrixs, x, offset, right - 10, offset + 1, Palette.GRAY60);
 		offset += 20;
 	}
 
@@ -358,10 +361,10 @@ public class DonationTypeEntry extends Widget implements IEntry {
 			line.tag = tag;
 		}
 		
-		public void drawElement(int x, int y, int mouseX, int mouseY, float partialTicks)
+		public void drawElement(MatrixStack matrixs, int x, int y, int mouseX, int mouseY, float partialTicks)
 		{
-			line.renderButton(x, y);
-			delete.drawButton(mc, x + 210, y + 10, mouseX, mouseY, partialTicks);
+			line.renderButton(matrixs, x, y);
+			delete.drawButton(matrixs, mc, x + 210, y + 10, mouseX, mouseY, partialTicks);
 		}
 
 		public void keyTyped(char typedChar, int keyCode)
