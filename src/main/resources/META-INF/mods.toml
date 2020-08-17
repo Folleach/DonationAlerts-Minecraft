@@ -6,25 +6,21 @@ issueTrackerURL="https://github.com/Folleach/DonationAlerts-Minecraft/issues/" #
 [[mods]] #mandatory
 
 modId="daintegratew" #mandatory
-
 jarVersion="1.1.0a-1.16"
-
 version="${file.jarVersion}" #mandatory
-
 displayName="Donation Alerts Integrate" #mandatory
-
 # updateJSONURL="http://myurl.me/" #optional
-
 displayURL="https://www.curseforge.com/minecraft/mc-mods/donation-alerts-integrate/" #optional
-
 # logoFile="examplemod.png" #optional
-
 # credits="Thanks for this example mod goes to Java" #optional
-
 authors="Folleach" #optional
 
 description='''
-    Modification can interact with your chat as well as with the rest of the world through commands.
+Modification can interact with your chat as well as with the rest of the world through commands.
+See the keyboard settings to open the modification's window (By default, the key is equals '=').
+
+Thank for support:
+- ForaMon
 '''
 
 [[dependencies.daintegratew]] #optional

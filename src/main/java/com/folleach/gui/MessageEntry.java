@@ -24,8 +24,31 @@ public class MessageEntry extends Widget implements IEntry
 		super(x, y, height, width, new StringTextComponent("msg"));
 		fontRenderer = fontR;
         title = donate.UserName + " - " + donate.Amount + " " + donate.Currency;
-        messageLines = new ArrayList<String>(); //TODO: FUCK IT fontRenderer.listFormattedStringToWidth(donate.Message, width);
+        messageLines = ListFormattedStringToWidth(donate.Message, width);
     }
+
+    private List<String> ListFormattedStringToWidth(String value, int width)
+	{
+		// TODO: Needed optimize
+    	List<String> result = new ArrayList<String>();
+    	result.add("");
+    	int spaceSize = fontRenderer.getStringWidth(" ");
+    	String[] array = value.split("\\s+");
+    	int currentWidth = 0;
+    	for (int i = 0; i < array.length; i++)
+		{
+			int wordWidth = fontRenderer.getStringWidth(array[i]);
+			if (currentWidth + wordWidth + spaceSize > width)
+			{
+				result.add(array[i]);
+				currentWidth = wordWidth + spaceSize;
+				continue;
+			}
+			result.set(result.size() - 1, result.get(result.size() - 1) + " " +  array[i]);
+			currentWidth += wordWidth + spaceSize;
+		}
+    	return result;
+	}
 
 	@Override
 	public void drawEntry(MatrixStack matrixs, int x, int y, int mouseX, int mouseY, float partialTicks) {
