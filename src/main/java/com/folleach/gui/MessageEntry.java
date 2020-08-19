@@ -70,16 +70,16 @@ public class MessageEntry extends Widget implements IEntry
 	}
 
 	@Override
-	public void keyTyped(char typedChar, int keyCode) {		
+	public void keyType(char typedChar, int keyCode) {
 	}
 
 	@Override
-	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+	public boolean mouseClick(double mouseX, double mouseY, int mouseButton) {
     	return false;
 	}
 
 	@Override
-	public boolean keyPressed(int a, int b, int c) {
+	public boolean keyPress(int a, int b, int c) {
 		return false;
 	}
 }

@@ -8,6 +8,8 @@ import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
@@ -56,22 +58,25 @@ public class ScrollPanel<T extends IEntry> extends Widget
     public boolean charTyped(char typedChar, int keyCode)
     {
     	for (int i = 0; i < entries.size(); i++)
-    		entries.get(i).keyTyped(typedChar, keyCode);
+    		entries.get(i).keyType(typedChar, keyCode);
     	return true;
     }
-    
+
+    @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
     {
+		Logger logger = LogManager.getLogger("daintegratew");
+		logger.debug("Initial");
     	if (mouseY >= 20)
     		for (int i = 0; i < entries.size(); i++)
-    			entries.get(i).mouseClicked(mouseX, mouseY, mouseButton);
+    			entries.get(i).mouseClick(mouseX, mouseY, mouseButton);
     	return true;
     }
 
     public boolean keyPressed(int a, int b, int c)
 	{
 		for (int i = 0; i < entries.size(); i++)
-			entries.get(i).keyPressed(a, b, c);
+			entries.get(i).keyPress(a, b, c);
 		return true;
 	}
 

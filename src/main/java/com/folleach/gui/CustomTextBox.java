@@ -380,6 +380,7 @@ public class CustomTextBox extends Widget implements IRenderable, IGuiEventListe
         }
     }
 
+    @Override
     public boolean mouseClicked(double mouseX, double mouseY, int p_231044_5_) {
         if (!this.getVisible()) {
             return false;

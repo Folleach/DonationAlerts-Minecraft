@@ -203,7 +203,7 @@ public class DonationTypeEntry extends Widget implements IEntry {
 	}
 	
 	@Override
-	public void keyTyped(char typedChar, int keyCode) {
+	public void keyType(char typedChar, int keyCode) {
 		for (WritableLineElement element : messages)
 			element.keyTyped(typedChar, keyCode);
 		for (WritableLineElement element : commands)
@@ -226,7 +226,7 @@ public class DonationTypeEntry extends Widget implements IEntry {
 			checkCurrency(CurrencyUSD);
 	}
 
-	public boolean keyPressed(int a, int b, int c)
+	public boolean keyPress(int a, int b, int c)
 	{
 		for (WritableLineElement element : messages)
 			element.keyPressed(a, b, c);
@@ -250,8 +250,7 @@ public class DonationTypeEntry extends Widget implements IEntry {
 		return true;
 	}
 
-	@Override
-	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
+	public boolean mouseClick(double mouseX, double mouseY, int mouseButton)
 	{
 		for (int i = 0; i < messages.size(); i++)
 			messages.get(i).mouseClicked(mouseX, mouseY, mouseButton);

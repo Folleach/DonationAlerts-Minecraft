@@ -9,7 +9,7 @@ public interface IEntry
 {
 	void drawEntry(MatrixStack matrixs, int x, int y, int mouseX, int mouseY, float partialTicks);
 	int getHeight();
-	void keyTyped(char typedChar, int keyCode);
-	boolean mouseClicked(double mouseX, double mouseY, int mouseButton);
-    boolean keyPressed(int a, int b, int c);
+	void keyType(char typedChar, int keyCode);
+	boolean mouseClick(double mouseX, double mouseY, int mouseButton);
+    boolean keyPress(int a, int b, int c);
 }
