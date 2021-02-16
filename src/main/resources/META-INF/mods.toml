@@ -38,6 +38,6 @@ Thank for support:
 [[dependencies.daintegratew]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.2]"
+    versionRange="[1.16.5]"
     ordering="AFTER"
     side="CLIENT"

@@ -48,7 +48,7 @@ public class CustomTextBox extends Widget implements IRenderable, IGuiEventListe
     /** Called to check if the text is valid */
     private Predicate<String> validator = Objects::nonNull;
     private BiFunction<String, Integer, IReorderingProcessor> textFormatter = (p_195610_0_, p_195610_1_) -> {
-        return IReorderingProcessor.func_242239_a(p_195610_0_, Style.EMPTY);
+        return IReorderingProcessor.fromString(p_195610_0_, Style.EMPTY);
     };
     public String tag;
     public int LineColor;
