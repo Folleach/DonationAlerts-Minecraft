@@ -37,7 +37,7 @@ public class DonationType {
 		case "UAH": return CurrencyUAH;
 		case "USD": return CurrencyUSD;
 		}
-		return 10000000f;
+		return Float.POSITIVE_INFINITY;
 	}
 	
 	public static DonationType getDonationType(String data) throws JSONException
