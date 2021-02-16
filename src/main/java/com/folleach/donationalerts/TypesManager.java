@@ -31,19 +31,19 @@ public class TypesManager {
 			types.add(DonationType.getDonationType(jarr.getString(i)));
 	}
 	
-	public String toString()
+	public JSONObject toJson()
 	{
 		 JSONObject json = new JSONObject();
 		 JSONArray jsonArray = new JSONArray();
 		 try {
 		 	for (DonationType item : types)
 			{
-				jsonArray.put(item.toString());
+				jsonArray.put(item.toJson());
 			}
 			json.put("types", jsonArray);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		 return json.toString();
+		 return json;
 	}
 }

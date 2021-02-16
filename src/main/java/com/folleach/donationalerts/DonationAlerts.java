@@ -20,7 +20,12 @@ public class DonationAlerts {
 
 	private Listener connectListener;
 	private Listener disconectListener;
-	private Listener donationListener;
+	private Listener donationListener = new Listener() {
+		@Override
+		public void call(Object... arg0) {
+			Main.AddDonation(DonationAlertsEvent.getDonationAlertsEvent((String)arg0[0]));
+		}
+	};
 	private Listener errorListener;
 	
 	public DonationAlerts(String server) throws URISyntaxException {
@@ -39,14 +44,7 @@ public class DonationAlerts {
 				Main.DonationAlertsInformation(I18n.format("daintegratew.disconnected"));
 			}
 		};
-		
-		donationListener = new Listener() {
-			@Override
-			public void call(Object... arg0) {
-				Main.AddDonation(DonationAlertsEvent.getDonationAlertsEvent((String)arg0[0]));
-			}
-		};
-		
+
 		errorListener = new Listener() {
 			@Override
 			public void call(Object... arg0) {

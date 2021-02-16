@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -28,13 +29,17 @@ public class DataCollector {
 	String Token;
 	
 	private File dataFile;
-	private static int key = 175;
-	
+	private File tokenFile;
+
 	public static final String TagDonationMessage      = "<donation_message>";
 	public static final String TagDonationAmount       = "<donation_amount>";
 	public static final String TagDonationCurrency     = "<donation_currency>";
 	public static final String TagDonationUserName     = "<donation_username>";
 	public static final String TagMinecraftPlayerName  = "<minecraft_playername>";
+
+	private static final String PathName = "DAIntegrate/";
+	private static final String SettingsFileName = "settings.json";
+	private static final String TokenFileName = "TOKEN";
 	
 	public DataCollector() throws IOException
 	{
@@ -43,13 +48,14 @@ public class DataCollector {
 		DonationTo = ChatType.CHAT;
 		SkipTestDonation = false;
 		Token = "";
-		dataFile = new File("DAIntegrated/a.bin");
-		
+		dataFile = new File(PathName, SettingsFileName);
+		tokenFile = new File(PathName, TokenFileName);
+
 		if (dataFile.exists()) {
 			Load();
 			return;
 		}
-		File d = new File("DAIntegrated/");
+		File d = new File(PathName);
 		if (!d.exists())
 			d.mkdir();
 		dataFile.createNewFile();
@@ -66,24 +72,19 @@ public class DataCollector {
 		}
 	}
 
-	public void Load() {
+	public void Load() throws IOException {
 		byte[] bytes = null;
-		try {
-			bytes = Files.readAllBytes(Paths.get(dataFile.getPath()));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		for (int i = 0; i < bytes.length; i++)
-			bytes[i] = (byte) (bytes[i] ^ ((key + i) % 256));
+		bytes = Files.readAllBytes(Paths.get(dataFile.getPath()));
+		if (tokenFile.exists())
+			Token = new String(Files.readAllBytes(Paths.get(tokenFile.getPath())), StandardCharsets.UTF_8);
 		String data = new String(bytes, StandardCharsets.UTF_8);
 		JSONObject json;
 		try {
 			json = new JSONObject(data);
-			TManager.Load(new JSONObject(json.getString("tmanager")).getJSONArray("types"));
+			TManager.Load(new JSONObject(json.getJSONObject("typesManager")).getJSONArray("types"));
 			DonationTo = ChatType.byId((byte) json.getInt("donationTo"));
-			SkipTestDonation = json.getBoolean("skiptest");
-			Token = json.getString("tkn");
-			CountDonationInCache = json.getInt("cdic");
+			SkipTestDonation = json.getBoolean("skipTest");
+			CountDonationInCache = json.getInt("countDonationInCache");
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -91,16 +92,17 @@ public class DataCollector {
 
 	public void Save() throws JSONException, IOException {
 		JSONObject json = new JSONObject();
-		json.put("tmanager", TManager.toString());
+		json.put("typesManager", TManager.toJson());
 		json.put("donationTo", DonationTo.getId());
-		json.put("skiptest", SkipTestDonation);
-		json.put("tkn", Token);
-		json.put("cdic", CountDonationInCache);
+		json.put("skipTest", SkipTestDonation);
+		json.put("countDonationInCache", CountDonationInCache);
+
+		try (FileOutputStream stream = new FileOutputStream(tokenFile.getPath())) {
+			stream.write(Token.getBytes(StandardCharsets.UTF_8));
+		}
 		
 		String sj = json.toString();
 		byte[] bytes = sj.getBytes(StandardCharsets.UTF_8);
-		for (int i = 0; i < bytes.length; i++)
-			bytes[i] = (byte) (bytes[i] ^ ((key + i) % 256));
 		try (FileOutputStream stream = new FileOutputStream(dataFile.getPath())) {
 		    stream.write(bytes);
 		}

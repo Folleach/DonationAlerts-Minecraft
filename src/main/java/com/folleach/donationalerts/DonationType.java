@@ -43,55 +43,55 @@ public class DonationType {
 	public static DonationType getDonationType(String data) throws JSONException
 	{
 		JSONObject json = new JSONObject(data);
-		DonationType obj = new DonationType();
+		DonationType typeObject = new DonationType();
 		if (json.has("active"))
-			obj.Active = json.getBoolean("active");
-		if (json.has("m"))
+			typeObject.Active = json.getBoolean("active");
+		if (json.has("messages"))
 		{
-			JSONArray jarr = json.getJSONArray("m");
-			if (jarr != null)
+			JSONArray messagesJsonArray = json.getJSONArray("messages");
+			if (messagesJsonArray != null)
 			{
-				obj.Messages = new ArrayList<String>();
-				for (int i = 0; i < jarr.length(); i++)
-					obj.Messages.add(jarr.getString(i));
+				typeObject.Messages = new ArrayList<String>();
+				for (int i = 0; i < messagesJsonArray.length(); i++)
+					typeObject.Messages.add(messagesJsonArray.getString(i));
 			}
 		}
-		if (json.has("c"))
+		if (json.has("commands"))
 		{
-			JSONArray jarr = json.getJSONArray("c");
-			if (jarr != null)
+			JSONArray commandJsonArray = json.getJSONArray("commands");
+			if (commandJsonArray != null)
 			{
-				obj.Commands = new ArrayList<String>();
-				for (int i = 0; i < jarr.length(); i++)
-					obj.Commands.add(jarr.getString(i));
+				typeObject.Commands = new ArrayList<String>();
+				for (int i = 0; i < commandJsonArray.length(); i++)
+					typeObject.Commands.add(commandJsonArray.getString(i));
 			}
 		}
 		if (json.has("BRL"))
-			obj.CurrencyBRL = (float) json.getDouble("BRL");
+			typeObject.CurrencyBRL = (float) json.getDouble("BRL");
 		if (json.has("BYN"))
-			obj.CurrencyBYN = (float) json.getDouble("BYN");
+			typeObject.CurrencyBYN = (float) json.getDouble("BYN");
 		if (json.has("EUR"))
-			obj.CurrencyEUR = (float) json.getDouble("EUR");
+			typeObject.CurrencyEUR = (float) json.getDouble("EUR");
 		if (json.has("KZT"))
-			obj.CurrencyKZT = (float) json.getDouble("KZT");
+			typeObject.CurrencyKZT = (float) json.getDouble("KZT");
 		if (json.has("RUB"))
-			obj.CurrencyRUB = (float) json.getDouble("RUB");
+			typeObject.CurrencyRUB = (float) json.getDouble("RUB");
 		if (json.has("UAH"))
-			obj.CurrencyUAH = (float) json.getDouble("UAH");
+			typeObject.CurrencyUAH = (float) json.getDouble("UAH");
 		if (json.has("USD"))
-			obj.CurrencyUSD = (float) json.getDouble("USD");
+			typeObject.CurrencyUSD = (float) json.getDouble("USD");
 		if (json.has("name"))
-			obj.Name = json.getString("name");
-		return obj;
+			typeObject.Name = json.getString("name");
+		return typeObject;
 	}
 	
-	public String toString()
+	public JSONObject toJson()
 	{
 		JSONObject json = new JSONObject();
 		try {
 			json.put("active", Active);
-			json.put("m", Messages);
-			json.put("c", Commands);
+			json.put("messages", Messages);
+			json.put("commands", Commands);
 			json.put("BRL", CurrencyBRL);
 			json.put("BYN", CurrencyBYN);
 			json.put("EUR", CurrencyEUR);
@@ -103,7 +103,7 @@ public class DonationType {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		return json.toString();
+		return json;
 	}
 	
 	public List<String> getMessages() {

@@ -36,5 +36,6 @@
     "daintegratew.help.d2": "Amount of donation",
     "daintegratew.help.d3": "Currency of donation",
     "daintegratew.help.d4": "Name of sender the donation",
-    "daintegratew.help.m1": "Player name in the Minecraft"
+    "daintegratew.help.m1": "Player name in the Minecraft",
+    "daintegratew.help.projson": "You can edit types in DAIntegrate/settings.json"
 }

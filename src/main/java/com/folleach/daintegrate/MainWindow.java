@@ -171,6 +171,8 @@ public class MainWindow extends Screen
     	langHelpLines.add(DataCollector.TagDonationCurrency + " - " + I18n.format("daintegratew.help.d3"));
     	langHelpLines.add(DataCollector.TagDonationUserName + " - " + I18n.format("daintegratew.help.d4"));
     	langHelpLines.add(DataCollector.TagMinecraftPlayerName + " - " + I18n.format("daintegratew.help.m1"));
+    	langHelpLines.add("");
+    	langHelpLines.add(I18n.format("daintegratew.help.projson"));
     }
     
     //MINECRAFT HANDLERS HERE ------------------------------------------------

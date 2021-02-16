@@ -36,5 +36,6 @@
     "daintegratew.help.d2": "Сума даната",
     "daintegratew.help.d3": "Валюта даната",
     "daintegratew.help.d4": "Імя адпраўніка даната",
-    "daintegratew.help.m1": "Імя гульца ў Minecraft"
+    "daintegratew.help.m1": "Імя гульца ў Minecraft",
+    "daintegratew.help.projson": "You can edit types in DAIntegrate/settings.json"
 }

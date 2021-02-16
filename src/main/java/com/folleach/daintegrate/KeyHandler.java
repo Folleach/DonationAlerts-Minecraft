@@ -12,7 +12,7 @@ public class KeyHandler
 	
 	public KeyHandler()
 	{
-		openWindow = new KeyBinding("Open window", 1, "Donation Alerts Integrate");
+		openWindow = new KeyBinding("Open window", 61, "Donation Alerts Integrate");
 		ClientRegistry.registerKeyBinding(openWindow);
 	}
 

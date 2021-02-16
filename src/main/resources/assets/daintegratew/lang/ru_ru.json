@@ -36,5 +36,6 @@
     "daintegratew.help.d2": "Сумма доната",
     "daintegratew.help.d3": "Валюта доната",
     "daintegratew.help.d4": "Имя отправителя доната",
-    "daintegratew.help.m1": "Имя игрока в Minecraft"
+    "daintegratew.help.m1": "Имя игрока в Minecraft",
+    "daintegratew.help.projson": "Можно редактировать файл DAIntegrate/settings.json"
 }
