@@ -51,7 +51,7 @@ public class CustomTextBox extends Widget implements IRenderable, IGuiEventListe
     public int LineColor;
 
     public CustomTextBox(FontRenderer p_i232260_1_, int p_i232260_2_, int p_i232260_3_, int p_i232260_4_, int p_i232260_5_, String p_i232260_6_) {
-        this(p_i232260_1_, p_i232260_2_, p_i232260_3_, p_i232260_4_, p_i232260_5_, (net.minecraft.client.gui.widget.TextFieldWidget)null, p_i232260_6_);
+        this(p_i232260_1_, p_i232260_2_, p_i232260_3_ + 10, p_i232260_4_, p_i232260_5_, (net.minecraft.client.gui.widget.TextFieldWidget)null, p_i232260_6_);
     }
 
     public CustomTextBox(FontRenderer p_i232259_1_, int p_i232259_2_, int p_i232259_3_, int p_i232259_4_, int p_i232259_5_, @Nullable net.minecraft.client.gui.widget.TextFieldWidget p_i232259_6_, String p_i232259_7_) {

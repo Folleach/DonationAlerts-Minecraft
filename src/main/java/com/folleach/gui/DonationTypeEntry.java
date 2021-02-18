@@ -43,6 +43,7 @@ public class DonationTypeEntry extends Widget implements IEntry {
 	private CustomButton addMessage;
 	private CustomButton addCommand;
 	private CustomButton deleteEntry;
+	private CustomButton hideButton;
 	
 	public CustomTextBox CurrencyBRL;
 	public CustomTextBox CurrencyBYN;
@@ -53,10 +54,9 @@ public class DonationTypeEntry extends Widget implements IEntry {
 	public CustomTextBox CurrencyUSD;
 	
 	public boolean hasError = false;
+	private boolean hide = false;
 	
-	public DonationTypeEntry(int x, int y, int width, int height, ScrollPanel own, DonationType type, Minecraft mc, int right)
-	{
-
+	public DonationTypeEntry(int x, int y, int width, int height, ScrollPanel own, DonationType type, Minecraft mc, int right) {
 		super(x, y, width, height, new StringTextComponent("msg"));
 		this.right = right;
 		owner = own;
@@ -84,16 +84,18 @@ public class DonationTypeEntry extends Widget implements IEntry {
 		deleteEntry.DefaultBackgroundColor = Palette.RED;
 		deleteEntry.HoveredBackgroundColor = Palette.RED_HOVERED;
 		deleteEntry.HoveredForegroundColor = Palette.WHITE;
-		WritableLineElement temp;
+
+		hideButton = new CustomButton(0, 0, 20, true, ">", this::SwitchHide);
+
 		for (int i = 0; i < type.getActions().size(); i++) {
 			Action action = type.getActions().get(i);
 			if (action.executor.equals("message")) {
-				temp = new WritableLineElement(this, mc, WritableType.Message, langLine + " " + (i + 1));
-				temp.line.setText(action.data.getString("message"));
-				messages.add(temp);
+				WritableLineElement line = new WritableLineElement(this, mc, WritableType.Message, langLine + " " + (i + 1));
+				line.line.setText(action.data.getString("message"));
+				messages.add(line);
 			}
 			else if (action.executor.equals("command")) {
-				temp = new WritableLineElement(this, mc, WritableType.Command, langLine + " " + (i + 1));
+				WritableLineElement temp = new WritableLineElement(this, mc, WritableType.Command, langLine + " " + (i + 1));
 				temp.line.setText(action.data.getString("command"));
 				commands.add(temp);
 			}
@@ -120,6 +122,10 @@ public class DonationTypeEntry extends Widget implements IEntry {
 		CurrencyUSD = new CustomTextBox(fontRenderer, 0, 0, 80, 20, "");
 		CurrencyUSD.tag = "USD";
 		CurrencyUSD.setText(String.valueOf(type.CurrencyUSD));
+	}
+
+	private void SwitchHide(Button button) {
+		hide = !hide;
 	}
 
 	private void AddMessageClick(Button button)
@@ -150,10 +156,14 @@ public class DonationTypeEntry extends Widget implements IEntry {
 
 	@Override
 	public void drawEntry(MatrixStack matrixs, int x, int y, int mouseX, int mouseY, float partialTicks) {
+		hideButton.drawButton(matrixs, mc, x, y, mouseX, mouseY, partialTicks);
+		x += 30;
 		int offset = y;
 		textBoxName.renderButton(matrixs, x, offset);
 		checkBoxActive.drawButton(matrixs, mc, x + 210, y + 10, mouseX, mouseY, partialTicks);
 		deleteEntry.drawButton(matrixs, mc, x + 275, y + 10, mouseX, mouseY, partialTicks);
+		if (hide)
+			return;
 		offset += 35;
 		fontRenderer.drawString(matrixs, langMessages, x, offset, Palette.WHITE);
 		offset += 10;
@@ -185,6 +195,8 @@ public class DonationTypeEntry extends Widget implements IEntry {
 
 	@Override
 	public int getHeight() {
+		if (hide)
+			return 40;
 		return 265 + (messages.size() * 35) + (commands.size() * 35);
 	}
 	
@@ -261,6 +273,7 @@ public class DonationTypeEntry extends Widget implements IEntry {
 		addCommand.mouseClicked(mouseX, mouseY, mouseButton);
 		deleteEntry.mouseClicked(mouseX, mouseY, mouseButton);
 		checkBoxActive.mouseClicked(mouseX, mouseY, mouseButton);
+		hideButton.mouseClicked(mouseX, mouseY, mouseButton);
 
 		if (CurrencyBRL.mouseClicked(mouseX, mouseY, mouseButton))
 			checkCurrency(CurrencyBRL);
