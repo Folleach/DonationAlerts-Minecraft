@@ -3,6 +3,7 @@ package com.folleach.donationalerts;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import com.folleach.daintegrate.DonationAlertsIntegrate;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,16 +20,11 @@ public class DonationAlerts {
 	private String _token;
 
 	private Listener connectListener;
-	private Listener disconectListener;
-	private Listener donationListener = new Listener() {
-		@Override
-		public void call(Object... arg0) {
-			Main.AddDonation(DonationAlertsEvent.getDonationAlertsEvent((String)arg0[0]));
-		}
-	};
+	private Listener disconnectListener;
+	private Listener donationListener;
 	private Listener errorListener;
-	
-	public DonationAlerts(String server) throws URISyntaxException {
+
+	public DonationAlerts(String server, DonationAlertsIntegrate donationAlertsIntegrate) throws URISyntaxException {
 		_url = new URI(server);
 		sock = IO.socket(_url);
 
@@ -38,7 +34,7 @@ public class DonationAlerts {
 			}
 		};
 		
-		disconectListener = new Listener() {
+		disconnectListener = new Listener() {
 			@Override
 			public void call(Object... arg0) {
 				Main.DonationAlertsInformation(I18n.format("daintegratew.disconnected"));
@@ -51,9 +47,16 @@ public class DonationAlerts {
 				Main.DonationAlertsInformation(I18n.format("daintegratew.error"));
 			}
 		};
-		
+
+		donationListener = new Listener() {
+			@Override
+			public void call(Object... arg0) {
+				donationAlertsIntegrate.addEvent(DonationAlertsEvent.getDonationAlertsEvent((String)arg0[0]));
+			}
+		};
+
 		sock.on(Socket.EVENT_CONNECT, connectListener)
-		.on(Socket.EVENT_DISCONNECT, disconectListener)
+		.on(Socket.EVENT_DISCONNECT, disconnectListener)
 		.on(Socket.EVENT_ERROR, errorListener)
 		.on("donation", donationListener);
 	}

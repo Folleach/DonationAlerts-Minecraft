@@ -2,6 +2,7 @@ package com.folleach.gui;
 
 import java.util.List;
 
+import com.folleach.daintegrate.Action;
 import com.folleach.daintegrate.Palette;
 import com.folleach.donationalerts.DonationType;
 import com.google.common.collect.Lists;
@@ -84,19 +85,18 @@ public class DonationTypeEntry extends Widget implements IEntry {
 		deleteEntry.HoveredBackgroundColor = Palette.RED_HOVERED;
 		deleteEntry.HoveredForegroundColor = Palette.WHITE;
 		WritableLineElement temp;
-		if (type.getMessages() != null)
-		for (int i = 0; i < type.getMessages().size(); i++) {
-			temp = new WritableLineElement(this, mc, WritableType.Message, langLine + " " + (i + 1));
-			temp.line.setText(type.getMessages().get(i));
-			messages.add(temp);
-			
-		}
-		if (type.getCommands() != null)
-		for (int i = 0; i < type.getCommands().size(); i++) {
-			temp = new WritableLineElement(this, mc, WritableType.Command, langLine + " " + (i + 1));
-			temp.line.setText(type.getCommands().get(i));
-			commands.add(temp);
-			
+		for (int i = 0; i < type.getActions().size(); i++) {
+			Action action = type.getActions().get(i);
+			if (action.executor.equals("message")) {
+				temp = new WritableLineElement(this, mc, WritableType.Message, langLine + " " + (i + 1));
+				temp.line.setText(action.data.getString("message"));
+				messages.add(temp);
+			}
+			else if (action.executor.equals("command")) {
+				temp = new WritableLineElement(this, mc, WritableType.Command, langLine + " " + (i + 1));
+				temp.line.setText(action.data.getString("command"));
+				commands.add(temp);
+			}
 		}
 		
 		CurrencyBRL = new CustomTextBox(fontRenderer, 0, 0, 80, 20, "");
@@ -173,11 +173,9 @@ public class DonationTypeEntry extends Widget implements IEntry {
 		}
 		addCommand.drawButton(matrixs, mc, x + 210, offset, mouseX, mouseY, partialTicks);
 		offset += 25;
-		CurrencyUSD.renderButton(matrixs, x, offset); CurrencyRUB.renderButton(matrixs, x + 90, offset);
+		CurrencyUSD.renderButton(matrixs, x, offset); CurrencyRUB.renderButton(matrixs, x + 90, offset); CurrencyEUR.renderButton(matrixs, x + 90 * 2, offset);
 		offset += 35;
-		CurrencyEUR.renderButton(matrixs, x, offset); CurrencyKZT.renderButton(matrixs, x + 90, offset);
-		offset += 35;
-		CurrencyBRL.renderButton(matrixs, x, offset); CurrencyBYN.renderButton(matrixs, x + 90, offset);
+		CurrencyKZT.renderButton(matrixs, x, offset); CurrencyBRL.renderButton(matrixs, x + 90, offset); CurrencyBYN.renderButton(matrixs, x + 90 * 2, offset);
 		offset += 35;
 		CurrencyUAH.renderButton(matrixs, x, offset);
 		offset += 35;
@@ -304,21 +302,15 @@ public class DonationTypeEntry extends Widget implements IEntry {
 	
 	public List<String> getMessages() {
 		List<String> msgs = Lists.<String>newArrayList();
-		if (messages.size() > 0)
-			for (int i = 0; i < messages.size(); i++)
-				msgs.add(messages.get(i).line.getText());
-		else
-			return null;
+		for (int i = 0; i < messages.size(); i++)
+			msgs.add(messages.get(i).line.getText());
 		return msgs;
 	}
 	
 	public List<String> getCommands() {
 		List<String> cmds = Lists.<String>newArrayList();
-		if (commands.size() > 0)
-			for (int i = 0; i < commands.size(); i++)
-				cmds.add(commands.get(i).line.getText());
-		else
-			return null;
+		for (int i = 0; i < commands.size(); i++)
+			cmds.add(commands.get(i).line.getText());
 		return cmds;
 	}
 	

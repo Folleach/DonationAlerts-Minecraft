@@ -1,8 +1,8 @@
 package com.folleach.donationalerts;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import com.folleach.daintegrate.Action;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.json.JSONArray;
@@ -15,9 +15,8 @@ import com.google.common.collect.Lists;
 public class DonationType {
 	public boolean Active;
 	
-	private List<String> Messages;
-	private List<String> Commands;
-	
+	private List<Action> Actions;
+
 	public String Name = "";
 	public float CurrencyBRL;
 	public float CurrencyBYN;
@@ -26,7 +25,11 @@ public class DonationType {
 	public float CurrencyRUB;
 	public float CurrencyUAH;
 	public float CurrencyUSD;
-	
+
+	public DonationType() {
+		Actions = Lists.<Action>newArrayList();
+	}
+
 	public float getAmountByCurrency(String currency) {
 		switch (currency) {
 		case "BRL": return CurrencyBRL; 
@@ -40,49 +43,34 @@ public class DonationType {
 		return Float.POSITIVE_INFINITY;
 	}
 	
-	public static DonationType getDonationType(String data) throws JSONException
+	public static DonationType getDonationType(JSONObject json) throws JSONException
 	{
-		JSONObject json = new JSONObject(data);
-		DonationType typeObject = new DonationType();
+		DonationType instance = new DonationType();
 		if (json.has("active"))
-			typeObject.Active = json.getBoolean("active");
-		if (json.has("messages"))
+			instance.Active = json.getBoolean("active");
+		if (json.has("actions"))
 		{
-			JSONArray messagesJsonArray = json.getJSONArray("messages");
-			if (messagesJsonArray != null)
-			{
-				typeObject.Messages = new ArrayList<String>();
-				for (int i = 0; i < messagesJsonArray.length(); i++)
-					typeObject.Messages.add(messagesJsonArray.getString(i));
-			}
-		}
-		if (json.has("commands"))
-		{
-			JSONArray commandJsonArray = json.getJSONArray("commands");
-			if (commandJsonArray != null)
-			{
-				typeObject.Commands = new ArrayList<String>();
-				for (int i = 0; i < commandJsonArray.length(); i++)
-					typeObject.Commands.add(commandJsonArray.getString(i));
-			}
+			JSONArray array = json.getJSONArray("actions");
+			for (int i = 0; i < array.length(); i++)
+				instance.Actions.add(Action.fromJson(array.getJSONObject(i)));
 		}
 		if (json.has("BRL"))
-			typeObject.CurrencyBRL = (float) json.getDouble("BRL");
+			instance.CurrencyBRL = (float) json.getDouble("BRL");
 		if (json.has("BYN"))
-			typeObject.CurrencyBYN = (float) json.getDouble("BYN");
+			instance.CurrencyBYN = (float) json.getDouble("BYN");
 		if (json.has("EUR"))
-			typeObject.CurrencyEUR = (float) json.getDouble("EUR");
+			instance.CurrencyEUR = (float) json.getDouble("EUR");
 		if (json.has("KZT"))
-			typeObject.CurrencyKZT = (float) json.getDouble("KZT");
+			instance.CurrencyKZT = (float) json.getDouble("KZT");
 		if (json.has("RUB"))
-			typeObject.CurrencyRUB = (float) json.getDouble("RUB");
+			instance.CurrencyRUB = (float) json.getDouble("RUB");
 		if (json.has("UAH"))
-			typeObject.CurrencyUAH = (float) json.getDouble("UAH");
+			instance.CurrencyUAH = (float) json.getDouble("UAH");
 		if (json.has("USD"))
-			typeObject.CurrencyUSD = (float) json.getDouble("USD");
+			instance.CurrencyUSD = (float) json.getDouble("USD");
 		if (json.has("name"))
-			typeObject.Name = json.getString("name");
-		return typeObject;
+			instance.Name = json.getString("name");
+		return instance;
 	}
 	
 	public JSONObject toJson()
@@ -90,8 +78,10 @@ public class DonationType {
 		JSONObject json = new JSONObject();
 		try {
 			json.put("active", Active);
-			json.put("messages", Messages);
-			json.put("commands", Commands);
+			JSONArray actionsArray = new JSONArray();
+			for (Action action : Actions)
+				actionsArray.put(action.toJson());
+			json.put("actions", actionsArray);
 			json.put("BRL", CurrencyBRL);
 			json.put("BYN", CurrencyBYN);
 			json.put("EUR", CurrencyEUR);
@@ -106,26 +96,11 @@ public class DonationType {
 		return json;
 	}
 	
-	public List<String> getMessages() {
-		return Messages;
+	public List<Action> getActions() {
+		return Actions;
 	}
-	public List<String> getCommands() {
-		return Commands;
-	}
-	public void AddMessage(String value) {
-		if (Messages == null)
-			Messages = Lists.<String>newArrayList();
-		Messages.add(value);
-	}
-	public void AddCommand(String value) {
-		if (Commands == null)
-			Commands = Lists.<String>newArrayList();
-		Commands.add(value);
-	}
-	public void setMessages(List<String> value) {
-		Messages = value;
-	}
-	public void setCommands(List<String> value) {
-		Commands = value;
+
+	public void addAction(Action action) {
+		Actions.add(action);
 	}
 }

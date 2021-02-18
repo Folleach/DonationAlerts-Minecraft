@@ -28,7 +28,7 @@ public class TypesManager {
 	public void Load(JSONArray jarr) throws JSONException
 	{
 		for (int i = 0; i < jarr.length(); i++)
-			types.add(DonationType.getDonationType(jarr.getString(i)));
+			types.add(DonationType.getDonationType(jarr.getJSONObject(i)));
 	}
 	
 	public JSONObject toJson()

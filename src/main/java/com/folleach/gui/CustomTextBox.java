@@ -1,7 +1,6 @@
 package com.folleach.gui;
 
 import com.folleach.daintegrate.Palette;
-import com.google.common.base.Predicates;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -11,12 +10,10 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.IRenderable;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.SharedConstants;
 import net.minecraft.util.Util;
@@ -426,7 +423,8 @@ public class CustomTextBox extends Widget implements IRenderable, IGuiEventListe
                 fill(p_230431_1_, this.x - 1, this.y - 1, this.x + this.width + 1, this.y + this.height + 1, i);
                 fill(p_230431_1_, this.x, this.y, this.x + this.width, this.y + this.height, -16777216);
             }
-
+            if (tag != null)
+                fontRenderer.drawString(p_230431_1_, tag, x, y - 10, Palette.WHITE);
             int i2 = this.isEnabled ? this.enabledColor : this.disabledColor;
             int j = this.cursorPosition - this.lineScrollOffset;
             int k = this.selectionEnd - this.lineScrollOffset;

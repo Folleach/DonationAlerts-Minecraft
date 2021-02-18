@@ -4,6 +4,7 @@ import com.folleach.daintegrate.Main;
 import com.folleach.daintegrate.Palette;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -30,7 +31,7 @@ public class CheckBox extends CustomButton
     {
         if (this.visible)
         {
-            FontRenderer fontrenderer = Main.GameInstance.fontRenderer;
+            FontRenderer fontrenderer = Minecraft.getInstance().fontRenderer;
             this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
             // this.mouseDragged(mc, mouseX, mouseY);
             int colorBg = DefaultBackgroundColor;

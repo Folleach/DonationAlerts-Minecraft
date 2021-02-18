@@ -1,5 +1,7 @@
 package com.folleach.daintegrate;
 
+import com.folleach.donationalerts.DonationAlerts;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -9,9 +11,19 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 public class KeyHandler
 {
 	private KeyBinding openWindow;
-	
-	public KeyHandler()
-	{
+	private Minecraft game;
+	private DataCollector data;
+	private DonationAlerts donationAlerts;
+	private DonationAlertsIntegrate donationAlertsIntegrate;
+
+	public KeyHandler(Minecraft game,
+					  DataCollector data,
+					  DonationAlerts donationAlerts,
+					  DonationAlertsIntegrate donationAlertsIntegrate) {
+		this.game = game;
+		this.data = data;
+		this.donationAlerts = donationAlerts;
+		this.donationAlertsIntegrate = donationAlertsIntegrate;
 		openWindow = new KeyBinding("Open window", 61, "Donation Alerts Integrate");
 		ClientRegistry.registerKeyBinding(openWindow);
 	}
@@ -20,6 +32,6 @@ public class KeyHandler
 	public void PlayerTick(TickEvent.PlayerTickEvent event)
 	{
 		if (event.phase == TickEvent.Phase.START && openWindow.isPressed())
-			Main.GameInstance.displayGuiScreen(new MainWindow(Main.GameInstance, Main.data, Main.da));
+			game.displayGuiScreen(new MainWindow(game, data, donationAlerts, donationAlertsIntegrate));
 	}
 }

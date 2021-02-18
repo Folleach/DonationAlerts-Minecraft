@@ -9,7 +9,6 @@ import com.folleach.gui.*;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -24,6 +23,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.ChatType;
+import org.json.JSONObject;
 
 @OnlyIn(Dist.CLIENT)
 public class MainWindow extends Screen
@@ -49,7 +49,8 @@ public class MainWindow extends Screen
 	private Minecraft mc;
 	private FontRenderer fontRenderer;
 	private DataCollector data;
-	private DonationAlerts dalets;
+	private DonationAlerts donationAlerts;
+	private DonationAlertsIntegrate donationAlertsIntegrate;
 	private PanelsType activePanel;
 	
 	private CustomButton LEFTBUTTON_Messages;
@@ -83,13 +84,17 @@ public class MainWindow extends Screen
 	private int typesSaveTimer;
 	private boolean initialized;
 
-	public MainWindow(Minecraft mc, DataCollector d, DonationAlerts da)
+	public MainWindow(Minecraft mc,
+					  DataCollector data,
+					  DonationAlerts donationAlerts,
+					  DonationAlertsIntegrate donationAlertsIntegrate)
 	{
 		super(new StringTextComponent("MainWindow"));
 		this.mc = mc;
 		fontRenderer = mc.fontRenderer;
-		data = d;
-		dalets = da;
+		this.data = data;
+		this.donationAlerts = donationAlerts;
+		this.donationAlertsIntegrate = donationAlertsIntegrate;
 		InitializeStrings();
 		
 	}
@@ -126,7 +131,7 @@ public class MainWindow extends Screen
 		STATUSBUTTON_Save = this.addButton(new DefaultButton(125, TOKENPANELY + 45, 120, activePanel == PanelsType.Status, I18n.format("daintegratew.save"), this::StatusSaveClick));
 		STATUSBUTTON_Delete = this.addButton(new DefaultButton(250, TOKENPANELY + 45, 120, activePanel == PanelsType.Status, I18n.format("daintegratew.delete"), this::StatusDeleteClick));
 		STATUSBUTTON_ConnectionController = this.addButton(new DefaultButton(125, 35, 120, activePanel == PanelsType.Status,
-				dalets.getConnected() ? I18n.format("daintegratew.disconnect") : I18n.format("daintegratew.connect"), this::ConntectionControllerClick));
+				donationAlerts.getConnected() ? I18n.format("daintegratew.disconnect") : I18n.format("daintegratew.connect"), this::ConntectionControllerClick));
 		TYPESBUTTON_Save = this.addButton(new DefaultButton(this.width - 80, 0, 80, activePanel == PanelsType.Types, I18n.format("daintegratew.save"), this::TypesSaveClick));
 		TYPESBUTTON_Add = this.addButton(new CustomButton(this.width - 100, 0, 20, activePanel == PanelsType.Types, "+", this::TypesAddClick));
 		TYPESBUTTON_Add.DefaultBackgroundColor = Palette.GREEN;
@@ -152,25 +157,25 @@ public class MainWindow extends Screen
     private void InitializeMessages()
     {
     	messagesPanel = new ScrollPanel<MessageEntry>(125, 25, this.width, this.height);
-		for (int i = data.Donations.size() - 1; i >= 0; i--)
-			messagesPanel.addEntry(new MessageEntry(0, 0, this.width - 130, 0, fontRenderer, data.Donations.get(i)));
+		for (int i = donationAlertsIntegrate.Donations.size() - 1; i >= 0; i--)
+			messagesPanel.addEntry(new MessageEntry(0, 0, this.width - 130, 0, fontRenderer, donationAlertsIntegrate.Donations.get(i)));
     }
     
     private void InitializeTypes()
     {
     	typesPanel = new ScrollPanel<DonationTypeEntry>(125, 25, this.width, this.height);
-    	for (int i = 0; i < data.TManager.getTypes().size(); i++)
-    		typesPanel.addEntry(new DonationTypeEntry(0, 0, 0, 0, typesPanel, data.TManager.getTypes().get(i) , mc, this.width));
+    	for (int i = 0; i < data.typesManager.getTypes().size(); i++)
+    		typesPanel.addEntry(new DonationTypeEntry(0, 0, 0, 0, typesPanel, data.typesManager.getTypes().get(i) , mc, this.width));
     }
     
     private void InitializeLangHelpLines() {
     	langHelpLines = Lists.newArrayList();
     	langHelpLines.add(I18n.format("daintegratew.help.title"));
-    	langHelpLines.add(DataCollector.TagDonationMessage + " - " + I18n.format("daintegratew.help.d1"));
-    	langHelpLines.add(DataCollector.TagDonationAmount + " - " + I18n.format("daintegratew.help.d2"));
-    	langHelpLines.add(DataCollector.TagDonationCurrency + " - " + I18n.format("daintegratew.help.d3"));
-    	langHelpLines.add(DataCollector.TagDonationUserName + " - " + I18n.format("daintegratew.help.d4"));
-    	langHelpLines.add(DataCollector.TagMinecraftPlayerName + " - " + I18n.format("daintegratew.help.m1"));
+    	langHelpLines.add(DonationAlertsIntegrate.TagDonationMessage + " - " + I18n.format("daintegratew.help.d1"));
+    	langHelpLines.add(DonationAlertsIntegrate.TagDonationAmount + " - " + I18n.format("daintegratew.help.d2"));
+    	langHelpLines.add(DonationAlertsIntegrate.TagDonationCurrency + " - " + I18n.format("daintegratew.help.d3"));
+    	langHelpLines.add(DonationAlertsIntegrate.TagDonationUserName + " - " + I18n.format("daintegratew.help.d4"));
+    	langHelpLines.add(DonationAlertsIntegrate.TagMinecraftPlayerName + " - " + I18n.format("daintegratew.help.m1"));
     	langHelpLines.add("");
     	langHelpLines.add(I18n.format("daintegratew.help.projson"));
     }
@@ -198,8 +203,8 @@ public class MainWindow extends Screen
     		break;
     	case Status:
     		drawString(matrixs, fontRenderer, langConnectState, 125, 25, Palette.WHITE);
-    		drawString(matrixs, fontRenderer, dalets.getConnected() ? langConnected : langDisonnected, 125 + lenghtConnectState + 5, 25,
-    				dalets.getConnected() ? Palette.GREEN : Palette.RED);
+    		drawString(matrixs, fontRenderer, donationAlerts.getConnected() ? langConnected : langDisonnected, 125 + lenghtConnectState + 5, 25,
+    				donationAlerts.getConnected() ? Palette.GREEN : Palette.RED);
     		
     		text1.renderButton(matrixs);
     		drawString(matrixs, fontRenderer, data.isTokenExists() ? langTokenExist : langTokenNotExists, 125, TOKENPANELY + 35, data.isTokenExists() ? Palette.GREEN : Palette.RED);
@@ -352,7 +357,7 @@ public class MainWindow extends Screen
 			if (data.CountDonationInCache < 1)
 				data.CountDonationInCache = 1;
 			data.Save();
-			data.RecountDonationCache();
+			donationAlertsIntegrate.RecountDonationCache();
 			SETTINGS_ShowCountDonation.LineColor = Palette.GRAY30_TRANSPARENT_xDD;
 			SETTINGS_ShowCountDonation.setText(Integer.toString(data.CountDonationInCache));
 		} catch (NumberFormatException e) {
@@ -384,13 +389,13 @@ public class MainWindow extends Screen
 
 	private void ConntectionControllerClick(Button button)
 	{
-		if (dalets.getConnected()) {
-			dalets.Disconnect();
+		if (donationAlerts.getConnected()) {
+			donationAlerts.Disconnect();
 			STATUSBUTTON_ConnectionController.setMessage(new StringTextComponent(I18n.format("daintegratew.connect")));
 		}
 		else {
 			try {
-				dalets.Connect(data.Token);
+				donationAlerts.Connect(data.Token);
 			} catch (JSONException e) {
 				Main.DonationAlertsInformation(I18n.format("daintegratew.error"));
 				e.printStackTrace();
@@ -423,11 +428,23 @@ public class MainWindow extends Screen
 				temp.CurrencyRUB = (float) Double.parseDouble(entries.get(i).CurrencyRUB.getText());
 				temp.CurrencyUAH = (float) Double.parseDouble(entries.get(i).CurrencyUAH.getText());
 				temp.CurrencyUSD = (float) Double.parseDouble(entries.get(i).CurrencyUSD.getText());
-				temp.setMessages(entries.get(i).getMessages());
-				temp.setCommands(entries.get(i).getCommands());
+				if (entries != null)
+				for (String value : entries.get(i).getMessages()) {
+					temp.addAction(new Action(
+							"message",
+							0,
+							new JSONObject().put("message", value)));
+				}
+				if (entries != null)
+				for (String value : entries.get(i).getCommands()) {
+					temp.addAction(new Action(
+							"command",
+							0,
+							new JSONObject().put("command", value)));
+				}
 				tManager.getTypes().add(temp);
 			}
-			data.TManager = tManager;
+			data.typesManager = tManager;
 			data.Save();
 			typesSaveTimer = 120;
 			typesSuccessfulSave = true;
