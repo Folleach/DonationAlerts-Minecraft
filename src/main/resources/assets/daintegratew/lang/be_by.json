@@ -28,7 +28,7 @@
     "daintegratew.token.exists": "Токен існуе",
     "daintegratew.token.absents": "Токен адсутнічае",
     "daintegratew.warning.line1": "УВАГА!",
-    "daintegratew.warning.line2": "Калі вы хочаце падзяліцца сваёй гульнёй,",
+    "daintegratew.warning.line2": "Калі Вы хочаце падзяліцца сваёй гульнёй,",
     "daintegratew.warning.line3": "выдаліце гэты токен каб абараніць сябе!",
     "daintegratew.help": "Дапамога",
     "daintegratew.help.title": "Тэгі для замены",
@@ -37,5 +37,5 @@
     "daintegratew.help.d3": "Валюта даната",
     "daintegratew.help.d4": "Імя адпраўніка даната",
     "daintegratew.help.m1": "Імя гульца ў Minecraft",
-    "daintegratew.help.projson": "You can edit types in DAIntegrate/settings.json"
+    "daintegratew.help.projson": "Вы можаце рэдагаваць файл DAIntegrate/settings.json"
 }
