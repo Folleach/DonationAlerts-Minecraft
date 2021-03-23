@@ -49,8 +49,6 @@ public class Main {
 	{
 		if (event.Type == AlertType.Donate)
 			data.AddDonation(event);
-		else
-			DonationAlertsInformation("Invalid type: " + event.Type.toString());
 	}
 	
 	public static void DonationAlertsInformation(String message)
