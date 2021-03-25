@@ -39,6 +39,10 @@ public class DonationAlertsIntegrate {
             Main.DonationAlertsInformation("Invalid type: " + event.Type.toString());
     }
 
+    public IExecutorEntity getExecutor(String name) {
+        return executors.get(name);
+    }
+
     public void RecountDonationCache()
     {
         while (Donations.size() > data.CountDonationInCache)

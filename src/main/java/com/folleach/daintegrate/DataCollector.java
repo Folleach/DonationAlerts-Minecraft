@@ -20,7 +20,7 @@ public class DataCollector {
 	public ChatType DonationTo;
 	public boolean SkipTestDonation;
 	public int CountDonationInCache = 30;
-	String Token;
+	public String Token;
 	
 	private File dataFile;
 	private File tokenFile;

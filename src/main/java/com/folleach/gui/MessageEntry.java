@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -19,12 +20,13 @@ public class MessageEntry extends Widget implements IEntry
 	private String title;
 	private List<String> messageLines;
 
-    public MessageEntry(int x, int y, int width, int height, FontRenderer fontR, DonationAlertsEvent donate)
+    public MessageEntry(int x, int y, ScrollPanel<MessageEntry> owner, DonationAlertsEvent donate)
     {
-		super(x, y, height, width, new StringTextComponent("msg"));
-		fontRenderer = fontR;
+		super(x, y, owner.width, 0, new StringTextComponent("msg"));
+		fontRenderer = Minecraft.getInstance().fontRenderer;
         title = donate.UserName + " - " + donate.Amount + " " + donate.Currency;
         messageLines = ListFormattedStringToWidth(donate.Message, width);
+        height = 15 + messageLines.size() * 10;
     }
 
     private List<String> ListFormattedStringToWidth(String value, int width)
@@ -66,7 +68,7 @@ public class MessageEntry extends Widget implements IEntry
 
 	@Override
 	public int getHeight() {
-		return 15 + messageLines.size() * 10;
+		return height;
 	}
 
 	@Override

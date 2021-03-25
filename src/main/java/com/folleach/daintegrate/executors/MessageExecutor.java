@@ -2,6 +2,7 @@ package com.folleach.daintegrate.executors;
 
 import com.folleach.daintegrate.DataCollector;
 import com.folleach.daintegrate.DonationAlertsIntegrate;
+import com.folleach.daintegrate.Requirement;
 import com.folleach.donationalerts.DonationAlertsEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.ForgeHooks;
@@ -13,6 +14,13 @@ public class MessageExecutor implements IExecutorEntity {
 
     public MessageExecutor(Minecraft minecraft) {
         this.minecraft = minecraft;
+    }
+
+    @Override
+    public Requirement[] getRequires() {
+        return new Requirement[] {
+                new Requirement("command", Requirement.RequirementType.String)
+        };
     }
 
     @Override

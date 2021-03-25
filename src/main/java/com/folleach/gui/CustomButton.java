@@ -1,5 +1,6 @@
 package com.folleach.gui;
 
+import com.folleach.daintegrate.Palette;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -11,12 +12,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class CustomButton extends Button
 {
-	public int DefaultBackgroundColor = 0x30000000;
-	public int DefaultForegroundColor = 0xFFFFFFFF;
-	public int HoveredBackgroundColor = 0x60000000;
-	public int HoveredForegroundColor = 0xFFF59907;
-	public int DisableBackgroundColor = DefaultBackgroundColor;
-	public int DisableForegroundColor = 0xFFA0A0A0;
+	public int DefaultBackgroundColor = Palette.Gray;
+	public int DefaultForegroundColor = Palette.AlmostWhiteButNotWhite;
+	public int HoveredBackgroundColor = Palette.Gray;
+	public int HoveredForegroundColor = Palette.BrandOrange;
+	public int DisableBackgroundColor = Palette.Grayish;
+	public int DisableForegroundColor = Palette.AlmostWhiteButNotWhite;
 
     public CustomButton(int x, int y, int width, boolean visibility, String text, IPressable onPress)
     {

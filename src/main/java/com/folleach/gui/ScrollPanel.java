@@ -18,7 +18,7 @@ public class ScrollPanel<T extends IEntry> extends Widget
 {
     private final List<T> entries = Lists.<T>newArrayList();
     
-    private int x, y, width, height; 
+    public int x, y, width, height;
     public int scrollPosition;
     public int scrollbarHeight;
     public int visualHeight;
@@ -45,7 +45,7 @@ public class ScrollPanel<T extends IEntry> extends Widget
     	
     	if (contentHeight > visualHeight) {
     		int pos = MathHelper.convertRange(-scrollPosition, 0, contentHeight - visualHeight, 0, height - 50);
-    		fill(matrixs, width - 4, y+pos, width, pos + 50, Palette.YELLOW);
+    		fill(matrixs, width - 4, y+pos, width, pos + 50, Palette.BrandOrange);
     	}
     	int offset = scrollPosition + y;
     	for (int i = 0; i < entries.size(); i++)
@@ -65,8 +65,6 @@ public class ScrollPanel<T extends IEntry> extends Widget
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
     {
-		Logger logger = LogManager.getLogger("daintegratew");
-		logger.debug("Initial");
     	if (mouseY >= 20)
     		for (int i = 0; i < entries.size(); i++)
     			entries.get(i).mouseClick(mouseX, mouseY, mouseButton);

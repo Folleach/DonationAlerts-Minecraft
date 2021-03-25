@@ -1,7 +1,9 @@
 package com.folleach.daintegrate;
 
 import com.folleach.donationalerts.DonationAlerts;
+import com.folleach.gui.screens.MainScreen;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -32,6 +34,6 @@ public class KeyHandler
 	public void PlayerTick(TickEvent.PlayerTickEvent event)
 	{
 		if (event.phase == TickEvent.Phase.START && openWindow.isPressed())
-			game.displayGuiScreen(new MainWindow(game, data, donationAlerts, donationAlertsIntegrate));
+			game.displayGuiScreen(new MainScreen(game.currentScreen, new StringTextComponent("Donation alerts integrate"), donationAlertsIntegrate, donationAlerts, data));
 	}
 }
