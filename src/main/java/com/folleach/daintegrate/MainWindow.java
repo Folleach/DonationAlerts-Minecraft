@@ -6,12 +6,13 @@ import java.net.URI;
 import java.util.List;
 
 import com.folleach.gui.*;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.util.text.StringTextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.ChatType;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.json.JSONException;
@@ -22,8 +23,6 @@ import com.folleach.donationalerts.TypesManager;
 import com.google.common.collect.Lists;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.ChatType;
 
 @OnlyIn(Dist.CLIENT)
 public class MainWindow extends Screen
@@ -47,7 +46,7 @@ public class MainWindow extends Screen
 	private static int lenghtSaved;
 	
 	private Minecraft mc;
-	private FontRenderer fontRenderer;
+	private Font fontRenderer;
 	private DataCollector data;
 	private DonationAlerts dalets;
 	private PanelsType activePanel;
@@ -85,9 +84,9 @@ public class MainWindow extends Screen
 
 	public MainWindow(Minecraft mc, DataCollector d, DonationAlerts da)
 	{
-		super(new StringTextComponent("MainWindow"));
+		super(new TextComponent("MainWindow"));
 		this.mc = mc;
-		fontRenderer = mc.fontRenderer;
+		fontRenderer = mc.font;
 		data = d;
 		dalets = da;
 		InitializeStrings();
@@ -96,45 +95,44 @@ public class MainWindow extends Screen
 	
 	private void InitializeStrings()
 	{
-		langDonto = I18n.format("daintegratew.donto")+":";
-		langToken = I18n.format("daintegratew.token")+":";
-		langTokenExist = I18n.format("daintegratew.token.exists")+".";
-		langTokenNotExists = I18n.format("daintegratew.token.absents")+".";
-		langConnected = I18n.format("daintegratew.connected")+".";
-		langDisonnected = I18n.format("daintegratew.disconnected")+".";
-		langConnectState = I18n.format("daintegratew.connstatus")+":";
-		langSaved = I18n.format("daintegratew.saved");
-		langError = I18n.format("daintegratew.error");
-		lenghtSaved = mc.fontRenderer.getStringWidth(langSaved) + 10;
+		langDonto = I18n.get("daintegratew.donto")+":";
+		langToken = I18n.get("daintegratew.token")+":";
+		langTokenExist = I18n.get("daintegratew.token.exists")+".";
+		langTokenNotExists = I18n.get("daintegratew.token.absents")+".";
+		langConnected = I18n.get("daintegratew.connected")+".";
+		langDisonnected = I18n.get("daintegratew.disconnected")+".";
+		langConnectState = I18n.get("daintegratew.connstatus")+":";
+		langSaved = I18n.get("daintegratew.saved");
+		langError = I18n.get("daintegratew.error");
+		lenghtSaved = mc.font.width(langSaved) + 10;
 	}
 
     public void init() {
 		initialized = false;
-		this.buttons.clear();
-		this.children.clear();
-		LEFTBUTTON_Messages = this.addButton(new CustomButton(0, 20, 120, 20, I18n.format("daintegratew.messages"), this::SwitchPanel_Messages));
-		LEFTBUTTON_Status = this.addButton(new CustomButton(0, 20 + SPACE_LEFTBUTTON, 120, 20, I18n.format("daintegratew.status"), this::SwitchPanel_Status));
-		LEFTBUTTON_Types = this.addButton(new CustomButton(0, 20 + (2 * SPACE_LEFTBUTTON), 120, 20, I18n.format("daintegratew.types"), this::SwitchPanel_Types));
-		LEFTBUTTON_Settings = this.addButton(new CustomButton(0, 20 + (3 * SPACE_LEFTBUTTON), 120, 20, I18n.format("daintegratew.settings"), this::SwitchPanel_Settings));
-		LEFTBUTTON_Help = this.addButton(new CustomButton(0, 20 + (4 * SPACE_LEFTBUTTON), 120, 20, I18n.format("daintegratew.help"), this::SwitchPanel_Help));
-		LEFTBUTTON_SupportAuthor = this.addButton(new DefaultButton(0, height - 20, 120, 20, I18n.format("daintegratew.suppauthor"), this::SwitchPanel_SupportAuthor));
-		SETTINGSBUTTON_SkippingTestDonation = this.addButton(new CheckBox(125, 25, 170, activePanel == PanelsType.Settings, I18n.format("daintegratew.skiptestd"), data.SkipTestDonation, this::SettingsSkipTestDonationClick));
-		SETTINGSBUTTON_DTChat = this.addButton(new CheckBox(125, 65, 80, activePanel == PanelsType.Settings, I18n.format("daintegratew.chat"), data.DonationTo == ChatType.CHAT, this::SettingsDTChatClick));
-		SETTINGSBUTTON_DTSystem = this.addButton(new CheckBox(210, 65, 80, activePanel == PanelsType.Settings, I18n.format("daintegratew.system"), data.DonationTo == ChatType.SYSTEM, this::SettingsDTSystemClick));
-		SETTINGSBUTTON_DTGameInfo = this.addButton(new CheckBox(295, 65, 80, activePanel == PanelsType.Settings, I18n.format("daintegratew.gameinfo"), data.DonationTo == ChatType.GAME_INFO, this::SettingsDTGameClick));
-		SETTINGSBUTTON_Save = this.addButton(new DefaultButton(this.width - 80, 0, 80, activePanel == PanelsType.Settings, I18n.format("daintegratew.save"), this::SettingsSaveClick));
-		STATUSBUTTON_Save = this.addButton(new DefaultButton(125, TOKENPANELY + 45, 120, activePanel == PanelsType.Status, I18n.format("daintegratew.save"), this::StatusSaveClick));
-		STATUSBUTTON_Delete = this.addButton(new DefaultButton(250, TOKENPANELY + 45, 120, activePanel == PanelsType.Status, I18n.format("daintegratew.delete"), this::StatusDeleteClick));
-		STATUSBUTTON_ConnectionController = this.addButton(new DefaultButton(125, 35, 120, activePanel == PanelsType.Status,
-				dalets.getConnected() ? I18n.format("daintegratew.disconnect") : I18n.format("daintegratew.connect"), this::ConntectionControllerClick));
-		TYPESBUTTON_Save = this.addButton(new DefaultButton(this.width - 80, 0, 80, activePanel == PanelsType.Types, I18n.format("daintegratew.save"), this::TypesSaveClick));
-		TYPESBUTTON_Add = this.addButton(new CustomButton(this.width - 100, 0, 20, activePanel == PanelsType.Types, "+", this::TypesAddClick));
+		this.children().clear();
+		LEFTBUTTON_Messages = this.addWidget(new CustomButton(0, 20, 120, 20, I18n.get("daintegratew.messages"), this::SwitchPanel_Messages));
+		LEFTBUTTON_Status = this.addWidget(new CustomButton(0, 20 + SPACE_LEFTBUTTON, 120, 20, I18n.get("daintegratew.status"), this::SwitchPanel_Status));
+		LEFTBUTTON_Types = this.addWidget(new CustomButton(0, 20 + (2 * SPACE_LEFTBUTTON), 120, 20, I18n.get("daintegratew.types"), this::SwitchPanel_Types));
+		LEFTBUTTON_Settings = this.addWidget(new CustomButton(0, 20 + (3 * SPACE_LEFTBUTTON), 120, 20, I18n.get("daintegratew.settings"), this::SwitchPanel_Settings));
+		LEFTBUTTON_Help = this.addWidget(new CustomButton(0, 20 + (4 * SPACE_LEFTBUTTON), 120, 20, I18n.get("daintegratew.help"), this::SwitchPanel_Help));
+		LEFTBUTTON_SupportAuthor = this.addWidget(new DefaultButton(0, height - 20, 120, 20, I18n.get("daintegratew.suppauthor"), this::SwitchPanel_SupportAuthor));
+		SETTINGSBUTTON_SkippingTestDonation = this.addWidget(new CheckBox(125, 25, 170, activePanel == PanelsType.Settings, I18n.get("daintegratew.skiptestd"), data.SkipTestDonation, this::SettingsSkipTestDonationClick));
+		SETTINGSBUTTON_DTChat = this.addWidget(new CheckBox(125, 65, 80, activePanel == PanelsType.Settings, I18n.get("daintegratew.chat"), data.DonationTo == ChatType.CHAT, this::SettingsDTChatClick));
+		SETTINGSBUTTON_DTSystem = this.addWidget(new CheckBox(210, 65, 80, activePanel == PanelsType.Settings, I18n.get("daintegratew.system"), data.DonationTo == ChatType.SYSTEM, this::SettingsDTSystemClick));
+		SETTINGSBUTTON_DTGameInfo = this.addWidget(new CheckBox(295, 65, 80, activePanel == PanelsType.Settings, I18n.get("daintegratew.gameinfo"), data.DonationTo == ChatType.GAME_INFO, this::SettingsDTGameClick));
+		SETTINGSBUTTON_Save = this.addWidget(new DefaultButton(this.width - 80, 0, 80, activePanel == PanelsType.Settings, I18n.get("daintegratew.save"), this::SettingsSaveClick));
+		STATUSBUTTON_Save = this.addWidget(new DefaultButton(125, TOKENPANELY + 45, 120, activePanel == PanelsType.Status, I18n.get("daintegratew.save"), this::StatusSaveClick));
+		STATUSBUTTON_Delete = this.addWidget(new DefaultButton(250, TOKENPANELY + 45, 120, activePanel == PanelsType.Status, I18n.get("daintegratew.delete"), this::StatusDeleteClick));
+		STATUSBUTTON_ConnectionController = this.addWidget(new DefaultButton(125, 35, 120, activePanel == PanelsType.Status,
+				dalets.getConnected() ? I18n.get("daintegratew.disconnect") : I18n.get("daintegratew.connect"), this::ConntectionControllerClick));
+		TYPESBUTTON_Save = this.addWidget(new DefaultButton(this.width - 80, 0, 80, activePanel == PanelsType.Types, I18n.get("daintegratew.save"), this::TypesSaveClick));
+		TYPESBUTTON_Add = this.addWidget(new CustomButton(this.width - 100, 0, 20, activePanel == PanelsType.Types, "+", this::TypesAddClick));
 		TYPESBUTTON_Add.DefaultBackgroundColor = Palette.GREEN;
 		TYPESBUTTON_Add.HoveredBackgroundColor = Palette.GREEN_HOVERED;
 		TYPESBUTTON_Add.HoveredForegroundColor = Palette.WHITE;
 		LEFTBUTTON_SupportAuthor.DefaultBackgroundColor = Palette.BLACK_TRANSPARENT30;
 		SETTINGS_ShowCountDonation = new CustomTextBox(fontRenderer, 125, 90, 200, 20, "");
-		SETTINGS_ShowCountDonation.tag = I18n.format("daintegratew.countshowdonation");
+		SETTINGS_ShowCountDonation.tag = I18n.get("daintegratew.countshowdonation");
 		SETTINGS_ShowCountDonation.setText(Integer.toString(data.CountDonationInCache));
 		text1 = new CustomTextBox(fontRenderer, 125, TOKENPANELY, 200, 20, "");
 		text1.setTextColor(Palette.WHITE);
@@ -143,7 +141,7 @@ public class MainWindow extends Screen
 		InitializeMessages();
 		InitializeTypes();
 
-		lenghtConnectState = mc.fontRenderer.getStringWidth(langConnectState);
+		lenghtConnectState = mc.font.width(langConnectState);
 		if (activePanel == null)
 			this.SetActivePanel(PanelsType.Messages);
 		initialized = true;
@@ -165,12 +163,12 @@ public class MainWindow extends Screen
     
     private void InitializeLangHelpLines() {
     	langHelpLines = Lists.newArrayList();
-    	langHelpLines.add(I18n.format("daintegratew.help.title"));
-    	langHelpLines.add(DataCollector.TagDonationMessage + " - " + I18n.format("daintegratew.help.d1"));
-    	langHelpLines.add(DataCollector.TagDonationAmount + " - " + I18n.format("daintegratew.help.d2"));
-    	langHelpLines.add(DataCollector.TagDonationCurrency + " - " + I18n.format("daintegratew.help.d3"));
-    	langHelpLines.add(DataCollector.TagDonationUserName + " - " + I18n.format("daintegratew.help.d4"));
-    	langHelpLines.add(DataCollector.TagMinecraftPlayerName + " - " + I18n.format("daintegratew.help.m1"));
+    	langHelpLines.add(I18n.get("daintegratew.help.title"));
+    	langHelpLines.add(DataCollector.TagDonationMessage + " - " + I18n.get("daintegratew.help.d1"));
+    	langHelpLines.add(DataCollector.TagDonationAmount + " - " + I18n.get("daintegratew.help.d2"));
+    	langHelpLines.add(DataCollector.TagDonationCurrency + " - " + I18n.get("daintegratew.help.d3"));
+    	langHelpLines.add(DataCollector.TagDonationUserName + " - " + I18n.get("daintegratew.help.d4"));
+    	langHelpLines.add(DataCollector.TagMinecraftPlayerName + " - " + I18n.get("daintegratew.help.m1"));
     }
     
     //MINECRAFT HANDLERS HERE ------------------------------------------------
@@ -180,7 +178,7 @@ public class MainWindow extends Screen
 			typesSaveTimer--;
 	}
 
-    public void render(MatrixStack matrixs, int mouseX, int mouseY, float partialTicks)
+    public void render(PoseStack matrixs, int mouseX, int mouseY, float partialTicks)
     {
     	if (!initialized)
     		return;
@@ -384,16 +382,16 @@ public class MainWindow extends Screen
 	{
 		if (dalets.getConnected()) {
 			dalets.Disconnect();
-			STATUSBUTTON_ConnectionController.setMessage(new StringTextComponent(I18n.format("daintegratew.connect")));
+			STATUSBUTTON_ConnectionController.setMessage(new TextComponent(I18n.get("daintegratew.connect")));
 		}
 		else {
 			try {
 				dalets.Connect(data.Token);
 			} catch (JSONException e) {
-				Main.DonationAlertsInformation(I18n.format("daintegratew.error"));
+				Main.DonationAlertsInformation(I18n.get("daintegratew.error"));
 				e.printStackTrace();
 			}
-			STATUSBUTTON_ConnectionController.setMessage(new StringTextComponent(I18n.format("daintegratew.disconnect")));
+			STATUSBUTTON_ConnectionController.setMessage(new TextComponent(I18n.get("daintegratew.disconnect")));
 		}
 	}
 

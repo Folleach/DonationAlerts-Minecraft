@@ -1,12 +1,12 @@
 modLoader="javafml" #mandatory
-loaderVersion="[33,)" #mandatory
+loaderVersion="[39,)" #mandatory
 license="MIT"
 issueTrackerURL="https://github.com/Folleach/DonationAlerts-Minecraft/issues/" #optional
 
 [[mods]] #mandatory
 
 modId="daintegratew" #mandatory
-jarVersion="1.1.1b-1.16.5"
+jarVersion="1.1.1b-1.18.1"
 version="${file.jarVersion}" #mandatory
 displayName="Donation Alerts Integrate" #mandatory
 # updateJSONURL="http://myurl.me/" #optional
@@ -19,9 +19,11 @@ description='''
 Modification can interact with your chat as well as with the rest of the world through commands.
 See the keyboard settings to open the modification's window (By default, the key is equals '=').
 
-Thank for support:
+Thanks for support:
 - ForaMon
 - Космик
+- SashaWai
+- Nazzy
 '''
 
 [[dependencies.daintegratew]] #optional
@@ -30,7 +32,7 @@ Thank for support:
     # Does this dependency have to exist - if not, ordering below must be specified
     mandatory=true #mandatory
     # The version range of the dependency
-    versionRange="[33,)" #mandatory
+    versionRange="[39,)" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="AFTER"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
@@ -39,6 +41,6 @@ Thank for support:
 [[dependencies.daintegratew]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.2,)"
+    versionRange="[1.18.1,)"
     ordering="AFTER"
     side="CLIENT"

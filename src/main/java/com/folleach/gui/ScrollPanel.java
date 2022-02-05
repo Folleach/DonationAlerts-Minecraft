@@ -3,9 +3,10 @@ package com.folleach.gui;
 import com.folleach.daintegrate.MathHelper;
 import com.folleach.daintegrate.Palette;
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.util.text.StringTextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.logging.log4j.LogManager;
@@ -14,7 +15,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
-public class ScrollPanel<T extends IEntry> extends Widget
+public class ScrollPanel<T extends IEntry> extends AbstractWidget
 {
     private final List<T> entries = Lists.<T>newArrayList();
     
@@ -27,7 +28,7 @@ public class ScrollPanel<T extends IEntry> extends Widget
     
     public ScrollPanel(int x, int y, int width, int height)
 	{
-		super(x, y, width, height, new StringTextComponent("msg"));
+		super(x, y, width, height, new TextComponent("msg"));
 		this.x = x;
     	this.y = y;
     	this.width = width;
@@ -35,7 +36,7 @@ public class ScrollPanel<T extends IEntry> extends Widget
     	this.visualHeight = height - y;
 	}
     
-    public void drawPanel(MatrixStack matrixs, int mouseX, int mouseY, float partialTicks)
+    public void drawPanel(PoseStack matrixs, int mouseX, int mouseY, float partialTicks)
     {
     	if (-scrollPosition > contentHeight - visualHeight)
     		scrollPosition = -(contentHeight - visualHeight);
@@ -51,7 +52,7 @@ public class ScrollPanel<T extends IEntry> extends Widget
     	for (int i = 0; i < entries.size(); i++)
     	{
     		entries.get(i).drawEntry(matrixs, x, offset, mouseX, mouseY, partialTicks);
-    		offset += entries.get(i).getHeight();
+    		offset += entries.get(i).getHeightE();
     	}
     }
     
@@ -90,11 +91,11 @@ public class ScrollPanel<T extends IEntry> extends Widget
 	{
     	contentHeight = 0;
     	for (int i = 0; i < entries.size(); i++)
-    		contentHeight += entries.get(i).getHeight();
+    		contentHeight += entries.get(i).getHeightE();
     }
     
     public void addEntry(T entry) {
-    	contentHeight += entry.getHeight();
+    	contentHeight += entry.getHeightE();
     	entries.add(entry);
     }
     
@@ -108,11 +109,16 @@ public class ScrollPanel<T extends IEntry> extends Widget
     }
     
     public void removeAt(int index) {
-    	contentHeight -= entries.get(index).getHeight();
+    	contentHeight -= entries.get(index).getHeightE();
     	entries.remove(index);
     }
     
     public void removeEntry(T entry) {
     	entries.remove(entry);
     }
+
+	@Override
+	public void updateNarration(NarrationElementOutput p_169152_) {
+
+	}
 }

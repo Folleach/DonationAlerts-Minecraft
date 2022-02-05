@@ -6,31 +6,32 @@ import com.folleach.daintegrate.Palette;
 import com.folleach.donationalerts.DonationType;
 import com.google.common.collect.Lists;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class DonationTypeEntry extends Widget implements IEntry {
+public class DonationTypeEntry extends AbstractWidget implements IEntry {
 	private static final String langMessages;
 	private static final String langCommands;
 	private static final String langLine;
 	
 	static {
-		langMessages = I18n.format("daintegratew.messages");
-		langCommands = I18n.format("daintegratew.commands");
-		langLine = I18n.format("daintegratew.line");
+		langMessages = I18n.get("daintegratew.messages");
+		langCommands = I18n.get("daintegratew.commands");
+		langLine = I18n.get("daintegratew.line");
 	}
 	
 	private final ScrollPanel owner;
 	public final DonationType type;
-	private final FontRenderer fontRenderer;
+	private final Font fontRenderer;
 	private final Minecraft mc;
 	private int right;
 	
@@ -56,7 +57,7 @@ public class DonationTypeEntry extends Widget implements IEntry {
 	public DonationTypeEntry(int x, int y, int width, int height, ScrollPanel own, DonationType type, Minecraft mc, int right)
 	{
 
-		super(x, y, width, height, new StringTextComponent("msg"));
+		super(x, y, width, height, new TextComponent("msg"));
 		this.right = right;
 		owner = own;
 		messages = Lists.<WritableLineElement>newArrayList();
@@ -72,12 +73,12 @@ public class DonationTypeEntry extends Widget implements IEntry {
 		addCommand.HoveredForegroundColor = Palette.WHITE;
 		
 		this.type = type;
-		this.fontRenderer = mc.fontRenderer;
+		this.fontRenderer = mc.font;
 		this.mc = mc;
 		textBoxName = new CustomTextBox(fontRenderer, 0, 0, 200, 20, "");
-		textBoxName.tag = I18n.format("daintegratew.name");
+		textBoxName.tag = I18n.get("daintegratew.name");
 		textBoxName.setText(type.Name);
-		checkBoxActive = new CheckBox(0, 0, 60, true, I18n.format("daintegratew.active"), type.Active, this::CheckBoxClick);
+		checkBoxActive = new CheckBox(0, 0, 60, true, I18n.get("daintegratew.active"), type.Active, this::CheckBoxClick);
 		
 		deleteEntry = new CustomButton(0, 0, 20, true, "-", this::DeleteEntryClick);
 		deleteEntry.DefaultBackgroundColor = Palette.RED;
@@ -125,37 +126,37 @@ public class DonationTypeEntry extends Widget implements IEntry {
 	private void AddMessageClick(Button button)
 	{
 		messages.add(new WritableLineElement(this, mc, WritableType.Message, langLine + " " + (messages.size() + 1)));
-		button.playDownSound(mc.getSoundHandler());
+		button.playDownSound(mc.getSoundManager());
 		owner.updateHeight();
 	}
 
 	private void AddCommandClick(Button button)
 	{
 		commands.add(new WritableLineElement(this, mc, WritableType.Command, langLine + " " + (commands.size() + 1)));
-		button.playDownSound(mc.getSoundHandler());
+		button.playDownSound(mc.getSoundManager());
 		owner.updateHeight();
 	}
 
 	private void DeleteEntryClick(Button button)
 	{
-		button.playDownSound(mc.getSoundHandler());
+		button.playDownSound(mc.getSoundManager());
 		owner.removeEntry(this);
 	}
 
 	private void CheckBoxClick(Button button)
 	{
 		checkBoxActive.SwitchFlag(!checkBoxActive.Flag);
-		checkBoxActive.playDownSound(mc.getSoundHandler());
+		checkBoxActive.playDownSound(mc.getSoundManager());
 	}
 
 	@Override
-	public void drawEntry(MatrixStack matrixs, int x, int y, int mouseX, int mouseY, float partialTicks) {
+	public void drawEntry(PoseStack matrixs, int x, int y, int mouseX, int mouseY, float partialTicks) {
 		int offset = y;
-		textBoxName.renderButton(matrixs, x, offset);
+		textBoxName.renderButton(matrixs, x, offset, partialTicks);
 		checkBoxActive.drawButton(matrixs, mc, x + 210, y + 10, mouseX, mouseY, partialTicks);
 		deleteEntry.drawButton(matrixs, mc, x + 275, y + 10, mouseX, mouseY, partialTicks);
 		offset += 35;
-		fontRenderer.drawString(matrixs, langMessages, x, offset, Palette.WHITE);
+		fontRenderer.draw(matrixs, langMessages, x, offset, Palette.WHITE);
 		offset += 10;
 		for (int i = 0; i < messages.size(); i++)
 		{
@@ -164,7 +165,7 @@ public class DonationTypeEntry extends Widget implements IEntry {
 		}
 		addMessage.drawButton(matrixs, mc, x + 210, offset, mouseX, mouseY, partialTicks);
 		offset += 25;
-		fontRenderer.drawString(matrixs, langCommands, x, offset, Palette.WHITE);
+		fontRenderer.draw(matrixs, langCommands, x, offset, Palette.WHITE);
 		offset += 10;
 		for (int i = 0; i < commands.size(); i++)
 		{
@@ -173,23 +174,23 @@ public class DonationTypeEntry extends Widget implements IEntry {
 		}
 		addCommand.drawButton(matrixs, mc, x + 210, offset, mouseX, mouseY, partialTicks);
 		offset += 25;
-		CurrencyUSD.renderButton(matrixs, x, offset); CurrencyRUB.renderButton(matrixs, x + 90, offset);
+		CurrencyUSD.renderButton(matrixs, x, offset, partialTicks); CurrencyRUB.renderButton(matrixs, x + 90, offset, partialTicks);
 		offset += 35;
-		CurrencyEUR.renderButton(matrixs, x, offset); CurrencyKZT.renderButton(matrixs, x + 90, offset);
+		CurrencyEUR.renderButton(matrixs, x, offset, partialTicks); CurrencyKZT.renderButton(matrixs, x + 90, offset, partialTicks);
 		offset += 35;
-		CurrencyBRL.renderButton(matrixs, x, offset); CurrencyBYN.renderButton(matrixs, x + 90, offset);
+		CurrencyBRL.renderButton(matrixs, x, offset, partialTicks); CurrencyBYN.renderButton(matrixs, x + 90, offset, partialTicks);
 		offset += 35;
-		CurrencyUAH.renderButton(matrixs, x, offset);
+		CurrencyUAH.renderButton(matrixs, x, offset, partialTicks);
 		offset += 35;
 		fill(matrixs, x, offset, right - 10, offset + 1, Palette.GRAY60);
 		offset += 20;
 	}
 
 	@Override
-	public int getHeight() {
+	public int getHeightE() {
 		return 265 + (messages.size() * 35) + (commands.size() * 35);
 	}
-	
+
 	public void removeMessage(WritableLineElement ctb) {
 		messages.remove(ctb);
 		for (int i = 0; i < messages.size(); i++)
@@ -321,7 +322,12 @@ public class DonationTypeEntry extends Widget implements IEntry {
 			return null;
 		return cmds;
 	}
-	
+
+	@Override
+	public void updateNarration(NarrationElementOutput p_169152_) {
+
+	}
+
 	enum WritableType {
 		Message, Command
 	}
@@ -341,7 +347,7 @@ public class DonationTypeEntry extends Widget implements IEntry {
 			this.mc = mc;
 			callbackThinking = dte;
 			wtype = t;
-			line = new CustomTextBox(mc.fontRenderer, 0, 0, 200, 20, "");
+			line = new CustomTextBox(mc.font, 0, 0, 200, 20, "");
 			line.tag = tag;
 			delete = new CustomButton(0, 0, 20, true, "-", this::DeleteClick);
 		}
@@ -352,7 +358,7 @@ public class DonationTypeEntry extends Widget implements IEntry {
 				callbackThinking.removeMessage(this);
 			else if (wtype == WritableType.Command)
 				callbackThinking.removeCommands(this);
-			button.playDownSound(mc.getSoundHandler());
+			button.playDownSound(mc.getSoundManager());
 			owner.updateHeight();
 		}
 
@@ -360,9 +366,9 @@ public class DonationTypeEntry extends Widget implements IEntry {
 			line.tag = tag;
 		}
 		
-		public void drawElement(MatrixStack matrixs, int x, int y, int mouseX, int mouseY, float partialTicks)
+		public void drawElement(PoseStack matrixs, int x, int y, int mouseX, int mouseY, float partialTicks)
 		{
-			line.renderButton(matrixs, x, y);
+			line.renderButton(matrixs, x, y, partialTicks);
 			delete.drawButton(matrixs, mc, x + 210, y + 10, mouseX, mouseY, partialTicks);
 		}
 

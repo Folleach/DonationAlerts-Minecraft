@@ -7,8 +7,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 import org.json.JSONException;
+import net.minecraft.network.chat.TextComponent;
 import org.json.JSONObject;
 
 import com.folleach.donationalerts.DonationAlertsEvent;
@@ -16,7 +18,7 @@ import com.folleach.donationalerts.DonationType;
 import com.folleach.donationalerts.TypesManager;
 import com.google.common.collect.Lists;
 
-import net.minecraft.util.text.ChatType;
+import net.minecraft.network.chat.ChatType;
 import net.minecraftforge.common.ForgeHooks;
 
 public class DataCollector {
@@ -80,7 +82,7 @@ public class DataCollector {
 		try {
 			json = new JSONObject(data);
 			TManager.Load(new JSONObject(json.getString("tmanager")).getJSONArray("types"));
-			DonationTo = ChatType.byId((byte) json.getInt("donationTo"));
+			DonationTo = ChatType.getForIndex((byte) json.getInt("donationTo"));
 			SkipTestDonation = json.getBoolean("skiptest");
 			Token = json.getString("tkn");
 			CountDonationInCache = json.getInt("cdic");
@@ -92,7 +94,7 @@ public class DataCollector {
 	public void Save() throws JSONException, IOException {
 		JSONObject json = new JSONObject();
 		json.put("tmanager", TManager.toString());
-		json.put("donationTo", DonationTo.getId());
+		json.put("donationTo", DonationTo.getIndex());
 		json.put("skiptest", SkipTestDonation);
 		json.put("tkn", Token);
 		json.put("cdic", CountDonationInCache);
@@ -127,13 +129,13 @@ public class DataCollector {
 			for (int i = 0; i < executor.getMessages().size(); i++)
 			{
 				temp = ReplaceConstants(executor.getMessages().get(i), donate);
-				Main.GameInstance.ingameGUI.getChatGUI().printChatMessage(ForgeHooks.newChatWithLinks(temp));
+				Main.GameInstance.gui.getChat().addMessage(ForgeHooks.newChatWithLinks(temp));
 			}
 		if (executor.getCommands() != null)
 			for (int i = 0; i < executor.getCommands().size(); i++)
 			{
 				temp = ReplaceConstants(executor.getCommands().get(i), donate);
-				Main.GameInstance.player.sendChatMessage(temp);
+				Main.GameInstance.player.sendMessage(new TextComponent(temp), UUID.randomUUID());
 			}
 		RecountDonationCache();
 	}

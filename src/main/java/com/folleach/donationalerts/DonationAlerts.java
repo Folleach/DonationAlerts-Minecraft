@@ -11,7 +11,7 @@ import com.folleach.daintegrate.Main;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter.Listener;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resources.language.I18n;
 
 public class DonationAlerts {
 	private Socket sock;
@@ -29,14 +29,14 @@ public class DonationAlerts {
 
 		connectListener = new Listener() { @Override
 			public void call(Object... arg0) {
-				Main.DonationAlertsInformation(I18n.format("daintegratew.connected"));
+				Main.DonationAlertsInformation(I18n.get("daintegratew.connected"));
 			}
 		};
 		
 		disconectListener = new Listener() {
 			@Override
 			public void call(Object... arg0) {
-				Main.DonationAlertsInformation(I18n.format("daintegratew.disconnected"));
+				Main.DonationAlertsInformation(I18n.get("daintegratew.disconnected"));
 			}
 		};
 		
@@ -50,7 +50,7 @@ public class DonationAlerts {
 		errorListener = new Listener() {
 			@Override
 			public void call(Object... arg0) {
-				Main.DonationAlertsInformation(I18n.format("daintegratew.error"));
+				Main.DonationAlertsInformation(I18n.get("daintegratew.error"));
 			}
 		};
 		

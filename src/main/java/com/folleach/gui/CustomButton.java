@@ -1,10 +1,10 @@
 package com.folleach.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -18,28 +18,28 @@ public class CustomButton extends Button
 	public int DisableBackgroundColor = DefaultBackgroundColor;
 	public int DisableForegroundColor = 0xFFA0A0A0;
 
-    public CustomButton(int x, int y, int width, boolean visibility, String text, IPressable onPress)
+    public CustomButton(int x, int y, int width, boolean visibility, String text, Button.OnPress onPress)
     {
-        super(x, y, width, 20, new StringTextComponent(text), onPress);
+        super(x, y, width, 20, new TextComponent(text), onPress);
         this.visible = visibility;
     }
 
-    public CustomButton(int x, int y, int widthIn, int heightIn, String text, IPressable onPress)
+    public CustomButton(int x, int y, int widthIn, int heightIn, String text, Button.OnPress onPress)
     {
-        super(x, y, widthIn, heightIn, new StringTextComponent(text), onPress);
+        super(x, y, widthIn, heightIn, new TextComponent(text), onPress);
     }
 
-    public void drawButton(MatrixStack matrixs,  Minecraft mc, int x, int y, int mouseX, int mouseY, float partialTicks)
+    public void drawButton(PoseStack matrixs, Minecraft mc, int x, int y, int mouseX, int mouseY, float partialTicks)
 	{
 		this.x = x;
 		this.y = y;
 		render(matrixs, mouseX, mouseY, partialTicks);
 	}
     
-    public void render(MatrixStack matrixs, int mouseX, int mouseY, float partialTicks)
+    public void render(PoseStack matrixs, int mouseX, int mouseY, float partialTicks)
     {
         if (this.visible) {
-            FontRenderer fontrenderer = Minecraft.getInstance().fontRenderer;
+            Font fontrenderer = Minecraft.getInstance().font;
             this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
             // this.mouseDragged(mouseX, mouseY, partialTicks);
             int colorBg = DefaultBackgroundColor;

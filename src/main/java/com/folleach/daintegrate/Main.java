@@ -8,8 +8,7 @@ import com.folleach.donationalerts.DonationAlertsEvent;
 import com.folleach.donationalerts.DonationAlerts;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.ChatType;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.*;
@@ -53,6 +52,6 @@ public class Main {
 	
 	public static void DonationAlertsInformation(String message)
 	{
-		GameInstance.ingameGUI.getChatGUI().printChatMessage(new StringTextComponent("[DonationAlerts] " + message));
+		GameInstance.gui.getChat().addMessage(new TextComponent("[DonationAlerts] " + message));
 	}
 }
