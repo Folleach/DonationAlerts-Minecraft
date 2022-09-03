@@ -6,7 +6,7 @@ issueTrackerURL="https://github.com/Folleach/DonationAlerts-Minecraft/issues/" #
 [[mods]] #mandatory
 
 modId="daintegratew" #mandatory
-jarVersion="1.1.1b-1.18.1"
+jarVersion="1.1.1b-1.18.2"
 version="${file.jarVersion}" #mandatory
 displayName="Donation Alerts Integrate" #mandatory
 # updateJSONURL="http://myurl.me/" #optional
@@ -41,6 +41,6 @@ Thanks for support:
 [[dependencies.daintegratew]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.18.1,)"
+    versionRange="[1.18.0,)"
     ordering="AFTER"
     side="CLIENT"

@@ -56,7 +56,7 @@ public class DonationAlerts {
 		
 		sock.on(Socket.EVENT_CONNECT, connectListener)
 		.on(Socket.EVENT_DISCONNECT, disconectListener)
-		.on(Socket.EVENT_ERROR, errorListener)
+		.on(Socket.EVENT_CONNECT_ERROR, errorListener)
 		.on("donation", donationListener);
 	}
 	
