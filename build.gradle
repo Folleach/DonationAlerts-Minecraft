@@ -127,7 +127,7 @@ configurations {
 
 dependencies {
     extraLibs 'org.json:json:20220320'
-    extraLibs 'io.socket:socket.io-client:2.1.0'
+    extraLibs 'io.socket:socket.io-client:0.8.1'
 
     // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.

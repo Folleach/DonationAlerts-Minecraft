@@ -3,6 +3,8 @@ package com.folleach.donationalerts;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,6 +15,7 @@ import io.socket.client.Socket;
 import io.socket.emitter.Emitter.Listener;
 import net.minecraft.client.resources.language.I18n;
 
+@OnlyIn(Dist.CLIENT)
 public class DonationAlerts {
 	private Socket sock;
 	private URI _url;
@@ -56,7 +59,7 @@ public class DonationAlerts {
 		
 		sock.on(Socket.EVENT_CONNECT, connectListener)
 		.on(Socket.EVENT_DISCONNECT, disconectListener)
-		.on(Socket.EVENT_CONNECT_ERROR, errorListener)
+		.on(Socket.EVENT_ERROR, errorListener)
 		.on("donation", donationListener);
 	}
 	

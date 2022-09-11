@@ -29,13 +29,18 @@ public class CustomButton extends Button
         super(x, y, widthIn, heightIn, new TextComponent(text), onPress);
     }
 
+    public void drawButton(PoseStack matrixs, int mouseX, int mouseY, float partialTicks)
+    {
+        render(matrixs, mouseX, mouseY, partialTicks);
+    }
+
     public void drawButton(PoseStack matrixs, Minecraft mc, int x, int y, int mouseX, int mouseY, float partialTicks)
 	{
 		this.x = x;
 		this.y = y;
 		render(matrixs, mouseX, mouseY, partialTicks);
 	}
-    
+
     public void render(PoseStack matrixs, int mouseX, int mouseY, float partialTicks)
     {
         if (this.visible) {

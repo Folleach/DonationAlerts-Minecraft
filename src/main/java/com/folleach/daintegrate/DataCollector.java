@@ -9,6 +9,11 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
+import net.minecraft.Util;
+import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.ClientCommandHandler;
 import org.json.JSONException;
 import net.minecraft.network.chat.TextComponent;
 import org.json.JSONObject;
@@ -21,6 +26,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.network.chat.ChatType;
 import net.minecraftforge.common.ForgeHooks;
 
+@OnlyIn(Dist.CLIENT)
 public class DataCollector {
 	public List<DonationAlertsEvent> Donations;
 	public TypesManager TManager;
@@ -135,7 +141,7 @@ public class DataCollector {
 			for (int i = 0; i < executor.getCommands().size(); i++)
 			{
 				temp = ReplaceConstants(executor.getCommands().get(i), donate);
-				Main.GameInstance.player.sendMessage(new TextComponent(temp), UUID.randomUUID());
+				ClientCommandHandler.sendMessage(temp);
 			}
 		RecountDonationCache();
 	}

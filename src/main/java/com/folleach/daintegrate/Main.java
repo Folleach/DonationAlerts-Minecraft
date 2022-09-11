@@ -9,12 +9,17 @@ import com.folleach.donationalerts.DonationAlerts;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Mod(Main.MODID)
+@OnlyIn(Dist.CLIENT)
 public class Main {
 	public static final String MODID = "daintegratew";
 	public static final String MODNAME = "Donation Alerts Integrate";
@@ -25,6 +30,8 @@ public class Main {
 	public static DonationAlerts da;
 	public static DataCollector data;
 	public static KeyHandler keys;
+
+	private static final Logger log = LogManager.getLogger(Main.MODID);
 
 	public Main()
 	{

@@ -1,5 +1,6 @@
 package com.folleach.gui;
 
+import com.folleach.daintegrate.Palette;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
@@ -19,6 +20,8 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.*;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -26,6 +29,7 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+@OnlyIn(Dist.CLIENT)
 public class CustomTextBox extends AbstractWidget implements Widget, GuiEventListener {
     public static final int BACKWARDS = -1;
     public static final int FORWARDS = 1;
@@ -38,7 +42,7 @@ public class CustomTextBox extends AbstractWidget implements Widget, GuiEventLis
     private static final int BACKGROUND_COLOR = -16777216;
     private final Font font;
     private String value = "";
-    private int maxLength = 32;
+    private int maxLength = 1024;
     private int frame;
     private boolean bordered = true;
     private boolean canLoseFocus = true;
@@ -74,13 +78,12 @@ public class CustomTextBox extends AbstractWidget implements Widget, GuiEventLis
     }
 
     public void setText(String value) {
-        // TODO: Implement this
+        this.value = value;
     }
 
     public String getText()
     {
-        // TODO: Implement this
-        return "";
+        return value;
     }
 
     public void setResponder(Consumer<String> p_94152_) {
@@ -383,18 +386,15 @@ public class CustomTextBox extends AbstractWidget implements Widget, GuiEventLis
         this.setFocused(p_94179_);
     }
 
-    public void renderButton(PoseStack matrixStack) {
-        //TODO: Implement this
-    }
-
-    public void renderButton(PoseStack p_94160_, int p_94161_, int p_94162_, float p_94163_) {
+    public void renderButton(PoseStack matrix) {
         if (this.isVisible()) {
             if (this.isBordered()) {
-                int i = this.isFocused() ? -1 : -6250336;
-                fill(p_94160_, this.x - 1, this.y - 1, this.x + this.width + 1, this.y + this.height + 1, i);
-                fill(p_94160_, this.x, this.y, this.x + this.width, this.y + this.height, -16777216);
+                int i = LineColor;
+                fill(matrix, this.x - 1, this.y - 1, this.x + this.width + 1, this.y + this.height + 1, i);
+                fill(matrix, this.x, this.y, this.x + this.width, this.y + this.height, -16777216);
             }
 
+            drawString(matrix, font, tag, x, y - 10, Palette.WHITE);
             int i2 = this.isEditable ? this.textColor : this.textColorUneditable;
             int j = this.cursorPos - this.displayPos;
             int k = this.highlightPos - this.displayPos;
@@ -410,7 +410,7 @@ public class CustomTextBox extends AbstractWidget implements Widget, GuiEventLis
 
             if (!s.isEmpty()) {
                 String s1 = flag ? s.substring(0, j) : s;
-                j1 = this.font.drawShadow(p_94160_, this.formatter.apply(s1, this.displayPos), (float)l, (float)i1, i2);
+                j1 = this.font.drawShadow(matrix, this.formatter.apply(s1, this.displayPos), (float)l, (float)i1, i2);
             }
 
             boolean flag2 = this.cursorPos < this.value.length() || this.value.length() >= this.getMaxLength();
@@ -423,18 +423,18 @@ public class CustomTextBox extends AbstractWidget implements Widget, GuiEventLis
             }
 
             if (!s.isEmpty() && flag && j < s.length()) {
-                this.font.drawShadow(p_94160_, this.formatter.apply(s.substring(j), this.cursorPos), (float)j1, (float)i1, i2);
+                this.font.drawShadow(matrix, this.formatter.apply(s.substring(j), this.cursorPos), (float)j1, (float)i1, i2);
             }
 
             if (!flag2 && this.suggestion != null) {
-                this.font.drawShadow(p_94160_, this.suggestion, (float)(k1 - 1), (float)i1, -8355712);
+                this.font.drawShadow(matrix, this.suggestion, (float)(k1 - 1), (float)i1, -8355712);
             }
 
             if (flag1) {
                 if (flag2) {
-                    GuiComponent.fill(p_94160_, k1, i1 - 1, k1 + 1, i1 + 1 + 9, -3092272);
+                    GuiComponent.fill(matrix, k1, i1 - 1, k1 + 1, i1 + 1 + 9, -3092272);
                 } else {
-                    this.font.drawShadow(p_94160_, "_", (float)k1, (float)i1, i2);
+                    this.font.drawShadow(matrix, "_", (float)k1, (float)i1, i2);
                 }
             }
 
@@ -444,6 +444,12 @@ public class CustomTextBox extends AbstractWidget implements Widget, GuiEventLis
             }
 
         }
+    }
+
+    public void renderButton(PoseStack matrix, int x, int y, float p_94163_) {
+        this.x = x;
+        this.y = y + 10;
+        renderButton(matrix);
     }
 
     private void renderHighlight(int p_94136_, int p_94137_, int p_94138_, int p_94139_) {

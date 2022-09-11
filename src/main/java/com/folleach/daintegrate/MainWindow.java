@@ -131,10 +131,10 @@ public class MainWindow extends Screen
 		TYPESBUTTON_Add.HoveredBackgroundColor = Palette.GREEN_HOVERED;
 		TYPESBUTTON_Add.HoveredForegroundColor = Palette.WHITE;
 		LEFTBUTTON_SupportAuthor.DefaultBackgroundColor = Palette.BLACK_TRANSPARENT30;
-		SETTINGS_ShowCountDonation = new CustomTextBox(fontRenderer, 125, 90, 200, 20, "");
+		SETTINGS_ShowCountDonation = new CustomTextBox(fontRenderer, 125, 100, 200, 20, "");
 		SETTINGS_ShowCountDonation.tag = I18n.get("daintegratew.countshowdonation");
 		SETTINGS_ShowCountDonation.setText(Integer.toString(data.CountDonationInCache));
-		text1 = new CustomTextBox(fontRenderer, 125, TOKENPANELY, 200, 20, "");
+		text1 = new CustomTextBox(fontRenderer, 125, TOKENPANELY + 10, 200, 20, "");
 		text1.setTextColor(Palette.WHITE);
 		text1.tag = langToken;
 
@@ -196,19 +196,29 @@ public class MainWindow extends Screen
     		drawString(matrixs, fontRenderer, langConnectState, 125, 25, Palette.WHITE);
     		drawString(matrixs, fontRenderer, dalets.getConnected() ? langConnected : langDisonnected, 125 + lenghtConnectState + 5, 25,
     				dalets.getConnected() ? Palette.GREEN : Palette.RED);
-    		
+
+			STATUSBUTTON_ConnectionController.drawButton(matrixs, mouseX, mouseY, partialTicks);
+			STATUSBUTTON_Save.drawButton(matrixs, mouseX, mouseY, partialTicks);
     		text1.renderButton(matrixs);
     		drawString(matrixs, fontRenderer, data.isTokenExists() ? langTokenExist : langTokenNotExists, 125, TOKENPANELY + 35, data.isTokenExists() ? Palette.GREEN : Palette.RED);
     		break;
     	case Types:
+			SETTINGSBUTTON_Save.drawButton(matrixs, mouseX, mouseY, partialTicks);
     		typesPanel.drawPanel(matrixs, mouseX, mouseY, partialTicks);
-    		if (typesSuccessfulSave && typesSaveTimer > 0)
+			TYPESBUTTON_Add.drawButton(matrixs, mouseX, mouseY, partialTicks);
+			TYPESBUTTON_Save.drawButton(matrixs, mouseX, mouseY, partialTicks);
+			if (typesSuccessfulSave && typesSaveTimer > 0)
     			drawString(matrixs, fontRenderer, langSaved, width - lenghtSaved - 100, 6, Palette.WHITE);
     		else if (!typesSuccessfulSave && typesSaveTimer > 0)
     			drawString(matrixs, fontRenderer, langError, width - lenghtSaved - 100, 6, Palette.RED);
     		break;
     	case Settings:
     		SETTINGS_ShowCountDonation.renderButton(matrixs);
+			SETTINGSBUTTON_Save.drawButton(matrixs, mouseX, mouseY, partialTicks);
+			SETTINGSBUTTON_DTChat.drawButton(matrixs, mouseX, mouseY, partialTicks);
+			SETTINGSBUTTON_DTGameInfo.drawButton(matrixs, mouseX, mouseY, partialTicks);
+			SETTINGSBUTTON_DTSystem.drawButton(matrixs, mouseX, mouseY, partialTicks);
+			SETTINGSBUTTON_SkippingTestDonation.drawButton(matrixs, mouseX, mouseY, partialTicks);
     		this.drawString(matrixs, fontRenderer, langDonto, 125, 54, Palette.WHITE);
     		break;
     	case Help:
@@ -216,7 +226,13 @@ public class MainWindow extends Screen
     			drawString(matrixs, fontRenderer, langHelpLines.get(i), 125, i * 10 + 25, Palette.WHITE);
     		break;
     	}
-        
+
+		LEFTBUTTON_Messages.drawButton(matrixs, mc, 0, 20, mouseX, mouseY, partialTicks);
+		LEFTBUTTON_Status.drawButton(matrixs, mc, 0, 40, mouseX, mouseY, partialTicks);
+		LEFTBUTTON_Types.drawButton(matrixs, mc, 0, 60, mouseX, mouseY, partialTicks);
+		LEFTBUTTON_Settings.drawButton(matrixs, mc, 0, 80, mouseX, mouseY, partialTicks);
+		LEFTBUTTON_Help.drawButton(matrixs, mc, 0, 100, mouseX, mouseY, partialTicks);
+
         //Left menu
         fill(matrixs, 0, 0, this.width, 20, 0x65000000);
         fill(matrixs, 0, 20, 120, this.height, 0x50000000);
@@ -412,13 +428,13 @@ public class MainWindow extends Screen
 				temp = new DonationType();
 				temp.Name = entries.get(i).getName();
 				temp.Active = entries.get(i).getActive();
-				temp.CurrencyBRL = (float) Double.parseDouble(entries.get(i).CurrencyBRL.getText());
-				temp.CurrencyBYN = (float) Double.parseDouble(entries.get(i).CurrencyBYN.getText());
-				temp.CurrencyEUR = (float) Double.parseDouble(entries.get(i).CurrencyEUR.getText());
-				temp.CurrencyKZT = (float) Double.parseDouble(entries.get(i).CurrencyKZT.getText());
-				temp.CurrencyRUB = (float) Double.parseDouble(entries.get(i).CurrencyRUB.getText());
-				temp.CurrencyUAH = (float) Double.parseDouble(entries.get(i).CurrencyUAH.getText());
-				temp.CurrencyUSD = (float) Double.parseDouble(entries.get(i).CurrencyUSD.getText());
+				temp.CurrencyBRL = getCurrency(entries.get(i).CurrencyBRL.getText());
+				temp.CurrencyBYN = getCurrency(entries.get(i).CurrencyBYN.getText());
+				temp.CurrencyEUR = getCurrency(entries.get(i).CurrencyEUR.getText());
+				temp.CurrencyKZT = getCurrency(entries.get(i).CurrencyKZT.getText());
+				temp.CurrencyRUB = getCurrency(entries.get(i).CurrencyRUB.getText());
+				temp.CurrencyUAH = getCurrency(entries.get(i).CurrencyUAH.getText());
+				temp.CurrencyUSD = getCurrency(entries.get(i).CurrencyUSD.getText());
 				temp.setMessages(entries.get(i).getMessages());
 				temp.setCommands(entries.get(i).getCommands());
 				tManager.getTypes().add(temp);
@@ -429,6 +445,15 @@ public class MainWindow extends Screen
 			typesSuccessfulSave = true;
 		} catch (JSONException | IOException e) {
 			e.printStackTrace();
+		}
+	}
+
+	private float getCurrency(String text) {
+		try {
+			return Float.parseFloat(text);
+		}
+		catch (NumberFormatException e) {
+			return 0;
 		}
 	}
 

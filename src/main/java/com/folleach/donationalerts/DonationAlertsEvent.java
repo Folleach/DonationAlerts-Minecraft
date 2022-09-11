@@ -3,8 +3,11 @@ package com.folleach.donationalerts;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.json.JSONObject;
 
+@OnlyIn(Dist.CLIENT)
 public class DonationAlertsEvent
 {
 	public int ID;
