@@ -25,14 +25,7 @@ public class KeyHandler
 	@SubscribeEvent
 	public void PlayerTick(TickEvent.PlayerTickEvent event)
 	{
-		var nameOfThread = Thread.currentThread().getName();
-
-		if (Thread.currentThread().getName().contains("Render thread"))
-		{
-			if (event.phase == TickEvent.Phase.START && openWindow.isDown())
-				Main.GameInstance.setScreen(new MainWindow(Main.GameInstance, Main.data, Main.da));
-		}
+		if (event.phase == TickEvent.Phase.START && openWindow.isDown() && Thread.currentThread().getName().contains("Render thread"))
+			Main.GameInstance.setScreen(new MainWindow(Main.GameInstance, Main.data, Main.da));
 	}
-
-	private static final Logger log = LogManager.getLogger(Main.MODID);
 }
