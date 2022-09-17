@@ -1,25 +1,25 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "daintegratew",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "DonationAlerts-Minecraft",
+  "description": "Mod which can interact with DA events",
   "authors": [
-    "Me!"
+    "Folleach"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://github.com/Folleach/DonationAlerts-Minecraft/",
+    "sources": "https://github.com/Folleach/DonationAlerts-Minecraft/"
   },
 
-  "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "license": "MIT",
+  "icon": "assets/daintegratew/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.fabricmc.example.ExampleMod"
+      "net.folleach.daintegrate.ExampleMod"
     ]
   },
   "mixins": [
