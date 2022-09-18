@@ -6,6 +6,5 @@ import net.folleach.dontaionalerts.DonationAlertsEvent;
 public class MessageHandler implements IHandler<MessageHandler> {
     @Override
     public void Handle(DonationAlertsEvent event, MessageHandler properties) {
-        
     }
 }

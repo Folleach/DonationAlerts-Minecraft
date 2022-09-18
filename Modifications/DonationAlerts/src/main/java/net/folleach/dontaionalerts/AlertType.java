@@ -1,10 +1,17 @@
 package net.folleach.dontaionalerts;
 
-public enum  AlertType {
+import com.google.gson.annotations.SerializedName;
+
+public enum AlertType {
+    @SerializedName("-1")
     Undefined(-1),
+    @SerializedName("1")
     Donate(1),
+    @SerializedName("4")
     TwitchSubscription(4),
+    @SerializedName("6")
     TwitchFreeFollow(6),
+    @SerializedName("7")
     YouTubeSubscription(7);
 
     public final int Value;
