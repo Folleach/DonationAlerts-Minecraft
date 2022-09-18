@@ -31,11 +31,11 @@ public class DonationAlertsClient {
         socket = IO.socket(url);
 
         connectListener = arg -> {
-            System.out.print("connect");
+            System.out.println("connect");
         };
 
         disconnectListener = arg -> {
-            System.out.print("disconnect");
+            System.out.println("disconnect");
         };
 
         donationListener = arg -> {
@@ -49,7 +49,7 @@ public class DonationAlertsClient {
         };
 
         errorListener = arg -> {
-            System.out.print("error");
+            System.out.println("error");
         };
 
         socket.on(Socket.EVENT_CONNECT, connectListener)
