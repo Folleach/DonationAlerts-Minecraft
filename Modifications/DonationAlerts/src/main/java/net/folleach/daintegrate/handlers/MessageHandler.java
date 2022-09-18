@@ -5,17 +5,7 @@ import net.folleach.dontaionalerts.DonationAlertsEvent;
 
 public class MessageHandler implements IHandler<MessageProperties> {
     @Override
-    public String getModId() {
-        return Constants.ModId;
-    }
-
-    @Override
-    public String getModUrl() {
-        return Constants.ModUrl;
-    }
-
-    @Override
-    public String getHandlerId() {
+    public String getImplementationId() {
         return "message_handler";
     }
 

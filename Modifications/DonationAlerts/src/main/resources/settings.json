@@ -1,0 +1,33 @@
+{
+  "triggers": [
+    {
+      "name": "default",
+      "description": "Just default trigger",
+      "isActive": true,
+      "sensitives": [
+        {
+          "type": "daintegratew/sensitive/range_sensitive",
+          "properties": {
+            "from": 0,
+            "to": 100
+          }
+        }
+      ],
+      "handlers": [
+        {
+          "type": "daintegratew/handler/message",
+          "properties": {
+            "message": "Hello! It's day time!"
+          }
+        },
+        {
+          "type": "daintegratew/handler/command",
+          "properties": {
+            "command": "/time set day"
+          },
+          "delay": 20
+        }
+      ]
+    }
+  ]
+}

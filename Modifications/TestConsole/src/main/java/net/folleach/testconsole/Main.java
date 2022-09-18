@@ -15,10 +15,12 @@ public class Main {
         BufferedReader reader = new BufferedReader(new FileReader("token.txt"));
         var token = reader.readLine();
 
-        DonationAlertsIntegrate.registerHandler(new MessageHandler());
-        DonationAlertsIntegrate.registerEventListener(e -> {
-            System.out.println(e.getAmount());
-        });
+        DonationAlertsIntegrate
+                .configure("daintegratew", "https://folleach.ru/l/daintegrate")
+                .registerHandler(new MessageHandler())
+                .registerEventListener(e -> {
+                    System.out.println(e.getAmount());
+                });
         var listener = new DonationAlertsEventListener(new EventProcessor(), DonationAlertsIntegrate.getEventListeners());
         try {
             var client = new DonationAlertsClient("https://socket.donationalerts.ru:443", listener);

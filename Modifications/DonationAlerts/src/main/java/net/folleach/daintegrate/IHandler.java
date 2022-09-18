@@ -2,10 +2,6 @@ package net.folleach.daintegrate;
 
 import net.folleach.dontaionalerts.DonationAlertsEvent;
 
-public interface IHandler<T> {
-    String getModId();
-    String getModUrl();
-    String getHandlerId();
-
+public interface IHandler<T> extends IImplementationId {
     void handle(DonationAlertsEvent event, T properties);
 }

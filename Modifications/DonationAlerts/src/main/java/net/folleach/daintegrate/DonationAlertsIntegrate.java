@@ -1,6 +1,5 @@
 package net.folleach.daintegrate;
 
-import net.folleach.daintegrate.handlers.HandlerExtensions;
 import net.folleach.daintegrate.listeners.IListener;
 import net.folleach.dontaionalerts.ReadOnlyDonationAlertsEvent;
 
@@ -11,24 +10,27 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DonationAlertsIntegrate {
     public static final DonationAlertsIntegrate Instance = new DonationAlertsIntegrate();
 
-    private ConcurrentHashMap<String, HandlerDescriptor> handlers = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, PropertiesDescriptor> handlers = new ConcurrentHashMap<>();
     private ArrayList<IListener<ReadOnlyDonationAlertsEvent>> listeners = new ArrayList<>();
 
     public DonationAlertsIntegrate()
     {
     }
 
-    public static <T extends IHandler> void registerHandler(T handler) {
-        var id = HandlerExtensions.getUniqueHandlerId(handler);
-        var descriptor = new HandlerDescriptor<T>(handler);
-        Instance.handlers.put(id, descriptor);
+    public static IModuleConfiguration configure(String modId, String modUrl) {
+        return new ModuleConfiguration(modId, modUrl);
     }
 
-    public static void registerEventListener(IListener<ReadOnlyDonationAlertsEvent> listener) {
+    static <T extends IHandler> void registerHandler(T handler, String modId, String modUrl) {
+        var descriptor = new PropertiesDescriptor<T>(handler, new EntityId(modId, handler.getImplementationId(), "handler", modUrl));
+        Instance.handlers.put(descriptor.getUniqueId(), descriptor);
+    }
+
+    static void registerEventListener(IListener<ReadOnlyDonationAlertsEvent> listener) {
         Instance.listeners.add(listener);
     }
 
-    static Iterator<HandlerDescriptor> getHandlers() {
+    public static Iterator<PropertiesDescriptor> getHandlers() {
         return Instance.handlers.elements().asIterator();
     }
 
