@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.folleach.gui.*;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.folleach.dontaionalerts.DonationAlertsCore;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;

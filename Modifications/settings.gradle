@@ -13,4 +13,5 @@ rootProject.name = 'Modifications'
 include 'fabric'
 include 'forge'
 include 'DonationAlerts'
+include 'TestConsole'
 
