@@ -20,6 +20,9 @@
   "entrypoints": {
     "main": [
       "net.folleach.daintegrate.ExampleMod"
+    ],
+    "client": [
+      "net.folleach.daintegrate.ClientEntryPoint"
     ]
   },
   "mixins": [
