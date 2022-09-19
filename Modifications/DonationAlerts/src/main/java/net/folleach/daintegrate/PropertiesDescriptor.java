@@ -9,7 +9,6 @@ public class PropertiesDescriptor<T> {
     private final EntityId id;
     private final Property[] properties;
 
-
     public PropertiesDescriptor(IHandler<T> handler, EntityId id) {
         this((Object)handler, id);
     }
@@ -41,5 +40,9 @@ public class PropertiesDescriptor<T> {
 
     public String getUniqueId() {
         return id.getUniqueId();
+    }
+
+    public Class<T> getType() {
+        return type;
     }
 }

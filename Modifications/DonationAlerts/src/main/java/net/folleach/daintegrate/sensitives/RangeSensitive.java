@@ -10,6 +10,6 @@ public class RangeSensitive implements ISensitive<RangeSensitiveProperties> {
 
     @Override
     public String getImplementationId() {
-        return null;
+        return "range";
     }
 }

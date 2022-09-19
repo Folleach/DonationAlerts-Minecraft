@@ -4,6 +4,6 @@ public class TriggerDto {
     public String name;
     public String description;
     public boolean isActive;
-    public SensitiveDto[] sensitives;
-    public PropertiesDto handlers;
+    public SensitivePropertiesDto[] sensitives;
+    public HandlerPropertiesDto[] handlers;
 }

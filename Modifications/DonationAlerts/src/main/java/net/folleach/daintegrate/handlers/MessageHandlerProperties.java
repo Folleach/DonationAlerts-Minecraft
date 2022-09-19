@@ -1,5 +1,5 @@
 package net.folleach.daintegrate.handlers;
 
-public class MessageProperties {
+public class MessageHandlerProperties {
     public String message;
 }
