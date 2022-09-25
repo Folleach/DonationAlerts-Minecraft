@@ -1,7 +1,7 @@
 package net.folleach.daintegrate.handlers;
 
 import net.folleach.daintegrate.IHandler;
-import net.folleach.dontaionalerts.DonationAlertsEvent;
+import net.folleach.dontaionalerts.ReadOnlyDonationAlertsEvent;
 
 public class MessageHandler implements IHandler<MessageHandlerProperties> {
     @Override
@@ -10,7 +10,7 @@ public class MessageHandler implements IHandler<MessageHandlerProperties> {
     }
 
     @Override
-    public void handle(DonationAlertsEvent event, MessageHandlerProperties properties) {
-        System.out.println(properties.message);
+    public void handle(ReadOnlyDonationAlertsEvent event, MessageHandlerProperties properties) {
+        System.out.println("Message receive: " + properties.message);
     }
 }

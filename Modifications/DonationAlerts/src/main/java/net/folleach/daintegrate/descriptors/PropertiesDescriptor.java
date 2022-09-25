@@ -1,5 +1,8 @@
-package net.folleach.daintegrate;
+package net.folleach.daintegrate.descriptors;
 
+import net.folleach.daintegrate.EntityId;
+import net.folleach.daintegrate.IHandler;
+import net.folleach.daintegrate.Property;
 import net.folleach.daintegrate.sensitives.ISensitive;
 
 import java.lang.reflect.ParameterizedType;

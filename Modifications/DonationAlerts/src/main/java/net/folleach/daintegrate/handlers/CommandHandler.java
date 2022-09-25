@@ -1,16 +1,16 @@
 package net.folleach.daintegrate.handlers;
 
 import net.folleach.daintegrate.IHandler;
-import net.folleach.dontaionalerts.DonationAlertsEvent;
+import net.folleach.dontaionalerts.ReadOnlyDonationAlertsEvent;
 
 public class CommandHandler implements IHandler<CommandHandlerProperties> {
     @Override
-    public void handle(DonationAlertsEvent event, CommandHandlerProperties properties) {
-
+    public String getImplementationId() {
+        return "command";
     }
 
     @Override
-    public String getImplementationId() {
-        return "command";
+    public void handle(ReadOnlyDonationAlertsEvent event, CommandHandlerProperties properties) {
+        System.out.println("Command execute: " + properties.command);
     }
 }

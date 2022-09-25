@@ -1,5 +1,6 @@
 package net.folleach.testconsole;
 
+import net.folleach.daintegrate.DonationAlertsEntryPoint;
 import net.folleach.daintegrate.DonationAlertsIntegrate;
 import net.folleach.daintegrate.EventProcessor;
 import net.folleach.daintegrate.configurations.SettingsDto;
@@ -11,6 +12,7 @@ import net.folleach.daintegrate.listeners.DonationAlertsEventListener;
 import net.folleach.daintegrate.listeners.IListener;
 import net.folleach.daintegrate.sensitives.RangeSensitive;
 import net.folleach.dontaionalerts.DonationAlertsClient;
+import net.folleach.dontaionalerts.DonationAlertsEvent;
 
 import java.io.*;
 import java.net.URISyntaxException;
@@ -22,32 +24,7 @@ public class Main {
         BufferedReader reader = new BufferedReader(new FileReader("token.txt"));
         var token = reader.readLine();
 
-        DonationAlertsIntegrate
-                .configure("daintegratew", "https://folleach.ru/l/daintegrate")
-                .registerHandler(new MessageHandler())
-                .registerHandler(new CommandHandler())
-                .registerSensitive(new RangeSensitive())
-                .registerEventListener(e -> {
-                    System.out.println(e.getAmount());
-                });
-
-        var configurationListeners = new ArrayList<IListener<SettingsDto>>();
-        configurationListeners.add(e -> {
-           System.out.println("Length of triggers: " + e.triggers.length);
-        });
-        var configurationSource = new FileConfigurationSource(
-                "DonationAlerts\\src\\main\\resources\\",
-                "settings.json",
-                configurationListeners,
-                new SettingsDtoTransformer());
-
-        configurationSource.startListening();
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        configurationSource.stopListening();
+        DonationAlertsEntryPoint.Main("DonationAlerts\\src\\main\\resources\\", "settings.json");
 
         var listener = new DonationAlertsEventListener(new EventProcessor(), DonationAlertsIntegrate.getEventListeners());
         try {

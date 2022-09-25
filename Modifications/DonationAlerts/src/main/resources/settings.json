@@ -7,7 +7,7 @@
       "sensitives": [
         {
           "properties": {
-            "type": "daintegratew/sensitive/range",
+            "type": "daintegratew/sensitive/always",
             "value": {
               "from": 0,
               "to": 100
@@ -20,7 +20,7 @@
           "properties": {
             "type": "daintegratew/handler/message",
             "value": {
-              "message": "Hello! It's day time!"
+              "message": "Hello! It's day time! No reload"
             }
           }
         },
