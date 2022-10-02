@@ -7,11 +7,7 @@
       "sensitives": [
         {
           "properties": {
-            "type": "daintegratew/sensitive/always",
-            "value": {
-              "from": 0,
-              "to": 100
-            }
+            "type": "daintegratew/sensitive/always"
           }
         }
       ],
@@ -32,6 +28,32 @@
             }
           },
           "delay": 20
+        }
+      ]
+    },
+    {
+      "name": "not always",
+      "description": "Just not always trigger",
+      "isActive": true,
+      "sensitives": [
+        {
+          "properties": {
+            "type": "daintegratew/sensitive/range",
+            "value": {
+              "from": 0,
+              "to": 100
+            }
+          }
+        }
+      ],
+      "handlers": [
+        {
+          "properties": {
+            "type": "daintegratew/handler/message",
+            "value": {
+              "message": "Donate 0-100 ammount"
+            }
+          }
         }
       ]
     }

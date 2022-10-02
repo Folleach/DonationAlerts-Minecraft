@@ -10,6 +10,7 @@ public class EventProcessor implements IListener<ReadOnlyDonationAlertsEvent> {
     @Override
     public void onValue(ReadOnlyDonationAlertsEvent value) {
         getSenseTrigger(value).forEach(trigger -> {
+            System.out.println("Activate trigger: " + trigger.name);
             for (var handler : trigger.handlers) {
                 var handlerDescriptor = DonationAlertsIntegrate.getHandler(handler.properties.type);
                 handlerDescriptor.getHandler().handle(value, handler.properties.value);

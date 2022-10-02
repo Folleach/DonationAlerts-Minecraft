@@ -13,7 +13,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class DonationAlertsEntryPoint {
-    public static void Main(String settingsPath, String settingsFile) throws IOException {
+    public static void Main(String settingsPath, String settingsFile, IListener<String> log) throws IOException {
+        log.onValue("Initialize");
         var instance = DonationAlertsIntegrate.Instance;
 
         DonationAlertsIntegrate
