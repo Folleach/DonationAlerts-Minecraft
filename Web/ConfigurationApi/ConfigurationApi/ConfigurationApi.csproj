@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+        <PackageReference Include="Vostok.Logging.Console" Version="1.0.10-pre000021" />
+        <PackageReference Include="Vostok.Logging.File" Version="1.0.23-pre000032" />
+        <PackageReference Include="Vostok.Logging.Microsoft" Version="2.0.14-pre000017" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="SocketFlow">
+        <HintPath>..\..\..\..\..\SocketFlow\src\SocketFlow.AspNetCore\bin\Debug\netstandard2.1\SocketFlow.dll</HintPath>
+      </Reference>
+      <Reference Include="SocketFlow.AspNetCore">
+        <HintPath>..\..\..\..\..\SocketFlow\src\SocketFlow.AspNetCore\bin\Debug\netstandard2.1\SocketFlow.AspNetCore.dll</HintPath>
+      </Reference>
+      <Reference Include="SocketFlow.Server">
+        <HintPath>..\..\..\..\..\SocketFlow\src\SocketFlow.AspNetCore\bin\Debug\netstandard2.1\SocketFlow.Server.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>

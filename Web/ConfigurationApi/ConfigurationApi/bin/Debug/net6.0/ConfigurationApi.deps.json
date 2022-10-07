@@ -1,0 +1,349 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "ConfigurationApi/1.0.0": {
+        "dependencies": {
+          "Swashbuckle.AspNetCore": "6.2.3",
+          "Vostok.Logging.Console": "1.0.10-pre000021",
+          "Vostok.Logging.File": "1.0.23-pre000032",
+          "Vostok.Logging.Microsoft": "2.0.14-pre000017",
+          "SocketFlow.AspNetCore": "1.0.0.0",
+          "SocketFlow": "0.1.0.0",
+          "SocketFlow.Server": "0.1.0.0"
+        },
+        "runtime": {
+          "ConfigurationApi.dll": {}
+        }
+      },
+      "Microsoft.Extensions.ApiDescription.Server/3.0.0": {},
+      "Microsoft.Extensions.DependencyInjection.Abstractions/2.0.0": {},
+      "Microsoft.Extensions.Logging/2.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "2.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "2.0.0",
+          "Microsoft.Extensions.Options": "2.0.0"
+        }
+      },
+      "Microsoft.Extensions.Logging.Abstractions/2.0.0": {},
+      "Microsoft.Extensions.Options/2.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "2.0.0",
+          "Microsoft.Extensions.Primitives": "2.0.0"
+        }
+      },
+      "Microsoft.Extensions.Primitives/2.0.0": {
+        "dependencies": {
+          "System.Runtime.CompilerServices.Unsafe": "4.4.0"
+        }
+      },
+      "Microsoft.OpenApi/1.2.3": {
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.OpenApi.dll": {
+            "assemblyVersion": "1.2.3.0",
+            "fileVersion": "1.2.3.0"
+          }
+        }
+      },
+      "Swashbuckle.AspNetCore/6.2.3": {
+        "dependencies": {
+          "Microsoft.Extensions.ApiDescription.Server": "3.0.0",
+          "Swashbuckle.AspNetCore.Swagger": "6.2.3",
+          "Swashbuckle.AspNetCore.SwaggerGen": "6.2.3",
+          "Swashbuckle.AspNetCore.SwaggerUI": "6.2.3"
+        }
+      },
+      "Swashbuckle.AspNetCore.Swagger/6.2.3": {
+        "dependencies": {
+          "Microsoft.OpenApi": "1.2.3"
+        },
+        "runtime": {
+          "lib/net6.0/Swashbuckle.AspNetCore.Swagger.dll": {
+            "assemblyVersion": "6.2.3.0",
+            "fileVersion": "6.2.3.0"
+          }
+        }
+      },
+      "Swashbuckle.AspNetCore.SwaggerGen/6.2.3": {
+        "dependencies": {
+          "Swashbuckle.AspNetCore.Swagger": "6.2.3"
+        },
+        "runtime": {
+          "lib/net6.0/Swashbuckle.AspNetCore.SwaggerGen.dll": {
+            "assemblyVersion": "6.2.3.0",
+            "fileVersion": "6.2.3.0"
+          }
+        }
+      },
+      "Swashbuckle.AspNetCore.SwaggerUI/6.2.3": {
+        "runtime": {
+          "lib/net6.0/Swashbuckle.AspNetCore.SwaggerUI.dll": {
+            "assemblyVersion": "6.2.3.0",
+            "fileVersion": "6.2.3.0"
+          }
+        }
+      },
+      "System.Runtime.CompilerServices.Unsafe/4.4.0": {},
+      "Vostok.Context/0.1.7-pre000014": {
+        "runtime": {
+          "lib/net6.0/Vostok.Context.dll": {
+            "assemblyVersion": "0.1.7.0",
+            "fileVersion": "0.1.7.0"
+          }
+        }
+      },
+      "Vostok.Logging.Abstractions/1.0.31-pre000061": {
+        "runtime": {
+          "lib/net6.0/Vostok.Logging.Abstractions.dll": {
+            "assemblyVersion": "1.0.31.0",
+            "fileVersion": "1.0.31.0"
+          }
+        }
+      },
+      "Vostok.Logging.Console/1.0.10-pre000021": {
+        "dependencies": {
+          "Vostok.Logging.Abstractions": "1.0.31-pre000061",
+          "Vostok.Logging.Formatting": "1.0.14-pre000035"
+        },
+        "runtime": {
+          "lib/net6.0/Vostok.Logging.Console.dll": {
+            "assemblyVersion": "1.0.10.0",
+            "fileVersion": "1.0.10.0"
+          }
+        }
+      },
+      "Vostok.Logging.Context/1.0.5-pre000023": {
+        "dependencies": {
+          "Vostok.Context": "0.1.7-pre000014",
+          "Vostok.Logging.Abstractions": "1.0.31-pre000061"
+        },
+        "runtime": {
+          "lib/net6.0/Vostok.Logging.Context.dll": {
+            "assemblyVersion": "1.0.5.0",
+            "fileVersion": "1.0.5.0"
+          }
+        }
+      },
+      "Vostok.Logging.File/1.0.23-pre000032": {
+        "dependencies": {
+          "Vostok.Logging.Abstractions": "1.0.31-pre000061",
+          "Vostok.Logging.Formatting": "1.0.14-pre000035"
+        },
+        "runtime": {
+          "lib/net6.0/Vostok.Logging.File.dll": {
+            "assemblyVersion": "1.0.23.0",
+            "fileVersion": "1.0.23.0"
+          }
+        }
+      },
+      "Vostok.Logging.Formatting/1.0.14-pre000035": {
+        "dependencies": {
+          "Vostok.Logging.Abstractions": "1.0.31-pre000061"
+        },
+        "runtime": {
+          "lib/net6.0/Vostok.Logging.Formatting.dll": {
+            "assemblyVersion": "1.0.14.0",
+            "fileVersion": "1.0.14.0"
+          }
+        }
+      },
+      "Vostok.Logging.Microsoft/2.0.14-pre000017": {
+        "dependencies": {
+          "Microsoft.Extensions.Logging": "2.0.0",
+          "Vostok.Logging.Abstractions": "1.0.31-pre000061",
+          "Vostok.Logging.Context": "1.0.5-pre000023",
+          "Vostok.Logging.Formatting": "1.0.14-pre000035"
+        },
+        "runtime": {
+          "lib/net6.0/Vostok.Logging.Microsoft.dll": {
+            "assemblyVersion": "2.0.14.0",
+            "fileVersion": "2.0.14.0"
+          }
+        }
+      },
+      "SocketFlow.AspNetCore/1.0.0.0": {
+        "runtime": {
+          "SocketFlow.AspNetCore.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "SocketFlow/0.1.0.0": {
+        "runtime": {
+          "SocketFlow.dll": {
+            "assemblyVersion": "0.1.0.0",
+            "fileVersion": "0.1.0.0"
+          }
+        }
+      },
+      "SocketFlow.Server/0.1.0.0": {
+        "runtime": {
+          "SocketFlow.Server.dll": {
+            "assemblyVersion": "0.1.0.0",
+            "fileVersion": "0.1.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ConfigurationApi/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.Extensions.ApiDescription.Server/3.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-LH4OE/76F6sOCslif7+Xh3fS/wUUrE5ryeXAMcoCnuwOQGT5Smw0p57IgDh/pHgHaGz/e+AmEQb7pRgb++wt0w==",
+      "path": "microsoft.extensions.apidescription.server/3.0.0",
+      "hashPath": "microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.DependencyInjection.Abstractions/2.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-eUdJ0Q/GfVyUJc0Jal5L1QZLceL78pvEM9wEKcHeI24KorqMDoVX+gWsMGLulQMfOwsUaPtkpQM2pFERTzSfSg==",
+      "path": "microsoft.extensions.dependencyinjection.abstractions/2.0.0",
+      "hashPath": "microsoft.extensions.dependencyinjection.abstractions.2.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Logging/2.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-VP10syWV/vxYYMKgZ2eDESmUsz3gPxvBn5J6tkVN8lI4M+dF43RN8fWsEPbcAneDmZrHl3Pv23z05nmyGkJlpg==",
+      "path": "microsoft.extensions.logging/2.0.0",
+      "hashPath": "microsoft.extensions.logging.2.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Logging.Abstractions/2.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6ZCllUYGFukkymSTx3Yr0G/ajRxoNJp7/FqSxSB4fGISST54ifBhgu4Nc0ItGi3i6DqwuNd8SUyObmiC++AO2Q==",
+      "path": "microsoft.extensions.logging.abstractions/2.0.0",
+      "hashPath": "microsoft.extensions.logging.abstractions.2.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Options/2.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-sAKBgjl2gWsECBLLR9K54T7/uZaP2n9GhMYHay/oOLfvpvX0+iNAlQ2NJgVE352C9Fs5CDV3VbNTK8T2aNKQFA==",
+      "path": "microsoft.extensions.options/2.0.0",
+      "hashPath": "microsoft.extensions.options.2.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Primitives/2.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ukg53qNlqTrK38WA30b5qhw0GD7y3jdI9PHHASjdKyTcBHTevFM2o23tyk3pWCgAV27Bbkm+CPQ2zUe1ZOuYSA==",
+      "path": "microsoft.extensions.primitives/2.0.0",
+      "hashPath": "microsoft.extensions.primitives.2.0.0.nupkg.sha512"
+    },
+    "Microsoft.OpenApi/1.2.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Nug3rO+7Kl5/SBAadzSMAVgqDlfGjJZ0GenQrLywJ84XGKO0uRqkunz5Wyl0SDwcR71bAATXvSdbdzPrYRYKGw==",
+      "path": "microsoft.openapi/1.2.3",
+      "hashPath": "microsoft.openapi.1.2.3.nupkg.sha512"
+    },
+    "Swashbuckle.AspNetCore/6.2.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-cnzQDn0Le+hInsw2SYwlOhOCPXpYi/szcvnyqZJ12v+QyrLBwAmWXBg6RIyHB18s/mLeywC+Rg2O9ndz0IUNYQ==",
+      "path": "swashbuckle.aspnetcore/6.2.3",
+      "hashPath": "swashbuckle.aspnetcore.6.2.3.nupkg.sha512"
+    },
+    "Swashbuckle.AspNetCore.Swagger/6.2.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-qOF7j1sL0bWm8g/qqHVPCvkO3JlVvUIB8WfC98kSh6BT5y5DAnBNctfac7XR5EZf+eD7/WasvANncTqwZYfmWQ==",
+      "path": "swashbuckle.aspnetcore.swagger/6.2.3",
+      "hashPath": "swashbuckle.aspnetcore.swagger.6.2.3.nupkg.sha512"
+    },
+    "Swashbuckle.AspNetCore.SwaggerGen/6.2.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+Xq7WdMCCfcXlnbLJVFNgY8ITdP2TRYIlpbt6IKzDw5FwFxdi9lBfNDtcT+/wkKwX70iBBFmXldnnd02/VO72A==",
+      "path": "swashbuckle.aspnetcore.swaggergen/6.2.3",
+      "hashPath": "swashbuckle.aspnetcore.swaggergen.6.2.3.nupkg.sha512"
+    },
+    "Swashbuckle.AspNetCore.SwaggerUI/6.2.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-bCRI87uKJVb4G+KURWm8LQrL64St04dEFZcF6gIM67Zc0Sr/N47EO83ybLMYOvfNdO1DCv8xwPcrz9J/VEhQ5g==",
+      "path": "swashbuckle.aspnetcore.swaggerui/6.2.3",
+      "hashPath": "swashbuckle.aspnetcore.swaggerui.6.2.3.nupkg.sha512"
+    },
+    "System.Runtime.CompilerServices.Unsafe/4.4.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-9dLLuBxr5GNmOfl2jSMcsHuteEg32BEfUotmmUkmZjpR3RpVHE8YQwt0ow3p6prwA1ME8WqDVZqrr8z6H8G+Kw==",
+      "path": "system.runtime.compilerservices.unsafe/4.4.0",
+      "hashPath": "system.runtime.compilerservices.unsafe.4.4.0.nupkg.sha512"
+    },
+    "Vostok.Context/0.1.7-pre000014": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-HFoRp8TKC0vxL6nOHgjeUoZyE13wBUEb2BSl86H92U0mS4MYQEpnF32UbTurFE5l/n1vJwdWLN8bzb0KJzBU4Q==",
+      "path": "vostok.context/0.1.7-pre000014",
+      "hashPath": "vostok.context.0.1.7-pre000014.nupkg.sha512"
+    },
+    "Vostok.Logging.Abstractions/1.0.31-pre000061": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-xqGD57A7Gw//HhqwWtlNdp8WIfkUiFfChi1fWDaRKuOA1RkGd0J0vFm4E6ZWEQMr9jQnYf6LN4PyyHjI19C0YA==",
+      "path": "vostok.logging.abstractions/1.0.31-pre000061",
+      "hashPath": "vostok.logging.abstractions.1.0.31-pre000061.nupkg.sha512"
+    },
+    "Vostok.Logging.Console/1.0.10-pre000021": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-lag1B6eakojFSJhREseJZmk2AN69/lY+neSRckyuBwR+PihsY+eKcOarRH7qy7rvzj44fFPWPZnxMQXVglsW6A==",
+      "path": "vostok.logging.console/1.0.10-pre000021",
+      "hashPath": "vostok.logging.console.1.0.10-pre000021.nupkg.sha512"
+    },
+    "Vostok.Logging.Context/1.0.5-pre000023": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-o3ba+t5m9QD07KilYfiEuOP1m/8lyrvYQaVxtN9/kVumJy8ooJ92EmM/l3LtqWrKek9bjzXDNRJ0p2POu4qakA==",
+      "path": "vostok.logging.context/1.0.5-pre000023",
+      "hashPath": "vostok.logging.context.1.0.5-pre000023.nupkg.sha512"
+    },
+    "Vostok.Logging.File/1.0.23-pre000032": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-DBGixUUP0kpP6wU90YwXld5VygKdJk8o6yXtTJJLkQmtpzsblVoGj61pYSKRyjATfW1nW3k4AIJWCxW99RGuWA==",
+      "path": "vostok.logging.file/1.0.23-pre000032",
+      "hashPath": "vostok.logging.file.1.0.23-pre000032.nupkg.sha512"
+    },
+    "Vostok.Logging.Formatting/1.0.14-pre000035": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-SvFhrAigvcL1R+K899EARqkT2i++54vABe3TL6q9rRwY2t4wlGcEu5wziU/AEqDRFQF38G/o4Ge6aiAYL/utnw==",
+      "path": "vostok.logging.formatting/1.0.14-pre000035",
+      "hashPath": "vostok.logging.formatting.1.0.14-pre000035.nupkg.sha512"
+    },
+    "Vostok.Logging.Microsoft/2.0.14-pre000017": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-XX5Dp2Vtq5Rmrl0R2m2oblQtLXHEkVA/gEFcXeqLScC/tAAouy/cP6Q9o1TXPNItdMw3jkLvT5uBsKwbcTRCow==",
+      "path": "vostok.logging.microsoft/2.0.14-pre000017",
+      "hashPath": "vostok.logging.microsoft.2.0.14-pre000017.nupkg.sha512"
+    },
+    "SocketFlow.AspNetCore/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "SocketFlow/0.1.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "SocketFlow.Server/0.1.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

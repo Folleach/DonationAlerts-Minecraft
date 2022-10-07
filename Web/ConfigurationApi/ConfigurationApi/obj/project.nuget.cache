@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "dgSpecHash": "u+bzGM92zm4ek30t5c+5A9s6He7+KPGDebaNL1YalH2ARfH3tKKQtRk0Nct6scY7m4wxaku3yEPatZmHrzbiHA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Andrey\\Documents\\GitHub\\Folleach\\DonationAlerts-Minecraft\\Web\\ConfigurationApi\\ConfigurationApi\\ConfigurationApi.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Andrey\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
+    "C:\\Users\\Andrey\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\2.0.0\\microsoft.extensions.dependencyinjection.abstractions.2.0.0.nupkg.sha512",
+    "C:\\Users\\Andrey\\.nuget\\packages\\microsoft.extensions.logging\\2.0.0\\microsoft.extensions.logging.2.0.0.nupkg.sha512",
+    "C:\\Users\\Andrey\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\2.0.0\\microsoft.extensions.logging.abstractions.2.0.0.nupkg.sha512",
+    "C:\\Users\\Andrey\\.nuget\\packages\\microsoft.extensions.options\\2.0.0\\microsoft.extensions.options.2.0.0.nupkg.sha512",
+    "C:\\Users\\Andrey\\.nuget\\packages\\microsoft.extensions.primitives\\2.0.0\\microsoft.extensions.primitives.2.0.0.nupkg.sha512",
+    "C:\\Users\\Andrey\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\Andrey\\.nuget\\packages\\swashbuckle.aspnetcore\\6.2.3\\swashbuckle.aspnetcore.6.2.3.nupkg.sha512",
+    "C:\\Users\\Andrey\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.2.3\\swashbuckle.aspnetcore.swagger.6.2.3.nupkg.sha512",
+    "C:\\Users\\Andrey\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.2.3\\swashbuckle.aspnetcore.swaggergen.6.2.3.nupkg.sha512",
+    "C:\\Users\\Andrey\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.2.3\\swashbuckle.aspnetcore.swaggerui.6.2.3.nupkg.sha512",
+    "C:\\Users\\Andrey\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\4.4.0\\system.runtime.compilerservices.unsafe.4.4.0.nupkg.sha512",
+    "C:\\Users\\Andrey\\.nuget\\packages\\vostok.context\\0.1.7-pre000014\\vostok.context.0.1.7-pre000014.nupkg.sha512",
+    "C:\\Users\\Andrey\\.nuget\\packages\\vostok.logging.abstractions\\1.0.31-pre000061\\vostok.logging.abstractions.1.0.31-pre000061.nupkg.sha512",
+    "C:\\Users\\Andrey\\.nuget\\packages\\vostok.logging.console\\1.0.10-pre000021\\vostok.logging.console.1.0.10-pre000021.nupkg.sha512",
+    "C:\\Users\\Andrey\\.nuget\\packages\\vostok.logging.context\\1.0.5-pre000023\\vostok.logging.context.1.0.5-pre000023.nupkg.sha512",
+    "C:\\Users\\Andrey\\.nuget\\packages\\vostok.logging.file\\1.0.23-pre000032\\vostok.logging.file.1.0.23-pre000032.nupkg.sha512",
+    "C:\\Users\\Andrey\\.nuget\\packages\\vostok.logging.formatting\\1.0.14-pre000035\\vostok.logging.formatting.1.0.14-pre000035.nupkg.sha512",
+    "C:\\Users\\Andrey\\.nuget\\packages\\vostok.logging.microsoft\\2.0.14-pre000017\\vostok.logging.microsoft.2.0.14-pre000017.nupkg.sha512"
+  ],
+  "logs": []
+}
