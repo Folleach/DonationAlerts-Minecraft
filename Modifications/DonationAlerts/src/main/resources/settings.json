@@ -7,14 +7,14 @@
       "sensitives": [
         {
           "properties": {
-            "type": "daintegratew/sensitive/always"
+            "type": "daintegrate/sensitive/always"
           }
         }
       ],
       "handlers": [
         {
           "properties": {
-            "type": "daintegratew/handler/message",
+            "type": "daintegrate/handler/message",
             "value": {
               "message": "Hello! It's day time! No reload"
             }
@@ -22,7 +22,7 @@
         },
         {
           "properties": {
-            "type": "daintegratew/handler/command",
+            "type": "daintegrate/handler/command",
             "value": {
               "command": "/time set day"
             }
@@ -38,10 +38,11 @@
       "sensitives": [
         {
           "properties": {
-            "type": "daintegratew/sensitive/range",
+            "type": "daintegrate/sensitive/range",
             "value": {
               "from": 0,
-              "to": 100
+              "to": 100,
+              "currency": "USD"
             }
           }
         }
@@ -49,9 +50,9 @@
       "handlers": [
         {
           "properties": {
-            "type": "daintegratew/handler/message",
+            "type": "daintegrate/handler/message",
             "value": {
-              "message": "Donate 0-100 ammount"
+              "message": "Donate 0-100 amount"
             }
           }
         }

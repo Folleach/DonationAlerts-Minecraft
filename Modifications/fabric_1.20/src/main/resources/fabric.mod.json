@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "daintegratew",
+  "version": "${version}",
+  "name": "donation-alerts-integrate",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/daintegratew/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "net.folleach.daintegrate.fabric.ClientEntryPoint"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}

@@ -58,7 +58,7 @@ public class DonationAlertsClient {
                 .on("donation", donationListener);
     }
 
-    public void connect(String token) {
+    public boolean connect(String token) {
         currentToken = token;
         socket.connect();
         try {
@@ -68,10 +68,12 @@ public class DonationAlertsClient {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+        return true;
     }
 
-    public void Disconnect() {
-        socket.disconnect();
+    public void disconnect() {
+        socket.close();
+        currentToken = null;
     }
 
     public boolean getConnected() {

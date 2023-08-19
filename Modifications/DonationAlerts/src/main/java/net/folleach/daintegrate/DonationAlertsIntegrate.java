@@ -71,7 +71,6 @@ public class DonationAlertsIntegrate {
         return Instance.handlers.get(id);
     }
 
-
     public static Stream<TriggerDto> getTriggers() {
         return Arrays.stream(Instance.triggers);
     }

@@ -10,8 +10,6 @@ pluginManagement {
 }
 
 rootProject.name = 'Modifications'
-include 'fabric'
-include 'forge'
+include 'fabric_1.20'
 include 'DonationAlerts'
 include 'TestConsole'
-

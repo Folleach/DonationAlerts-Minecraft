@@ -5,7 +5,8 @@ import net.folleach.daintegrate.ITransformer;
 import net.folleach.daintegrate.configurations.SettingsDto;
 import net.folleach.daintegrate.listeners.IListener;
 
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -21,6 +22,7 @@ public class FileConfigurationSource implements IConfigurationSource {
     private final WatchService watcher;
     private final ArrayList<IListener<SettingsDto>> listeners;
     private final ITransformer<String, SettingsDto> transformer;
+    private final IListener<String> log;
     private final MessageDigest md;
 
     {
@@ -39,15 +41,38 @@ public class FileConfigurationSource implements IConfigurationSource {
             String path,
             String file,
             ArrayList<IListener<SettingsDto>> listeners,
-            ITransformer<String, SettingsDto> transformer) throws IOException {
+            ITransformer<String, SettingsDto> transformer,
+            IListener<String> log) throws IOException {
         this.transformer = transformer;
+        this.log = log;
         var cp = Paths.get(path);
+        createIfNotExists(path, file);
         this.path = cp.toString();
         watchedFileName = file;
         watcher = FileSystems.getDefault().newWatchService();
         cp.register(watcher, ENTRY_MODIFY);
         this.listeners = listeners;
-        tryUpdate();
+    }
+
+    private void createIfNotExists(String path, String file) {
+        var resultMkdirs = new File(path).mkdirs();
+        var fileHandle = new File(path, file);
+        if (!fileHandle.exists())
+        {
+            try {
+                var result = fileHandle.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            try {
+                PrintWriter writer = new PrintWriter(fileHandle, StandardCharsets.UTF_8);
+                writer.print("{}");
+                writer.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public void onValue(SettingsDto value) {
@@ -60,6 +85,7 @@ public class FileConfigurationSource implements IConfigurationSource {
         if (pooling)
             return;
         pooling = true;
+        tryUpdate();
         thread = new Thread(() -> {
             while (pooling) {
                 WatchKey key = null;
@@ -88,21 +114,21 @@ public class FileConfigurationSource implements IConfigurationSource {
     }
 
     private void tryUpdate() {
-        String json = null;
         try {
+            String json = null;
             json = Files.readString(Paths.get(path, watchedFileName));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            if (json == null)
+                return;
+            var hash = md.digest(json.getBytes());
+            if (Arrays.equals(hash, currentHash))
+                return;
+            currentHash = hash;
+            var value = transformer.transform(json);
+            if (value != null)
+                onValue(value);
+        } catch (Exception e) {
+            log.onValue("error while update the settings from file: " + e);
         }
-        if (json == null)
-            return;
-        var hash = md.digest(json.getBytes());
-        if (Arrays.equals(hash, currentHash))
-            return;
-        currentHash = hash;
-        var value = transformer.transform(json);
-        if (value != null)
-            onValue(value);
     }
 
     @Override
@@ -113,5 +139,9 @@ public class FileConfigurationSource implements IConfigurationSource {
             throw new RuntimeException(e);
         }
         pooling = false;
+    }
+
+    public void addListener(IListener<SettingsDto> listener) {
+        listeners.add(listener);
     }
 }
