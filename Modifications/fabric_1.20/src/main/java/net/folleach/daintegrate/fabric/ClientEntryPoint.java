@@ -6,6 +6,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.folleach.daintegrate.Constants;
 import net.folleach.daintegrate.DonationAlertsIntegrate;
 import net.folleach.daintegrate.DonationAlertsIntegrateFactory;
@@ -60,13 +61,18 @@ public class ClientEntryPoint implements ClientModInitializer {
             );
         });
 
-        var listener = new DonationAlertsEventListener(new EventProcessor());
+        var eventProcessor = new EventProcessor();
+        var listener = new DonationAlertsEventListener(eventProcessor);
         try {
             client = new DonationAlertsClient(Constants.DonationAlertsEventServer, listener);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> registerCommands(dispatcher));
+
+        ClientTickEvents.END_CLIENT_TICK.register(t -> {
+            eventProcessor.evalute();
+        });
     }
 
     private void registerCommands(CommandDispatcher<FabricClientCommandSource> dispatcher) {
