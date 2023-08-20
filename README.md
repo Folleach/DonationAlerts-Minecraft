@@ -129,7 +129,7 @@ And the currency matches.
 
 ###### Example
 
-```json
+```yaml
 sensitives:
 - properties:
     type: daintegrate/sensitive/donate
@@ -159,7 +159,7 @@ Activates if the `type` is matches
 
 ###### Example
 
-```json
+```yaml
 sensitives:
 - properties:
     type: daintegrate/sensitive/subscribe
@@ -181,7 +181,7 @@ Activates if the amount of Twitch bits falls within the specified range (`from` 
 
 ###### Example
 
-```json
+```yaml
 sensitives:
 - properties:
     type: daintegrate/sensitive/twitch/bits
@@ -217,7 +217,7 @@ Adds a message to your chat
 
 ###### Example
 
-```json
+```yaml
 handlers:
 - delay: 10
   properties:
@@ -238,7 +238,7 @@ Sends a command to the server on your behalf
 
 ###### Example
 
-```json
+```yaml
 handlers:
 - delay: 10
   properties:
@@ -264,7 +264,7 @@ If you want to contribute, you can:
    ```java
    var cfgSource = DonationAlertsIntegrateFactory.create(
         "donation-alerts-integrate",
-        "settings.json",
+        "settings.yaml",
         LOGGER::info);   
    ```
 4. Create basic handlers
