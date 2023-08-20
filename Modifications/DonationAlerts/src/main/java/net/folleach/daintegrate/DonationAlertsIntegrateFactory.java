@@ -2,6 +2,7 @@ package net.folleach.daintegrate;
 
 import net.folleach.daintegrate.configurations.SettingsDto;
 import net.folleach.daintegrate.configurations.SettingsDtoTransformer;
+import net.folleach.daintegrate.configurations.YamlSettingsTransformer;
 import net.folleach.daintegrate.configurations.sources.FileConfigurationSource;
 import net.folleach.daintegrate.listeners.IListener;
 import net.folleach.daintegrate.sensitives.AlwaysSensitive;
@@ -30,7 +31,7 @@ public class DonationAlertsIntegrateFactory {
                 settingsPath,
                 settingsFile,
                 configurationListeners,
-                new SettingsDtoTransformer(),
+                new YamlSettingsTransformer(),
                 log
         );
         return configurationSource;

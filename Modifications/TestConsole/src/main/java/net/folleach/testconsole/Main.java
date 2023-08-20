@@ -1,5 +1,6 @@
 package net.folleach.testconsole;
 
+import net.folleach.daintegrate.Constants;
 import net.folleach.daintegrate.DonationAlertsIntegrateFactory;
 import net.folleach.daintegrate.DonationAlertsIntegrate;
 import net.folleach.daintegrate.EventProcessor;
@@ -15,11 +16,16 @@ public class Main {
         BufferedReader reader = new BufferedReader(new FileReader("token.txt"));
         var token = reader.readLine();
 
-        DonationAlertsIntegrateFactory.create(
+        var source = DonationAlertsIntegrateFactory.create(
                 "DonationAlerts/src/main/resources/",
-                "settings.json",
+                "settings.yaml",
                 System.out::println);
 
+        DonationAlertsIntegrate.configure(Constants.ModId, Constants.ModUrl)
+                .registerHandler(new MessageHandlerTest())
+                .registerHandler(new CommandHandlerTest());
+
+        source.startListening();
         var listener = new DonationAlertsEventListener(new EventProcessor());
         try {
             var client = new DonationAlertsClient("https://socket.donationalerts.ru:443", listener);
