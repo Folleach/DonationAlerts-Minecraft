@@ -1,7 +1,6 @@
 package net.folleach.daintegrate.sensitives;
 
-public class RangeSensitiveProperties {
+public class TwitchBitsSensitiveProperties {
     public float from;
     public float to;
-    public String currency;
 }

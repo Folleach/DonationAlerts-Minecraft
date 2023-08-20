@@ -1,12 +1,13 @@
 package net.folleach.daintegrate;
 
 import net.folleach.daintegrate.configurations.SettingsDto;
-import net.folleach.daintegrate.configurations.SettingsDtoTransformer;
 import net.folleach.daintegrate.configurations.YamlSettingsTransformer;
 import net.folleach.daintegrate.configurations.sources.FileConfigurationSource;
 import net.folleach.daintegrate.listeners.IListener;
 import net.folleach.daintegrate.sensitives.AlwaysSensitive;
-import net.folleach.daintegrate.sensitives.RangeSensitive;
+import net.folleach.daintegrate.sensitives.DonateSensitive;
+import net.folleach.daintegrate.sensitives.SubscribeSensitive;
+import net.folleach.daintegrate.sensitives.TwitchBitsSensitive;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,8 +21,10 @@ public class DonationAlertsIntegrateFactory {
                 .configure(Constants.ModId, Constants.ModUrl)
 //                .registerHandler(new MessageHandler())
 //                .registerHandler(new CommandHandler())
-                .registerSensitive(new RangeSensitive())
+                .registerSensitive(new DonateSensitive())
                 .registerSensitive(new AlwaysSensitive())
+                .registerSensitive(new SubscribeSensitive())
+                .registerSensitive(new TwitchBitsSensitive())
                 .registerEventListener(event -> log.onValue("received new event"));
 
         var configurationListeners = new ArrayList<IListener<SettingsDto>>();

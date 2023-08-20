@@ -12,7 +12,13 @@ public enum AlertType {
     @SerializedName("6")
     TwitchFreeFollow(6),
     @SerializedName("7")
-    YouTubeSubscription(7);
+    YouTubeSubscription(7),
+    @SerializedName("11")
+    TwitchBits(11),
+    @SerializedName("13")
+    TwitchGiftSubscription(13),
+    @SerializedName("15")
+    TwitchPrimeSubscription(15);
 
     public final int Value;
 
@@ -30,6 +36,12 @@ public enum AlertType {
                 return AlertType.TwitchFreeFollow;
             case 7:
                 return AlertType.YouTubeSubscription;
+            case 11:
+                return AlertType.TwitchBits;
+            case 13:
+                return AlertType.TwitchGiftSubscription;
+            case 15:
+                return AlertType.TwitchPrimeSubscription;
             default:
                 return AlertType.Undefined;
         }
