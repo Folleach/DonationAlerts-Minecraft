@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "daintegratew",
+  "id": "daintegrate",
   "version": "${version}",
   "name": "donation-alerts-integrate",
   "description": "",

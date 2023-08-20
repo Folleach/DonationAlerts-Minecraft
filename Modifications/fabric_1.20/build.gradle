@@ -14,6 +14,10 @@ repositories {
     // for more information about repositories.
 }
 
+configurations{
+    addtojar
+}
+
 dependencies {
     // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -21,6 +25,7 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     implementation project(path: ':DonationAlerts', configuration: 'default')
+    addtojar project(path: ':DonationAlerts', configuration: 'default')
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
@@ -66,6 +71,9 @@ java {
 jar {
     from("LICENSE") {
         rename { "${it}_${project.archivesBaseName}" }
+    }
+    from {
+        configurations.addtojar.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
     }
 }
 
