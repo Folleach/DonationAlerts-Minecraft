@@ -1,5 +1,15 @@
 # DonationAlerts-Minecraft
-Modification can interact with your chat as well as with the rest of the world through commands.
+
+A modification that allows you to receive events from **DonationAlerts**
+
+Supports:
+- Donation
+- Twitch Bits
+- Subscriptions to YouTube and Twitch
+
+Allows to:
+- Send message to the chat
+- Execute any Minecraft commands (include mods)
 
 You can download it here: [CurseForge](https://www.curseforge.com/minecraft/mc-mods/donation-alerts-integrate)
 
@@ -45,40 +55,32 @@ And there is the command to disconnect
 
 ## Configuration
 
-The settings file is in `.minecraft/donation-alerts-integrate/settings.json`.  
-The file format is json, example:
+The settings file is in `.minecraft/donation-alerts-integrate/settings.yaml`  
+The file format is yaml, example:
 
-```json
-{
-  "triggers": [
-    {
-      "name": "default",
-      "description": "Just default trigger",
-      "isActive": true,
-      "sensitive": [
-        {
-          "properties": {
-            "type": "daintegratew/sensitive/always"
-          }
-        }
-      ],
-      "handlers": [
-        {
-          "properties": {
-            "type": "daintegratew/handler/message",
-            "value": {
-              "message": "Hello! It's day time! No reload"
-            }
-          },
-          "delay": 20
-        }
-      ]
-    }
-  ]
-}
+```yaml
+disableSettingsUpdateMessage: false
+disableWelcomeMessage: false
+triggers:
+- name: default
+  description: example trigger
+  isActive: true
+  sensitives:
+  - properties:
+      type: daintegrate/sensitive/donate
+      value:
+        from: 5
+        to: 10
+        currency: USD
+  handlers:
+  - delay: 0
+    properties:
+      type: daintegrate/handler/message
+      value:
+        message: Hello! This is an example message for all events from Donation Alerts
 ```
 
-`.triggers` is a list of events that can trigger by each message from donation alerts
+`triggers` is a list of events that can trigger by each message from donation alerts
 
 | Property    | Description            |
 | ----------- | ---------------------- |
@@ -93,60 +95,157 @@ The file format is json, example:
 Conditions for trigger activation.  
 The DonationAlertsIntegrate provides multiple sensitive
 
+| Type                                | Description                     |
+| ----------------------------------- | ------------------------------- |
+| `daintegrate/sensitive/always`      | Activates for any event         |
+| `daintegrate/sensitive/donate`      | Activates for specific donation |
+| `daintegrate/sensitive/subscribe`   | Activates for subscribe         |
+| `daintegrate/sensitive/twitch/bits` | Activates for specific bits     |
+
 #### Always
 
-Activates the trigger always
+###### Parameters
+Has no parameters
 
-##### Id
-`daintegrate/sensitive/always`.  
-
-##### Parameters
-Has no parameters.  
-
-##### Example
-```json
-{
-    "properties": {
-        "type": "daintegratew/sensitive/always"
-    }
-}
+###### Example
+```yaml
+sensitives:
+- properties:
+    type: daintegrate/sensitive/always
 ```
 
-#### Range
+#### Donate
 
-Activates if the amount falls within the specified range.  
-`from` <= amount <= `to`
+Activates if the amount falls within the specified range (`from` <= amount <= `to`).  
+And the currency matches.
 
-#### Id
-`daintegrate/sensitive/donation/range`
+###### Parameters
 
-#### Parameters
+| Name       | Type     | Description |
+| ---------- | -------- | ----------- |
+| `from`     | number   | Left side number  |
+| `to`       | number   | Right side number |
+| `currency` | text     | Currency in the [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) code |
 
-| Name | Description |
-| ---- | ----------- |
-| from | Left amount side |
-| to   | Right amount side |
-| currency | Currency in the [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) code |
-
-#### Example
+###### Example
 
 ```json
-{
-    "properties": {
-        "type": "daintegrate/sensitive/donation/range",
-        "value": {
-            "from": 0,
-            "to": 100,
-            "currency": "USD"
-        }
-    }
-}
+sensitives:
+- properties:
+    type: daintegrate/sensitive/donate
+    value:
+      from: 5
+      to: 10
+      currency: USD
+```
+
+#### Subscribe
+
+Activates if the `type` is matches
+
+###### Parameters
+
+| Name       | Type     | Description |
+| ---------- | -------- | ----------- |
+| `type`     | enum     | Type to match, see below for available types |
+
+###### Available types
+
+- YouTubeSubscription
+- TwitchSubscription
+- TwitchFreeFollow
+- TwitchGiftSubscription
+- TwitchPrimeSubscription
+
+###### Example
+
+```json
+sensitives:
+- properties:
+    type: daintegrate/sensitive/subscribe
+    value:
+      type: YouTubeSubscription
+```
+
+
+#### Twitch bits
+
+Activates if the amount of Twitch bits falls within the specified range (`from` <= amount <= `to`).  
+
+###### Parameters
+
+| Name       | Type     | Description |
+| ---------- | -------- | ----------- |
+| `from`     | number   | Left side of the Twitch bits amount  |
+| `to`       | number   | Right side of the Twitch bits amount |
+
+###### Example
+
+```json
+sensitives:
+- properties:
+    type: daintegrate/sensitive/twitch/bits
+    value:
+      from: 0
+      to: 2000
 ```
 
 ### Handlers
 
 Handlers for the trigger.  
-Perform actions when the trigger is activated
+Perform actions when the trigger is activated.  
+
+| Type                          | Description                                  |
+| ----------------------------- | -------------------------------------------- |
+| `daintegrate/handler/message` | Adds a message to your chat                  |
+| `daintegrate/handler/command` | Sends a command to the server on your behalf |
+
+###### Delay
+
+Each handler, in addition to the properties object, has a `delay` property, it indicates after how many ticks the command will be executed.  
+By default, 1 second in minecraft is 20 ticks
+
+#### Message
+
+Adds a message to your chat
+
+###### Parameters
+
+| Name       | Type     | Description |
+| ---------- | -------- | ----------- |
+| `message`  | text     | A message which will be added to the chat |
+
+###### Example
+
+```json
+handlers:
+- delay: 10
+  properties:
+    type: daintegrate/handler/message
+    value:
+      message: Hello! It's day time!
+```
+
+#### Command
+
+Sends a command to the server on your behalf
+
+###### Parameters
+
+| Name       | Type     | Description |
+| ---------- | -------- | ----------- |
+| `command`  | text     | A command which will be send to the server (**without** slash `/`) |
+
+###### Example
+
+```json
+handlers:
+- delay: 10
+  properties:
+    type: daintegrate/handler/command
+    value:
+      command: time set day
+```
 
 ## Sub-modifications
 
@@ -194,6 +293,8 @@ If you want to contribute, you can:
    ```
 9. Call `cfgSource.startListening()` as late as possible.  
    For start watcher on the config file
+10. Create welcome message with short guide  
+    Example: [fabric_1.20/ClientEntryPoint.java](Modifications/fabric_1.20/src/main/java/net/folleach/daintegrate/fabric/ClientEntryPoint.java#L183-L204)
 
 ## Required and used:
 MinecraftForge: https://github.com/MinecraftForge/MinecraftForge  
