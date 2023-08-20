@@ -24,6 +24,7 @@ public class FileConfigurationSource implements IConfigurationSource {
     private final ITransformer<String, SettingsDto> transformer;
     private final IListener<String> log;
     private final MessageDigest md;
+    private SettingsDto current;
 
     {
         try {
@@ -124,8 +125,10 @@ public class FileConfigurationSource implements IConfigurationSource {
                 return;
             currentHash = hash;
             var value = transformer.transform(json);
-            if (value != null)
+            if (value != null) {
                 onValue(value);
+                current = value;
+            }
         } catch (Exception e) {
             log.onValue("error while update the settings from file: " + e);
         }
@@ -143,5 +146,9 @@ public class FileConfigurationSource implements IConfigurationSource {
 
     public void addListener(IListener<SettingsDto> listener) {
         listeners.add(listener);
+    }
+
+    public SettingsDto getCurrent() {
+        return current;
     }
 }

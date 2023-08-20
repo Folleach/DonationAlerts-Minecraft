@@ -7,6 +7,9 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientLoginConnectionEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.folleach.daintegrate.Constants;
 import net.folleach.daintegrate.DonationAlertsIntegrate;
 import net.folleach.daintegrate.DonationAlertsIntegrateFactory;
@@ -15,6 +18,7 @@ import net.folleach.daintegrate.configurations.sources.FileConfigurationSource;
 import net.folleach.daintegrate.listeners.DonationAlertsEventListener;
 import net.folleach.dontaionalerts.DonationAlertsClient;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.MutableText;
@@ -73,6 +77,20 @@ public class ClientEntryPoint implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(t -> {
             eventProcessor.evalute();
         });
+
+        ClientPlayConnectionEvents.JOIN.register(new ClientPlayConnectionEvents.Join() {
+            @Override
+            public void onPlayReady(ClientPlayNetworkHandler handler, PacketSender sender, MinecraftClient client) {
+                configurationSource.startListening();
+                var player = MinecraftClient.getInstance().player;
+                if (player == null)
+                    return;
+                var current = configurationSource.getCurrent();
+                if (current == null || current.disableWelcomeMessage)
+                    return;
+                sendWelcomeMessage(player);
+            }
+        });
     }
 
     private void registerCommands(CommandDispatcher<FabricClientCommandSource> dispatcher) {
@@ -102,7 +120,6 @@ public class ClientEntryPoint implements ClientModInitializer {
     }
 
     private int connectCommand(CommandContext<FabricClientCommandSource> context) {
-        configurationSource.startListening();
         var home = System.getProperty("user.home");
         var token = "";
         try (BufferedReader br = new BufferedReader(new FileReader(new File(home, Constants.TokenFileName)))) {
@@ -148,20 +165,6 @@ public class ClientEntryPoint implements ClientModInitializer {
             throw new RuntimeException(e);
         }
         context.getSource().getPlayer().sendMessage(getPrefix().append("The token is set"));
-//        context
-//                .getSource()
-//                .getPlayer()
-//                .sendMessage(getPrefix().append("Settings stored in ")
-//                        .append(Text
-//                                .literal("donation-alerts-integrate/settings.json")
-//                                .formatted(Formatting.GOLD)
-//                        )
-//                        .append(Text.literal(". "))
-//                        .append(Text.literal("Click to open")
-//                                .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, "donation-alerts-integrate/settings.json")))
-//                                .formatted(Formatting.AQUA)
-//                        )
-//                );
         return 0;
     }
 
@@ -176,10 +179,33 @@ public class ClientEntryPoint implements ClientModInitializer {
         );
     }
 
+    private static void sendWelcomeMessage(ClientPlayerEntity player) {
+        player.sendMessage(getPrefix()
+                .append("Settings stored in ")
+                .append(Text
+                        .literal("donation-alerts-integrate/settings.yaml")
+                        .formatted(Formatting.GRAY)
+                )
+                .append(Text.literal(". "))
+                .append(Text.literal("Click to open")
+                        .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, "donation-alerts-integrate/settings.yaml")))
+                        .formatted(Formatting.AQUA)
+                )
+        );
+        player.sendMessage(getPrefix()
+                .append("Click ")
+                .append(Text.literal("here")
+                        .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, Constants.GuideToConfiguration)))
+                        .formatted(Formatting.AQUA)
+                )
+                .append(" to open manual")
+        );
+    }
+
     private static MutableText getPrefix() {
         return Text.literal("[")
                 .append(Text
-                        .literal("DonationAlerts")
+                        .literal("DA Integrate")
                         .formatted(Formatting.GOLD)
                 )
                 .append("] ");
