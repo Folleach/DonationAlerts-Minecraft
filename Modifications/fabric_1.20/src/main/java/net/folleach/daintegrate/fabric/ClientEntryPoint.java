@@ -111,6 +111,7 @@ public class ClientEntryPoint implements ClientModInitializer {
     }
 
     private int statusCommand(CommandContext<FabricClientCommandSource> context) {
+        context.getSource().getPlayer().sendMessage(getPrefix().append(client.getConnected() ? "Connected" : "Not connected"));
         return 0;
     }
 

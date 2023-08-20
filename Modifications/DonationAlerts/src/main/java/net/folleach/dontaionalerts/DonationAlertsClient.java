@@ -77,6 +77,6 @@ public class DonationAlertsClient {
     }
 
     public boolean getConnected() {
-        return socket.connected();
+        return socket != null && socket.connected();
     }
 }
