@@ -1,17 +1,28 @@
 package net.folleach.daintegrate.configurations.sources;
 
+import net.folleach.daintegrate.Constants;
 import net.folleach.daintegrate.IConfigurationSource;
 import net.folleach.daintegrate.ITransformer;
-import net.folleach.daintegrate.configurations.SettingsDto;
+import net.folleach.daintegrate.SimpleRepresenter;
+import net.folleach.daintegrate.configurations.*;
+import net.folleach.daintegrate.handlers.MessageHandlerProperties;
 import net.folleach.daintegrate.listeners.IListener;
+import net.folleach.daintegrate.sensitives.AlwaysSensitive;
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.nodes.Tag;
+import org.yaml.snakeyaml.representer.Representer;
 
 import java.io.*;
+import java.lang.constant.Constable;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
@@ -67,8 +78,39 @@ public class FileConfigurationSource implements IConfigurationSource {
             }
 
             try {
+                var alwaysProperties = new PropertiesDto();
+                var handlerMessageProperties = new PropertiesDto();
+                alwaysProperties.type = Constants.ModId + "/sensitive/always";
+                var always = new SensitivePropertiesDto();
+                always.properties = alwaysProperties;
+                var trigger = new TriggerDto();
+
+                var messageProps = new MessageHandlerProperties();
+                messageProps.message = "Hello! This is an example message for all events from Donation Alerts";
+                handlerMessageProperties.type = Constants.ModId + "/handler/message";
+                handlerMessageProperties.value = messageProps;
+                var message = new HandlerPropertiesDto();
+                message.properties = handlerMessageProperties;
+                trigger.sensitives = new SensitivePropertiesDto[1];
+                trigger.sensitives[0] = always;
+                trigger.isActive = true;
+                trigger.name = "default";
+                trigger.description = "example trigger, check " + Constants.GuideToConfiguration + " to learn how to set up this";
+                trigger.handlers = new HandlerPropertiesDto[1];
+                trigger.handlers[0] = message;
+
+                var defaultSettings = new SettingsDto();
+                defaultSettings.triggers = new TriggerDto[1];
+                defaultSettings.triggers[0] = trigger;
+
+                var options = new DumperOptions();
+                options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+                var representer = new Representer(options);
+                representer.addClassTag(SettingsDto.class, Tag.MAP);
+                representer.addClassTag(MessageHandlerProperties.class, Tag.MAP);
+                var yaml = new Yaml(representer, options);
                 PrintWriter writer = new PrintWriter(fileHandle, StandardCharsets.UTF_8);
-                writer.print("{}");
+                writer.print(yaml.dump(defaultSettings));
                 writer.close();
             } catch (IOException e) {
                 throw new RuntimeException(e);
