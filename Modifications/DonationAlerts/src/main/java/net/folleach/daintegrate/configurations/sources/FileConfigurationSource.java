@@ -3,26 +3,21 @@ package net.folleach.daintegrate.configurations.sources;
 import net.folleach.daintegrate.Constants;
 import net.folleach.daintegrate.IConfigurationSource;
 import net.folleach.daintegrate.ITransformer;
-import net.folleach.daintegrate.SimpleRepresenter;
 import net.folleach.daintegrate.configurations.*;
 import net.folleach.daintegrate.handlers.MessageHandlerProperties;
 import net.folleach.daintegrate.listeners.IListener;
-import net.folleach.daintegrate.sensitives.AlwaysSensitive;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.representer.Representer;
 
 import java.io.*;
-import java.lang.constant.Constable;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
 
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
