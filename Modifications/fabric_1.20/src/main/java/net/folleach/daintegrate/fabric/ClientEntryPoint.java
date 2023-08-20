@@ -39,7 +39,7 @@ public class ClientEntryPoint implements ClientModInitializer {
         try {
             configurationSource = DonationAlertsIntegrateFactory.create(
                     "donation-alerts-integrate",
-                    "settings.json",
+                    "settings.yaml",
                     LOGGER::info);
         } catch (IOException e) {
             LOGGER.error("failed to initialize donation-alerts-integrate", e);

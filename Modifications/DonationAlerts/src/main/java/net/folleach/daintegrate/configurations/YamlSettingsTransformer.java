@@ -31,7 +31,7 @@ public class YamlSettingsTransformer implements ITransformer<String, SettingsDto
                 replaceHashMap(sensitive.properties);
             }
         }
-        return null;
+        return result;
     }
 
     // (ง ◉ _ ◉)ง Even the UI in the first versions of the mod will not be worse than this

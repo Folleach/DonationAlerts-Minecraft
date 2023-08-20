@@ -4,7 +4,6 @@ import net.folleach.daintegrate.IHandler;
 import net.folleach.daintegrate.handlers.CommandHandlerProperties;
 import net.folleach.dontaionalerts.ReadOnlyDonationAlertsEvent;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
 
 public class CommandHandler implements IHandler<CommandHandlerProperties> {
     @Override
@@ -12,7 +11,7 @@ public class CommandHandler implements IHandler<CommandHandlerProperties> {
         var player = MinecraftClient.getInstance().player;
         if (player == null)
             return;
-        player.sendMessage(Text.literal(properties.command));
+        player.networkHandler.sendCommand(properties.command);
     }
 
     @Override
