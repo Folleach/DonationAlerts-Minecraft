@@ -38,12 +38,6 @@ public class DataCollector {
 	private File dataFile;
 	private static int key = 175;
 	
-	public static final String TagDonationMessage      = "<donation_message>";
-	public static final String TagDonationAmount       = "<donation_amount>";
-	public static final String TagDonationCurrency     = "<donation_currency>";
-	public static final String TagDonationUserName     = "<donation_username>";
-	public static final String TagMinecraftPlayerName  = "<minecraft_playername>";
-	
 	public DataCollector() throws IOException
 	{
 		Donations = Lists.<DonationAlertsEvent>newArrayList();
@@ -153,12 +147,7 @@ public class DataCollector {
 	}
 	
 	private String ReplaceConstants(String pattern, DonationAlertsEvent donat) {
-		pattern = pattern.replace(TagDonationMessage, donat.Message);
-		pattern = pattern.replace(TagDonationAmount, String.valueOf(donat.Amount));
-		pattern = pattern.replace(TagDonationCurrency, String.valueOf(donat.Currency));
-		pattern = pattern.replace(TagDonationUserName, String.valueOf(donat.UserName));
-		pattern = pattern.replace(TagMinecraftPlayerName, Main.GameInstance.player.getName().getString());
-		return pattern;
+
 	}
 	
 	public void AddDonationType(DonationType t) {
