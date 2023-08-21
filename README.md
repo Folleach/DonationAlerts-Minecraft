@@ -205,6 +205,18 @@ Perform actions when the trigger is activated.
 Each handler, in addition to the properties object, has a `delay` property, it indicates after how many ticks the command will be executed.  
 By default, 1 second in minecraft is 20 ticks
 
+###### Replace patterns
+
+In commands and messages, you can specify patterns that will be replaced with the corresponding values.
+
+```
+<donation_message>
+<donation_amount>
+<donation_currency>
+<donation_username>
+<minecraft_playername>
+```
+
 #### Message
 
 Adds a message to your chat
