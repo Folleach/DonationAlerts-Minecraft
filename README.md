@@ -2,6 +2,9 @@
 
 A modification that allows you to receive events from **DonationAlerts**
 
+**Welcome to the 2.0.0 version of the mod!**  
+There are some new features appears!
+
 Supports:
 - Donation
 - Twitch Bits
@@ -73,11 +76,28 @@ triggers:
         to: 10
         currency: USD
   handlers:
-  - delay: 0
+  - delay: 0 # Any comment you can type here!
     properties:
       type: daintegrate/handler/message
       value:
-        message: Hello! This is an example message for all events from Donation Alerts
+        message: Hello, <donation_username>! This is an example message for all events from Donation Alerts
+  - delay: 10
+    properties:
+      type: daintegrate/handler/command
+      value:
+        command: time set day # The sun is rising
+- name: Subscribtion
+  isActive: true
+  sensitives:
+  - properties:
+      type: daintegrate/sensitive/subscribe
+      value:
+        type: YouTubeSubscription
+  handlers:
+  - properties:
+      type: daintegrate/handler/message
+      value:
+        message: <donation_username> just subscribe to YouTube!
 ```
 
 `triggers` is a list of events that can trigger by each message from donation alerts
