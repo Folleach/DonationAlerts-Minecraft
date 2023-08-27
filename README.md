@@ -14,7 +14,7 @@ Allows to:
 - Send message to the chat
 - Execute any Minecraft commands (include mods)
 
-You can download it here: [CurseForge](https://www.curseforge.com/minecraft/mc-mods/donation-alerts-integrate)
+You can download this from: [Modrinth](https://modrinth.com/mod/donation-alerts-integrate), [CurseForge](https://www.curseforge.com/minecraft/mc-mods/donation-alerts-integrate) or [Releases](https://github.com/Folleach/DonationAlerts-Minecraft/releases)
 
 ## Setup
 
