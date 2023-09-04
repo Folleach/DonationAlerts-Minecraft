@@ -8,6 +8,7 @@ There are some new features appears!
 Supports:
 - Donation
 - Twitch Bits
+- Twitch Points
 - Subscriptions to YouTube and Twitch
 
 Allows to:
@@ -187,6 +188,27 @@ sensitives:
       type: YouTubeSubscription
 ```
 
+#### Twitch points
+
+Activates if the amount of Twitch points falls within the specified range (`from` <= amount <= `to`).  
+
+###### Parameters
+
+| Name       | Type     | Description |
+| ---------- | -------- | ----------- |
+| `from`     | number   | Left side of the Twitch bits amount  |
+| `to`       | number   | Right side of the Twitch bits amount |
+
+###### Example
+
+```yaml
+sensitives:
+- properties:
+    type: daintegrate/sensitive/twitch/points
+    value:
+      from: 0
+      to: 1000
+```
 
 #### Twitch bits
 
