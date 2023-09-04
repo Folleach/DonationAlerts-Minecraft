@@ -4,10 +4,7 @@ import net.folleach.daintegrate.configurations.SettingsDto;
 import net.folleach.daintegrate.configurations.YamlSettingsTransformer;
 import net.folleach.daintegrate.configurations.sources.FileConfigurationSource;
 import net.folleach.daintegrate.listeners.IListener;
-import net.folleach.daintegrate.sensitives.AlwaysSensitive;
-import net.folleach.daintegrate.sensitives.DonateSensitive;
-import net.folleach.daintegrate.sensitives.SubscribeSensitive;
-import net.folleach.daintegrate.sensitives.TwitchBitsSensitive;
+import net.folleach.daintegrate.sensitives.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,6 +22,7 @@ public class DonationAlertsIntegrateFactory {
                 .registerSensitive(new AlwaysSensitive())
                 .registerSensitive(new SubscribeSensitive())
                 .registerSensitive(new TwitchBitsSensitive())
+                .registerSensitive(new TwitchPointsSensitive())
                 .registerEventListener(event -> log.onValue("received new event"));
 
         var configurationListeners = new ArrayList<IListener<SettingsDto>>();

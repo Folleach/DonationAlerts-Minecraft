@@ -18,7 +18,9 @@ public enum AlertType {
     @SerializedName("13")
     TwitchGiftSubscription(13),
     @SerializedName("15")
-    TwitchPrimeSubscription(15);
+    TwitchPrimeSubscription(15),
+    @SerializedName("19")
+    TwitchPoints(19);
 
     public final int Value;
 
