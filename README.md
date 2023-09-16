@@ -2,9 +2,6 @@
 
 A modification that allows you to receive events from **DonationAlerts**
 
-**Welcome to the 2.0.0 version of the mod!**  
-There are some new features appears!
-
 Supports:
 - Donation
 - Twitch Bits
