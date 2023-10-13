@@ -1,0 +1,45 @@
+name: packages
+
+on:
+  release:
+    types: [ created ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        server-id: github
+        settings-path: ${{ github.workspace }}
+    - name: set version
+      run: echo ${{ github.ref_name }} | sed -r "s/^v/MOD_VERSION=/" >> $GITHUB_ENV
+    # From gradle doc: "Adding the JAR file to version control is expected"...
+    # Seriously? I should add to my vsc a binaries file? What if they are updated?
+    # Will I have to add a new 60 KB to my repository?
+    # I don't want to, so I'll just steal the files from another repository...
+    - name: download gradle
+      run: |
+        cd ./Modifications
+        mkdir gradle && cd gradle
+        mkdir wrapper && cd wrapper
+        wget https://github.com/FabricMC/fabric-example-mod/raw/60fdaa75228f5601e29af8611dbc0c5560e1544d/gradle/wrapper/gradle-wrapper.jar
+        wget https://github.com/FabricMC/fabric-example-mod/raw/60fdaa75228f5601e29af8611dbc0c5560e1544d/gradle/wrapper/gradle-wrapper.properties
+    - name: Validate Gradle wrapper
+      uses: gradle/wrapper-validation-action@ccb4328a959376b642e027874838f60f8e596de3
+    - name: Build with Gradle
+      run: |
+        cd ./Modifications
+        ./gradlew fabric_1.20:build -Pmod_version=$MOD_VERSION
+    - name: release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          ./Modifications/fabric_1.20/build/libs/*
