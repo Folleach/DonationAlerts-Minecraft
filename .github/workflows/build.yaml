@@ -35,10 +35,9 @@ jobs:
     - name: Validate Gradle wrapper
       uses: gradle/wrapper-validation-action@ccb4328a959376b642e027874838f60f8e596de3
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25
-      with:
-        arguments: 'fabric_1.20:build -Pmod_version=$MOD_VERSION'
-        build-root-directory: './Modifications'
+      run: |
+        cd ./Modifications
+        ./gradlew fabric_1.20:build -Pmod_version=$MOD_VERSION
     - name: release
       uses: softprops/action-gh-release@v1
       with:
