@@ -10,7 +10,9 @@ public class ReplaceHelper {
     public static final String TagMinecraftPlayerName  = "<minecraft_playername>";
 
     public static String replace(String pattern, ReadOnlyDonationAlertsEvent event, String playerName) {
-        pattern = pattern.replace(TagDonationMessage, event.getMessage());
+        if (pattern == null)
+            return "";
+        pattern = pattern.replace(TagDonationMessage, event.getMessage() == null ? "" : event.getMessage());
         pattern = pattern.replace(TagDonationAmount, String.valueOf(event.getAmount()));
         pattern = pattern.replace(TagDonationCurrency, String.valueOf(event.getCurrency()));
         pattern = pattern.replace(TagDonationUserName, String.valueOf(event.getUserName()));
