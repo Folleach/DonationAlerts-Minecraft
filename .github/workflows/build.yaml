@@ -1,8 +1,8 @@
 name: packages
 
 on:
-  push:
-    branches: '**'
+  release:
+    types: [ created ]
 
 jobs:
   build:
@@ -19,6 +19,8 @@ jobs:
         distribution: 'temurin'
         server-id: github
         settings-path: ${{ github.workspace }}
+    - name: set version
+      run: echo ${{ github.ref_name }} | sed -r "s/^v/MOD_VERSION=/" >> $GITHUB_ENV
     # From gradle doc: "Adding the JAR file to version control is expected"...
     # Seriously? I should add to my vsc a binaries file? What if they are updated?
     # Will I have to add a new 60 KB to my repository?
@@ -35,5 +37,10 @@ jobs:
     - name: Build with Gradle
       uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25
       with:
-        arguments: 'fabric_1.20:build'
+        arguments: 'fabric_1.20:build -Pmod_version=$MOD_VERSION'
         build-root-directory: './Modifications'
+    - name: release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          ./Modifications/fabric_1.20/build/libs/*
